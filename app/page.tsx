@@ -1,6 +1,7 @@
 import Archive from "../components/icons/Archive"
 import WebAuthn from "../components/icons/WebAuthn"
 import SeccionSocial from "../components/Social/SeccionSocial"
+import Link from "next/link"
 
 export default function Home() {
   return (
@@ -10,24 +11,30 @@ export default function Home() {
           <h1 className="text-3xl font-bold ">Gestor de Claves</h1>
           <span className="text-sm text-neutral-400">Elije la opcion a utilizar </span>
         </div>
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-2 h-full">
-          <button className="flex flex-row sm:flex-col  items-center justify-center gap-6 
-          w-full sm:h-50 py-3 border rounded-2xl border-neutral-600/70 cursor-pointer hover:bg-neutral-800/80 transition-colors group">
+        <div className="grid grid-cols-1 sm:grid-cols-2 justify-center items-center gap-4 h-full">
+          <Link href="/offline" className="flex flex-row sm:flex-col  items-center justify-start gap-2 md:gap-6  text-center
+          w-full sm:h-50 py-3 px-4 border rounded-2xl border-neutral-600/70 cursor-pointer hover:bg-neutral-800/80 transition-colors group">
             <div className="group-hover:scale-105 h-10 sm:h-14 md:h-16 lg:h-18 transition-all duration-100">
               <Archive />
             </div>
-            <p className="">Uso Offline</p>
-          </button>
-          <button className="flex flex-row sm:flex-col  items-center justify-center gap-6 
-          w-full sm:h-50 py-3 border rounded-2xl border-neutral-600/70 cursor-pointer hover:bg-neutral-800/80 transition-colors group">
-            <div className="group-hover:scale-110 h-10 sm:h-14 md:h-16 lg:h-18">
+            <div>
+              <p className="">Uso Offline</p>
+              <span className="text-xs text-neutral-400 px-2">Sin conexión a internet, archivo encriptado.</span>
+            </div>
+          </Link>
+          <button  className="flex flex-row sm:flex-col  items-center justify-start gap-6 
+          w-full sm:h-50 py-3 px-4 border rounded-2xl border-neutral-600/70 cursor-pointer hover:bg-neutral-800/80 transition-colors group">
+            <div className="group-hover:scale-105 h-10 sm:h-14 md:h-16 lg:h-18 transition-all duration-100">
               <WebAuthn />
             </div>
-            <p>WebAuthn</p>
+            <div>
+              <p>WebAuthn</p>
+              <span className="text-xs text-neutral-400 px-2">Autenticación biométrica, pin o huella.</span>
+            </div>
           </button>
         </div>
       </section>
-      <SeccionSocial className="flex flex-row items-center justify-center gap-2 "/>
+      <SeccionSocial className="flex flex-row items-center justify-center gap-2 " />
     </div>
   );
 }

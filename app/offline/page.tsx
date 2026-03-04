@@ -1,12 +1,11 @@
 "use client"
-import Ejemplo from "@/components/Ejemplo"
-import { useState } from "react"
 
 export const OfflinePage = () => {
-  
-
   return (
     <section>
+      Seccion LOgica Offline
+      1. Componente para cargar archivo 
+      2. Componente para  pedir contraseña
     </section>
   )
 }
