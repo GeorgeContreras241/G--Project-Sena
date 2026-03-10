@@ -1,17 +1,23 @@
 "use client"
 import Add from "../../components/icons/Add";
-import { deriveKey } from "../../lib/crypto/kdf";
-import { encrypt } from "../../lib/crypto/encrypt";
-import { decrypt } from "../../lib/crypto/decrypt";
 import { useState } from "react";
-import { buffer } from "stream/consumers";
+import { loadVault } from "../../lib/vault/loadVault";
+import { useStoragePass } from "@/storage/useStoragePass";
+import { decrypt } from "@/lib/crypto/decrypt";
+import { deriveKey } from "@/lib/crypto/kdf";
 
 
-export const ActionSubmit = ({ isKeyLoaded, setIsKeyLoaded }: { isKeyLoaded: boolean; setIsKeyLoaded: (value: boolean) => void }) => {
+export const ActionSubmit = ({ isPageOn }: { isPageOn: (value: boolean) => void }) => {
     const [file, setFile] = useState<File | null>(null);
+    //Estodos de carga
+    const setLoading = useStoragePass((state: any) => state.setLoading);
+    const setDataPassword = useStoragePass((state: any) => state.setDataPassword);
+    const setDerivedKey = useStoragePass((state: any) => state.setDerivedKey);
+    const setSalt = useStoragePass((state: any) => state.setSalt);
+    const derivedKey = useStoragePass((state: any) => state.derivedKey);
+    const salt = useStoragePass((state: any) => state.salt);
 
     // Almazenamientos de datos Decifrados.
-    const [dataPassword, setDataPassword] = useState<object | null>(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.[0] || null);
@@ -21,40 +27,37 @@ export const ActionSubmit = ({ isKeyLoaded, setIsKeyLoaded }: { isKeyLoaded: boo
         e.preventDefault();
         const formData = new FormData(e.target as HTMLFormElement);
         const password = formData.get("password") as string;
+
+        if (!password) {
+            console.error("Clave Necesaria para continuar");
+            return;
+        }
+        if (file) {
+            console.log("ARchivo existe")
+            const { iv, data, salt } = await loadVault({ file, setLoading });
+            const key = await deriveKey(password, salt);
+            console.log("key", salt)
+            console.log("Derive key: ", key)
+            const dataDecrypted = await decrypt(key, { iv, data }, setLoading);
+            setDataPassword(dataDecrypted);
+            if (dataDecrypted.error) {
+                console.log(dataDecrypted.error)
+                return;
+            }
+            console.log("Datos decifrados:", dataDecrypted);
+        }
+        // Almacenar los clave devicada
+        console.log("Clave devicada existe");
+        const salt = crypto.getRandomValues(new Uint8Array(16))
+
+        const key = await deriveKey(password, salt);
+        setSalt(salt);
+        console.log("salt original", salt)
+        
+        setDerivedKey(key);
+        isPageOn(true);
+
     }
-
-    function buildVaultFile(salt: Uint8Array, iv: Uint8Array | number[], data: Uint8Array | any) {
-
-        const buffer = new Uint8Array(
-            salt.length + (iv?.length || 0) + data.length
-        )
-
-        buffer.set(salt, 0)
-        buffer.set(iv, 16)
-        buffer.set(data, 28)
-
-        return buffer
-    }
-    
-
-    function downloadVault(vault: any) {
-        const blob = new Blob(
-            [vault],
-            { type: "application/octet-stream" }
-        )
-
-        const url = URL.createObjectURL(blob)
-
-        const a = document.createElement("a")
-
-        a.href = url
-        a.download = "vault.enc"
-
-        a.click()
-
-        URL.revokeObjectURL(url)
-    }
-
 
     return (
         <div className="border border-gray-800/70 w-full max-w-xl grid place-items-center gap-2 p-8">
@@ -75,11 +78,10 @@ export const ActionSubmit = ({ isKeyLoaded, setIsKeyLoaded }: { isKeyLoaded: boo
                     className="w-full border border-gray-800/70 rounded py-2 px-3 placeholder:text-gray-500 placeholder:italic placeholder:text-xs "
                     placeholder="Ingresa Aqui" id="password"
                     name="password"
-                    required 
-                    autoComplete="none"
+                    autoComplete="off"
                     spellCheck="false"
                     autoCorrect="off"
-                    />
+                />
                 <button className="w-full bg-neutral-700/50 text-white rounded p-2 cursor-pointer" type="submit">Decifrar</button>
             </form>
         </div>
