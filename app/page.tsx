@@ -1,6 +1,6 @@
-import Archive from "../components/icons/Archive"
-import WebAuthn from "../components/icons/WebAuthn"
-import SeccionSocial from "../components/Social/SeccionSocial"
+import Archive from "../components/ui/icons/Archive"
+import WebAuthn from "../components/ui/icons/WebAuthn"
+import SeccionSocial from "../components/Social/SocialSeccion"
 import Link from "next/link"
 
 export default function Home() {

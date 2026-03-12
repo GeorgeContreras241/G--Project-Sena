@@ -1,7 +1,7 @@
 "use client"
 import { ActionSubmit } from "@/components/SeccionSubmit/ActionSubmit";
 import { useStoragePass } from "@/storage/useStoragePass";
-import { Gestor } from "@/components/gestor/Gestor";
+import { Gestor } from "@/features/manager/componentes/Gestor";
 import { useState } from "react";
 
 export const OfflinePage = () => {

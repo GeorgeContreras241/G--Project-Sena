@@ -1,10 +1,10 @@
 "use client"
-import Add from "../../components/icons/Add";
+import Add from "../ui/icons/Add";
 import { useState } from "react";
 import { loadVault } from "../../lib/vault/loadVault";
 import { useStoragePass } from "@/storage/useStoragePass";
-import { decrypt } from "@/lib/crypto/decrypt";
-import { deriveKey } from "@/lib/crypto/kdf";
+import { decrypt } from "@/lib/crypto/decryptData";
+import { deriveKey } from "@/lib/crypto/kdfKey";
 
 
 export const ActionSubmit = ({ isPageOn }: { isPageOn: (value: boolean) => void }) => {

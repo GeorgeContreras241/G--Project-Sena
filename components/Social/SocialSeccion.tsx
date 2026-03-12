@@ -1,5 +1,5 @@
-import GitHub from "../icons/GitHub"
-import Linkedin from "../icons/LinKedin"
+import GitHub from "../ui/icons/GitHub"
+import Linkedin from "../ui/icons/LinKedin"
 
 const SeccionSocial = ({className}: {className?: string}) => {
     return (

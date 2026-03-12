@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useStoragePass } from '@/storage/useStoragePass'
-import { encrypt } from '@/lib/crypto/encrypt'
+import { encrypt } from '@/lib/crypto/encryptData'
 import { buildVaultFile } from '@/lib/vault/saveVault'
 
 interface PasswordEntry {
