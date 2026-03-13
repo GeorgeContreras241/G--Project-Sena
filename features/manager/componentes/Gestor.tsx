@@ -129,10 +129,16 @@ export const Gestor = () => {
         <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-6">
             <h1 className="text-md  md:text-3xl font-bold text-gray-900 dark:text-white">Gestor de Contraseñas</h1>
-            <button className="text-sm md:text-base bg-blue-800 hover:bg-blue-700 text-white dark:bg-blue-900 dark:hover:bg-blue-950  px-2 py-1 md:px-4 md:py-2 rounded-lg flex items-center gap-2 transition-colors">
-              <span className="text-xl">+</span>
-              Nueva Contraseña
-            </button>
+            <div id="modal_example" className='grid place-items-center top-50' popover='auto'>
+              <p>Ejemplo de model</p>
+
+              <button popoverTarget='modal_example' popoverTargetAction='hide'>cerrar</button>
+
+
+            </div>
+
+            <button popoverTarget='modal_example' popoverTargetAction='show'>abrir modal</button>
+
           </div>
 
           {/* Search Bar */}
