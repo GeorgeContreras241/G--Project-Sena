@@ -39,20 +39,18 @@ export const ActionSubmit = ({ isPageOn }: { isPageOn: (value: boolean) => void 
             console.log("key", salt)
             console.log("Derive key: ", key)
             const dataDecrypted = await decrypt(key, { iv, data }, setLoading);
-            setDataPassword(dataDecrypted);
+            setDataPassword(dataDecrypted)
             if (dataDecrypted.error) {
                 console.log(dataDecrypted.error)
                 return;
             }
-            console.log("Datos decifrados:", dataDecrypted);
         }
         // Almacenar los clave devicada
         console.log("Clave devicada existe");
         const salt = crypto.getRandomValues(new Uint8Array(16))
 
         const key = await deriveKey(password, salt);
-        setSalt(salt);
-        console.log("salt original", salt)
+
         
         setDerivedKey(key);
         isPageOn(true);

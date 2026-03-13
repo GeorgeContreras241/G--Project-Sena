@@ -18,10 +18,12 @@ interface PasswordEntry {
 export const Gestor = () => {
   const derivedKey = useStoragePass((state: any) => state.derivedKey)
   const salt = useStoragePass((state: any) => state.salt)
+  const dataPassword = useStoragePass((state: any) => state.dataPassword)
   const [searchTerm, setSearchTerm] = useState('')
   const [showPasswords, setShowPasswords] = useState<{ [key: string]: boolean }>({})
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
 
+  console.log(dataPassword)
 
   const [passwords, setPasswords] = useState<PasswordEntry[]>([
     {
@@ -86,7 +88,7 @@ export const Gestor = () => {
     }
   }
 
-  const filteredPasswords = passwords.filter(password => {
+  const filteredPasswords = dataPassword?.filter((password: any) => {
     const matchesSearch = password.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       password.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (password.url && password.url.toLowerCase().includes(searchTerm.toLowerCase()))
