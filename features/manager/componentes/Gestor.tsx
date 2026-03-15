@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useStoragePass } from '@/storage/useStoragePass'
 import { encrypt } from '@/lib/crypto/encryptData'
 import { buildVaultFile } from '@/lib/vault/saveVault'
+import { Header_Gestor } from "@/features/manager/componentes/Header_Gestor"
 
 interface PasswordEntry {
   id: string
@@ -81,10 +82,10 @@ export const Gestor = () => {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'web': return 'bg-blue-100 text-blue-800'
-      case 'app': return 'bg-green-100 text-green-800'
-      case 'card': return 'bg-purple-100 text-purple-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'web': return 'bg-accent/20 text-accent'
+      case 'app': return 'bg-success/20 text-success'
+      case 'card': return 'bg-secondary/20 text-secondary'
+      default: return 'bg-text-muted/20 text-text-muted'
     }
   }
 
@@ -123,92 +124,29 @@ export const Gestor = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-neutral-900 p-4">
+    <main className="min-h-screen bg-bg-main text-text-primary p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <h1 className="text-md  md:text-3xl font-bold text-gray-900 dark:text-white">Gestor de Contraseñas</h1>
-            <div id="modal_example" className='grid place-items-center top-50' popover='auto'>
-              <p>Ejemplo de model</p>
-
-              <button popoverTarget='modal_example' popoverTargetAction='hide'>cerrar</button>
-
-
-            </div>
-
-            <button popoverTarget='modal_example' popoverTargetAction='show'>abrir modal</button>
-
-          </div>
-
-          {/* Search Bar */}
-          <div className="relative mb-4">
-            <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Buscar contraseñas..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-700 placeholder:text-[12px] rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent outline-none"
-            />
-          </div>
-
-          {/* Category Filters */}
-          <div className="flex gap-2 flex-wrap">
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${selectedCategory === 'all'
-                ? 'bg-purple-800 text-white'
-                : 'bg-neutral-800 text-gray-200 border border-neutral-600 hover:bg-neutral-700'
-                }`}
-            >
-              Todas
-            </button>
-            <button
-              onClick={() => setSelectedCategory('web')}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors flex items-center gap-1 ${selectedCategory === 'web'
-                ? 'bg-blue-800 text-white'
-                : 'bg-neutral-800 text-gray-200 border border-neutral-600 hover:bg-neutral-700'
-                }`}
-            >
-              <span className="text-xs">🌐</span>
-              Web
-            </button>
-            <button
-              onClick={() => setSelectedCategory('app')}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors flex items-center gap-1 ${selectedCategory === 'app'
-                ? 'bg-green-800 text-white'
-                : 'bg-neutral-800 text-gray-200 border border-neutral-600 hover:bg-neutral-700'
-                }`}
-            >
-              <span className="text-xs">📱</span>
-              Apps
-            </button>
-            <button onClick={handleExport} className='px-3 py-1 rounded-full text-sm font-medium transition-colors bg-neutral-800 text-gray-200 border border-neutral-600 hover:bg-neutral-700'>
-              Exportar
-            </button>
-          </div>
-        </div>
+        <Header_Gestor selectedCategory={selectedCategory} handleExport={handleExport}
+          setSelectedCategory={setSelectedCategory} setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
 
         {/* Password List */}
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredPasswords.map((password) => (
-            <div key={password.id} className="bg-white dark:bg-neutral-800 rounded-lg shadow-sm hover:shadow-md transition-shadow p-4">
+          {filteredPasswords?.map((password: any) => (
+            <div key={password.id} className="bg-bg-card rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 border border-border">
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className={`p-2 rounded-lg ${getCategoryColor(password.category)}`}>
                     {getCategoryIcon(password.category)}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{password.title}</h3>
+                    <h3 className="font-semibold text-text-primary">{password.title}</h3>
                     {password.url && (
                       <a
                         href={password.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                        className="text-xs text-accent hover:underline"
                       >
                         {password.url}
                       </a>
@@ -222,12 +160,12 @@ export const Gestor = () => {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Usuario:</span>
+                  <span className="text-sm text-text-secondary">Usuario:</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">{password.username}</span>
+                    <span className="text-sm font-medium text-text-primary">{password.username}</span>
                     <button
                       onClick={() => copyToClipboard(password.username)}
-                      className="text-gray-400 hover:text-gray-600"
+                      className="text-text-muted hover:text-text-secondary"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -237,14 +175,14 @@ export const Gestor = () => {
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Contraseña:</span>
+                  <span className="text-sm text-text-secondary">Contraseña:</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-mono text-gray-900 dark:text-white">
+                    <span className="text-sm font-mono text-text-primary">
                       {showPasswords[password.id] ? password.password : '••••••••'}
                     </span>
                     <button
                       onClick={() => togglePasswordVisibility(password.id)}
-                      className="text-gray-400 hover:text-gray-600"
+                      className="text-text-muted hover:text-text-secondary"
                     >
                       {showPasswords[password.id] ?
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -258,7 +196,7 @@ export const Gestor = () => {
                     </button>
                     <button
                       onClick={() => copyToClipboard(password.password)}
-                      className="text-gray-400 hover:text-gray-600"
+                      className="text-text-muted hover:text-text-secondary"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -268,13 +206,13 @@ export const Gestor = () => {
                 </div>
               </div>
 
-              <div className="flex gap-2 mt-4 pt-3 border-t border-gray-100">
-                <button className="flex-1 text-gray-600 hover:text-blue-600 hover:bg-blue-50 py-1 rounded transition-colors">
+              <div className="flex gap-2 mt-4 pt-3 border-t border-border">
+                <button className="flex-1 text-text-secondary hover:text-accent hover:bg-bg-card py-1 rounded transition-colors">
                   <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
                 </button>
-                <button className="flex-1 text-gray-600 hover:text-red-600 hover:bg-red-50 py-1 rounded transition-colors">
+                <button className="flex-1 text-text-secondary hover:text-error hover:bg-bg-card py-1 rounded transition-colors">
                   <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
@@ -286,21 +224,21 @@ export const Gestor = () => {
 
         {/* Empty State */}
         {filteredPasswords.length === 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-12 text-center">
-            <svg className="w-16 h-16 text-gray-300  mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+          <div className="bg-bg-card rounded-lg shadow-sm p-12 text-center border border-border">
+            <svg className="w-16 h-16 text-text-muted mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
             </svg>
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No se encontraron contraseñas</h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-4">
+            <h3 className="text-lg font-medium text-text-primary mb-2">No se encontraron contraseñas</h3>
+            <p className="text-text-muted mb-4">
               {searchTerm ? 'Intenta con otra búsqueda' : 'Agrega tu primera contraseña para comenzar'}
             </p>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600 px-4 py-2 rounded-lg flex items-center gap-2 mx-auto transition-colors">
+            <button className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg flex items-center gap-2 mx-auto transition-colors">
               <span className="text-xl">+</span>
               Agregar Contraseña
             </button>
           </div>
         )}
       </div>
-    </div>
+    </main>
   )
 }
