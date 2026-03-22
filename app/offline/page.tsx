@@ -7,7 +7,7 @@ import { useState } from "react";
 export const OfflinePage = () => {
   const [ isPage, setPage ] = useState(false);
   return (
-    <>
+    <main className="fondo">
       {
         isPage ? (
           <Gestor />
@@ -17,7 +17,7 @@ export const OfflinePage = () => {
           </section>
         )
       }
-    </>
+    </main>
   )
 }
 
