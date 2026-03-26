@@ -1,5 +1,6 @@
 "use client"
 import Add from "../ui/icons/Add";
+import { Exit } from "@/components/ui/exit";
 import { sileo, Toaster } from "sileo"
 import { useState } from "react";
 import { useStoragePass } from "@/storage/useStoragePass";
@@ -9,15 +10,9 @@ import { openVault } from "@/utils/SeccionSubmit/openVault";
 
 export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => void }) => {
     const [file, setFile] = useState<File | null>(null);
-    //Estodos de carga
-    const setLoading = useStoragePass((state: any) => state.setLoading);
+    // Storage of decrypted data
     const setDataPassword = useStoragePass((state: any) => state.setDataPassword);
     const setDerivedKey = useStoragePass((state: any) => state.setDerivedKey);
-    const setSalt = useStoragePass((state: any) => state.setSalt);
-    const derivedKey = useStoragePass((state: any) => state.derivedKey);
-    const salt = useStoragePass((state: any) => state.salt);
-
-    // Almazenamientos de datos Decifrados.
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFile(e.target.files?.[0] || null);
@@ -25,29 +20,26 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        // Stetaless password extraction
         const formData = new FormData(e.target as HTMLFormElement);
         const password = formData.get("password") as string;
-
+        // Validation of inputs
         const validation = validateVaultInputs(password, file!);
         if (validation !== true) return sileo.error(validation);
-        
-
+        // Opening of vault
         const vaultData = await openVault({ file: file!, password });
-        console.log(vaultData);
-        if (!vaultData.state) return sileo.error(vaultData.message);
-        
-     
-        
+        // Validation of vault
+        if (!vaultData.state && vaultData.message) return sileo.error(vaultData.message);
+        // Setting data
         setDataPassword(vaultData.dataDecrypted);
         setDerivedKey(vaultData.key);
         onSuccess(false)
-        console.log(setDataPassword)
-
     }
 
     return (
-        <div className="border border-border-subtle rounded-md bg-bg-main w-full max-w-xl grid place-items-center gap-2 p-8">
+        <div className="border border-border rounded-md bg-bg-main w-full max-w-xl grid place-items-center gap-2 p-8">
             <Toaster position="bottom-center" />
+            <Exit />
             <div className="w-full grid place-items-center gap-2">
                 <input className="hidden" id="file" type="file" onChange={handleFileChange} />
                 <div className="w-full h-48 border border-border grid place-items-center rounded-lg bg-accent-subtle cursor-pointer">

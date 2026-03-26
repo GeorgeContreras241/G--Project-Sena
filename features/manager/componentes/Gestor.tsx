@@ -23,9 +23,6 @@ export const Gestor = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [showPasswords, setShowPasswords] = useState<{ [key: string]: boolean }>({})
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
-
-  console.log(dataPassword)
-
   const [passwords, setPasswords] = useState<PasswordEntry[]>([
     {
       id: '1',
