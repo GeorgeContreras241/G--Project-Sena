@@ -1,4 +1,4 @@
-  export async function decrypt(key: CryptoKey, payload: any, setLoading: (value: boolean) => void) {
+  export const decrypt = async (key: CryptoKey, payload: any): Promise<any> => {
 
     try {
       const iv = new Uint8Array(payload.iv)
@@ -20,7 +20,5 @@
     } catch (error) {
       console.log("Error:", error);
       return { error }
-    } finally {
-      setLoading(false);
     }
   }

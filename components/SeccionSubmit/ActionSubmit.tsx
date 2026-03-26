@@ -2,10 +2,9 @@
 import Add from "../ui/icons/Add";
 import { sileo, Toaster } from "sileo"
 import { useState } from "react";
-import { loadVault } from "../../lib/vault/loadVault";
 import { useStoragePass } from "@/storage/useStoragePass";
-import { decrypt } from "@/lib/crypto/decryptData";
-import { deriveKey } from "@/lib/crypto/kdfKey";
+import { validateVaultInputs } from "@/utils/SeccionSubmit/validateVaultInputs";
+import { openVault } from "@/utils/SeccionSubmit/openVault";
 
 
 export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => void }) => {
@@ -29,50 +28,26 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
         const formData = new FormData(e.target as HTMLFormElement);
         const password = formData.get("password") as string;
 
-        if (!password) {
-            sileo.success({
-                title: "Papi meta la clave",
-                description: "la clave socio",
-                fill: "#0008E1",
-                duration: "5000"
-            })
-            return;
-        }
-        if (!file) {
-            sileo.error({
-                title: "Papi meta la clave",
-                description: "la clave socio"
-            })
-            return
-        }
+        const validation = validateVaultInputs(password, file!);
+        if (validation !== true) return sileo.error(validation);
+        
 
-        console.log("ARchivo existe")
-        const { iv, data, salt } = await loadVault({ file, setLoading });
-        const key = await deriveKey(password, salt);
-        console.log("key", salt)
-        console.log("Derive key: ", key)
-        const dataDecrypted = await decrypt(key, { iv, data }, setLoading);
-        setDataPassword(dataDecrypted)
-        if (dataDecrypted.error) {
-            console.log(dataDecrypted.error)
-            return;
-        }
-
-        // Almacenar los clave devicada
-        console.log("Clave devicada existe");
-        const saltf = crypto.getRandomValues(new Uint8Array(16))
-
-        const keyFirts = await deriveKey(password, saltf);
-
-
-        setDerivedKey(keyFirts);
-        onSuccess()
+        const vaultData = await openVault({ file: file!, password });
+        console.log(vaultData);
+        if (!vaultData.state) return sileo.error(vaultData.message);
+        
+     
+        
+        setDataPassword(vaultData.dataDecrypted);
+        setDerivedKey(vaultData.key);
+        onSuccess(false)
+        console.log(setDataPassword)
 
     }
 
     return (
         <div className="border border-border-subtle rounded-md bg-bg-main w-full max-w-xl grid place-items-center gap-2 p-8">
-            <Toaster position="top-right" />
+            <Toaster position="bottom-center" />
             <div className="w-full grid place-items-center gap-2">
                 <input className="hidden" id="file" type="file" onChange={handleFileChange} />
                 <div className="w-full h-48 border border-border grid place-items-center rounded-lg bg-accent-subtle cursor-pointer">
