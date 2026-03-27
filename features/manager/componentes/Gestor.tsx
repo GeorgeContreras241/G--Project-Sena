@@ -52,7 +52,7 @@ export const Gestor = () => {
       favorite: true
     }
   ])
-
+  console.log(dataPassword)
   const togglePasswordVisibility = (id: string) => {
     setShowPasswords(prev => ({
       ...prev,
@@ -93,7 +93,7 @@ export const Gestor = () => {
     const matchesCategory = selectedCategory === 'all' || password.category === selectedCategory
     return matchesSearch && matchesCategory
   })
-
+  
   const handleExport = async () => {
     const encrypted = await encrypt(derivedKey, passwords)
     const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data)
@@ -121,66 +121,59 @@ export const Gestor = () => {
   }
 
   return (
-    <main className="min-h-screen bg-bg-main text-text-primary p-4">
+    <main className="min-h-screen p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <Header_Gestor selectedCategory={selectedCategory} handleExport={handleExport}
           setSelectedCategory={setSelectedCategory} setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
 
         {/* Password List */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col">
           {filteredPasswords?.map((password: any) => (
-            <div key={password.id} className="bg-bg-card rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 border border-border">
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <div className={`p-2 rounded-lg ${getCategoryColor(password.category)}`}>
+            <div key={password.id} className="flex bg-background border border-border gap-2">
+              {/* Password Card */}
+              <div className="flex flex-1  rounded-lg p-4">
+                <div className="flex items-center justify-center gap-3">
+                  <div className="p-2 rounded-lg">
                     {getCategoryIcon(password.category)}
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-text-primary">{password.title}</h3>
+                  <div className="flex flex-col">
+                    <h3 className="font-semibold">{password.title}</h3>
                     {password.url && (
                       <a
                         href={password.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-accent hover:underline"
+                        className="text-xs"
                       >
                         {password.url}
                       </a>
                     )}
                   </div>
+                  <button>
+                    {password.favorite ? '⭐' : '☆'}
+                  </button>
                 </div>
-                <button className="text-yellow-500 hover:text-yellow-600 text-xl">
-                  {password.favorite ? '⭐' : '☆'}
-                </button>
               </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-text-secondary">Usuario:</span>
+              {/* Password Details */}
+              <div className="flex flex-1  rounded-lg p-4">
+                <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-text-primary">{password.username}</span>
-                    <button
-                      onClick={() => copyToClipboard(password.username)}
-                      className="text-text-muted hover:text-text-secondary"
-                    >
+                    <span>Usuario:</span>
+                    <span>{password.username}</span>
+                    <button onClick={() => copyToClipboard(password.username)}>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
                     </button>
                   </div>
-                </div>
 
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-text-secondary">Contraseña:</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-mono text-text-primary">
+                    <span>Contraseña:</span>
+                    <span>
                       {showPasswords[password.id] ? password.password : '••••••••'}
                     </span>
-                    <button
-                      onClick={() => togglePasswordVisibility(password.id)}
-                      className="text-text-muted hover:text-text-secondary"
-                    >
+                    <button onClick={() => togglePasswordVisibility(password.id)}>
                       {showPasswords[password.id] ?
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
@@ -191,10 +184,7 @@ export const Gestor = () => {
                         </svg>
                       }
                     </button>
-                    <button
-                      onClick={() => copyToClipboard(password.password)}
-                      className="text-text-muted hover:text-text-secondary"
-                    >
+                    <button onClick={() => copyToClipboard(password.password)}>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
@@ -202,15 +192,15 @@ export const Gestor = () => {
                   </div>
                 </div>
               </div>
-
-              <div className="flex gap-2 mt-4 pt-3 border-t border-border">
-                <button className="flex-1 text-text-secondary hover:text-accent hover:bg-bg-card py-1 rounded transition-colors">
-                  <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {/* Action Buttons */}
+              <div className="flex flex-col justify-center items-end rounded-lg p-4">
+                <button>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
                 </button>
-                <button className="flex-1 text-text-secondary hover:text-error hover:bg-bg-card py-1 rounded transition-colors">
-                  <svg className="w-4 h-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
                 </button>
@@ -220,16 +210,16 @@ export const Gestor = () => {
         </div>
 
         {/* Empty State */}
-        {filteredPasswords.length === 0 && (
-          <div className="bg-bg-card rounded-lg shadow-sm p-12 text-center border border-border">
-            <svg className="w-16 h-16 text-text-muted mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+        {filteredPasswords?.length === 0 && (
+          <div className="p-12 text-center">
+            <svg className="w-16 h-16 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
             </svg>
-            <h3 className="text-lg font-medium text-text-primary mb-2">No se encontraron contraseñas</h3>
-            <p className="text-text-muted mb-4">
+            <h3 className="text-lg font-medium mb-2">No se encontraron contraseñas</h3>
+            <p className="mb-4">
               {searchTerm ? 'Intenta con otra búsqueda' : 'Agrega tu primera contraseña para comenzar'}
             </p>
-            <button className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg flex items-center gap-2 mx-auto transition-colors">
+            <button className="px-4 py-2 rounded-lg flex items-center gap-2 mx-auto">
               <span className="text-xl">+</span>
               Agregar Contraseña
             </button>
