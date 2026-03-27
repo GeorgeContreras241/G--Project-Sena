@@ -8,21 +8,32 @@ export const openVault = async ({ file, password }: { file: File, password: stri
     if (!vaultData.state) return {
         state: false,
         message: {
-            title: "Error Fatal",
+            title: "Error Fataldd",
             description: "No se pudo cargar el archivo",
-            duration: 5000
+            duration: 5000,
+            styles: {
+                title: "text-white!"
+            }
         }
     };
     const { salt, iv, data } = vaultData;
     if (!salt || !iv || !data) return {
         state: false,
         message: {
-            title: "Error Fatal",
+            title: "Error Fatal dd",
             description: "No se pudo cargar el archivo",
-            duration: 5000
+            duration: 5000,
+            styles: {
+                title: "text-white!"
+            }
         }
     };
     const key = await deriveKey(password, salt);
     const dataDecrypted = await decrypt(key, { iv, data });
-    return { state: true, dataDecrypted, key };
+    console.log(dataDecrypted);
+    if (!dataDecrypted.status) return {
+        status: false,
+        message: dataDecrypted.message
+    };
+    return { state: true, dataDecrypted: dataDecrypted.data, key };
 }
