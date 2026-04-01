@@ -5,6 +5,7 @@ import { useStoragePass } from '@/storage/useStoragePass'
 import { encrypt } from '@/lib/crypto/encryptData'
 import { buildVaultFile } from '@/lib/vault/saveVault'
 import { Header_Gestor } from "@/features/manager/componentes/Header_Gestor"
+import { copyToClipboard } from '@/utils/Gestor/copyToClipboard'
 
 interface PasswordEntry {
   id: string
@@ -52,7 +53,7 @@ export const Gestor = () => {
       favorite: true
     }
   ])
-  console.log(dataPassword)
+
   const togglePasswordVisibility = (id: string) => {
     setShowPasswords(prev => ({
       ...prev,
@@ -60,9 +61,6 @@ export const Gestor = () => {
     }))
   }
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
-  }
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -77,14 +75,6 @@ export const Gestor = () => {
     }
   }
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'web': return 'bg-accent/20 text-accent'
-      case 'app': return 'bg-success/20 text-success'
-      case 'card': return 'bg-secondary/20 text-secondary'
-      default: return 'bg-text-muted/20 text-text-muted'
-    }
-  }
 
   const filteredPasswords = dataPassword?.filter((password: any) => {
     const matchesSearch = password.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -99,13 +89,6 @@ export const Gestor = () => {
     const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data)
     downloadVault(vaultFile)
   }
-
-  function toHex(bytes: Uint8Array) {
-    return Array.from(bytes)
-      .map(b => b.toString(16).padStart(2, "0"))
-      .join("")
-  }
-
 
   function downloadVault(buffer: any) {
     const blob = new Blob(

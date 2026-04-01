@@ -1,8 +1,11 @@
 import { Export } from "@/components/ui/icons/Export";
 import { Exit } from "@/components/ui/icons/Exit";
 import { Search } from "@/components/ui/icons/Search";
+import { Button } from "@/components/ui/Button";
 
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, handleExport, selectedCategory, searchTerm }: { setSearchTerm: (value: string) => void, setSelectedCategory: (value: string) => void, handleExport: () => void, selectedCategory: string, searchTerm: string }) => {
+
+    
 
     return (
         <header className="bg-primary rounded-lg shadow-sm border border-border/15 p-6 mb-6">
@@ -10,17 +13,15 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, handleExport
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold text-text-primary">Gestor de Contraseñas</h1>
                 <article className="flex gap-2">
-                    <button
-                        onClick={handleExport}
-                        className="flex gap-2 items-center bg-primary text-white px-4 py-2 rounded-md border border-border/20 cursor-pointer"
-                    >
+                    <Button text="Exportar">
                         <Export />
-                        Exportar
-                    </button>
-                    <button className="flex gap-2 items-center bg-primary text-white px-4 py-2 rounded-md border border-border/20 cursor-pointer">
+                    </Button>
+                    <Button text="Salir">
                         <Exit />
-                        Salir
-                    </button>
+                    </Button>
+                    <Button text="Añadir">
+                        <Exit />
+                    </Button>
                 </article>
             </div>
             {/* Search */}
@@ -64,11 +65,6 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, handleExport
                             }`}
                     >
                         Apps
-                    </button>
-                </div>
-                <div>
-                    <button className="bg-primary px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer hover:bg-primary-hover text-white">
-                        Añadir
                     </button>
                 </div>
             </section>
