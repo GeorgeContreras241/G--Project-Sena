@@ -1,8 +1,8 @@
 "use client"
-import { useState } from "react"
+import { ReactNode, useState } from "react"
 import { ActionSubmit } from "@/components/SeccionSubmit/ActionSubmit";
 
-export const AuthGuard = ({ children }) => {
+export const AuthGuard = ({ children }: { children: ReactNode }) => {
     const [isUnLocked, setIsUnLocked] = useState(false)
 
     if (!isUnLocked) {
