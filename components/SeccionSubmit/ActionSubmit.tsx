@@ -26,8 +26,6 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
             setPasswordError('');
         } else if (password.length < 4) {
             setPasswordError('La clave debe tener al menos 4 caracteres');
-        } else if (!/^[a-zA-Z0-9]+$/.test(password)) {
-            setPasswordError('Solo se permiten letras y números');
         } else {
             setPasswordError('');
         }
@@ -45,7 +43,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0] || null;
-        
+
         if (selectedFile) {
             if (!selectedFile.name.endsWith('.enc')) {
                 setFileError('Solo se permiten archivos .enc');
@@ -68,35 +66,35 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         if (!file) {
             setFileError('Seleccione un archivo');
             return sileo.error({ title: "Seleccione un archivo" });
         }
-        
+
         const formData = new FormData(e.target as HTMLFormElement);
         const password = formData.get("password") as string;
-        
+
         if (password.length < 4) {
             setPasswordError('La clave debe tener al menos 4 caracteres');
             return;
         }
-        
+
         setIsLoading(true);
-        
+
         try {
             // Validation of inputs
             const validation = validateVaultInputs(password, file);
             if (validation !== true) return sileo.error(validation);
-            
+
             // Opening of vault
             const vaultData = await openVault({ file: file!, password });
-            
+
             // Validation of vault
             if (!vaultData.state && vaultData.message) {
                 return sileo.error(vaultData.message);
             }
-            
+
             // Setting data
             setDataPassword(vaultData.dataDecrypted);
             setDerivedKey(vaultData.key);
@@ -152,13 +150,12 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
                     )}
                 </div>
                 <div className="relative">
-                    <input 
+                    <input
                         type={viewPass ? "text" : "password"}
                         className={`w-full border rounded py-2 px-3 pr-10
-                        placeholder:text-gray-500 placeholder:italic placeholder:text-md focus:outline-none focus:ring-2 focus:ring-accent/20 ${
-                            passwordError ? 'border-error focus:ring-error/20' : 'border-border-strong'
-                        }`}
-                        placeholder="Ingresa Aqui" 
+                        placeholder:text-gray-500 placeholder:italic placeholder:text-md focus:outline-none focus:ring-2 focus:ring-accent/20 ${passwordError ? 'border-error focus:ring-error/20' : 'border-border-strong'
+                            }`}
+                        placeholder="Ingresa Aqui"
                         id="password"
                         name="password"
                         autoComplete="off"
@@ -181,10 +178,10 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
                         )}
                     </button>
                 </div>
-                
-                <button 
-                    className="w-full bg-secondary text-text-secondary rounded p-2 cursor-pointer flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed" 
-                    type="submit" 
+
+                <button
+                    className="w-full bg-secondary text-text-secondary rounded p-2 cursor-pointer flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    type="submit"
                     disabled={isLoading}
                     aria-busy={isLoading}
                     aria-describedby="loading-status"
