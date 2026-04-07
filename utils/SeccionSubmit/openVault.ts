@@ -30,10 +30,9 @@ export const openVault = async ({ file, password }: { file: File, password: stri
     };
     const key = await deriveKey(password, salt);
     const dataDecrypted = await decrypt(key, { iv, data });
-    console.log(dataDecrypted);
     if (!dataDecrypted.status) return {
         status: false,
         message: dataDecrypted.message
     };
-    return { state: true, dataDecrypted: dataDecrypted.data, key };
+    return { state: true, dataDecrypted: dataDecrypted.data, key, salt };
 }
