@@ -17,8 +17,10 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
     const [passwordError, setPasswordError] = useState('');
     const [fileError, setFileError] = useState('');
     // Storage of decrypted data
-    const setDataPassword = useStoragePass((state: any) => state.setDataPassword);
+    const setDataPasswordInit = useStoragePass((state: any) => state.setDataPasswordInit);
+    const dataPassword = useStoragePass((state: any) => state.dataPassword);
     const setDerivedKey = useStoragePass((state: any) => state.setDerivedKey);
+    const setSalt = useStoragePass((state: any) => state.setSalt);
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const password = e.target.value;
@@ -79,7 +81,6 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
             setPasswordError('La clave debe tener al menos 4 caracteres');
             return;
         }
-
         setIsLoading(true);
 
         try {
@@ -89,18 +90,18 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
 
             // Opening of vault
             const vaultData = await openVault({ file: file!, password });
-
             // Validation of vault
             if (!vaultData.state && vaultData.message) {
                 return sileo.error(vaultData.message);
             }
 
             // Setting data
-            setDataPassword(vaultData.dataDecrypted);
+            setSalt(vaultData.salt);    
+            setDataPasswordInit(vaultData.dataDecrypted);
             setDerivedKey(vaultData.key);
             onSuccess(false);
         } catch (error) {
-            sileo.error({ title: "Error al descifrar el archivo" });
+            sileo.error({ title: "Error al descifrar el archivo." });
         } finally {
             setIsLoading(false);
         }
