@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useStoragePass } from "@/storage/useStoragePass"
 
 export const AddPasswords = () => {
-    const setDataPassword = useStoragePass((state) => state.setDataPassword)
+    const setDataPasswordUpdate = useStoragePass((state) => state.setDataPasswordUpdate)
     const [keys, setKeys] = useState({
         title: "",
         username: "",
@@ -16,9 +16,9 @@ export const AddPasswords = () => {
     // tool tip Ventana emergente para agregar contraseña componente Reutilizable
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setDataPassword(keys);
+        setDataPasswordUpdate({ id: crypto.randomUUID(), ...keys });
     }
-    
+
     return (
         <section className="bg-background border border-border rounded-lg p-4">
             <form className="space-y-3" onSubmit={handleSubmit}>
