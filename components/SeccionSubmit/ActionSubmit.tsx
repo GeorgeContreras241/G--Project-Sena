@@ -36,7 +36,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
     const handleClearFile = () => {
         setFile(null);
         setFileError('');
-        // Reset file input
+        // Reset file input 
         const fileInput = document.getElementById('file') as HTMLInputElement;
         if (fileInput) {
             fileInput.value = '';
@@ -69,10 +69,6 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!file) {
-            setFileError('Seleccione un archivo');
-            return sileo.error({ title: "Seleccione un archivo" });
-        }
 
         const formData = new FormData(e.target as HTMLFormElement);
         const password = formData.get("password") as string;
@@ -85,9 +81,22 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
 
         try {
             // Validation of inputs
-            const validation = validateVaultInputs(password, file);
+            const validation = validateVaultInputs(password);
             if (validation !== true) return sileo.error(validation);
 
+            if(!file){
+                sileo.warning({
+        title: "Error Fatal",
+        description: "La contraseña es requerida",
+        duration: 5000,
+        fill: "var(--color-bg-elevated)",
+        styles: {
+            title: "text-red! font-bold!",
+            description: "text-white! text-center!",
+        }
+    })
+                return
+            }
             // Opening of vault
             const vaultData = await openVault({ file: file!, password });
             // Validation of vault
