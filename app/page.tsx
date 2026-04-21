@@ -24,7 +24,7 @@ export default function Home() {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-bg-card px-4 py-2 rounded">
         Saltar al contenido principal
       </a>
-      <section id="main-content" className="w-full flex flex-col gap-4 sm:w-3/4 md:w-2/4 lg:w-2/7 h-fit p-8 border rounded-2xl border-border bg-bg-card">
+      <section id="main-content" className="w-full flex flex-col gap-4 sm:w-3/4 md:w-2/4 lg:w-2/5 h-fit p-8 border rounded-2xl border-border bg-bg-card">
         <header className="p-4">
           <h1 className="text-3xl font-bold text-text-primary">Gestor de Claves</h1>
           <span className="text-sm text-text-secondary">Elije la opcion a utilizar</span>
