@@ -1,6 +1,7 @@
 "use client"
+import { use } from "react"
+import { VaultContext } from "@/context/VaultProvider";
 import Add from "../ui/icons/Add";
-import { Exit } from "@/components/ui/exit";
 import { sileo, Toaster } from "sileo"
 import { useState } from "react";
 import { useStoragePass } from "@/storage/useStoragePass";
@@ -12,6 +13,7 @@ import { EyeClose } from "../ui/icons/EyeClose";
 
 
 export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => void }) => {
+    const useRef = use(VaultContext)
     const [file, setFile] = useState<File | null>(null);
     const [viewPass, setViewPass] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -115,7 +117,8 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
             }
 
             // Setting data
-            setSalt(vaultData.salt);
+            const salt = vaultData.salt
+            localStorage.setItem("salt",JSON.stringify(Array.from(salt)))
             setDataPasswordInit(vaultData.dataDecrypted);
             setDerivedKey(vaultData.key);
             onSuccess(false);
@@ -129,7 +132,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
     return (
         <div className="border border-border rounded-md bg-bg-main w-full max-w-xl grid place-items-center gap-2 p-8">
             <Toaster position="bottom-center" />
-            <Exit />
+            
             <div className="w-full grid place-items-center gap-2">
                 <div className="w-full flex gap-3">
                     <input className="hidden" id="file" type="file" onChange={handleFileChange} accept=".enc" />

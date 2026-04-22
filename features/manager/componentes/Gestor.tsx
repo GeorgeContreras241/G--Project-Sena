@@ -9,6 +9,7 @@ import { copyToClipboard } from '@/utils/Gestor/copyToClipboard'
 import { AddPasswords } from '@/features/manager/componentes/AddPasswords'
 import { Delete } from '@/components/ui/icons/Delete'
 import { Edit } from '@/components/ui/icons/Edit'
+import { deriveKey } from "@/lib/crypto/kdfKey" 
 
 interface PasswordEntry {
   id: string
@@ -61,7 +62,10 @@ export const Gestor = () => {
   const handleExport = async () => {
     const saltArray = JSON.parse(localStorage.getItem("salt"))
     const salt = new Uint8Array(saltArray)
+    const derivedKey= await deriveKey("",salt)
+    console.log(salt)
     // the derived key is no present, That is why it cant not  encrypt
+
     const encrypted = await encrypt(derivedKey, dataPassword)
     const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data)
     downloadVault(vaultFile)
