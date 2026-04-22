@@ -22,8 +22,6 @@ interface PasswordEntry {
 
 export const Gestor = () => {
   const derivedKey = useStoragePass((state: any) => state.derivedKey)
-  const salt = useStoragePass((state: any) => state.salt)
-  console.log(salt)
   const dataPassword = useStoragePass((state: any) => state.dataPassword)
   const setDataPasswordDelate = useStoragePass((state: any) => state.setDataPasswordDelate)
   const [searchTerm, setSearchTerm] = useState('')
@@ -61,6 +59,9 @@ export const Gestor = () => {
   })
 
   const handleExport = async () => {
+    const saltArray = JSON.parse(localStorage.getItem("salt"))
+    const salt = new Uint8Array(saltArray)
+    // the derived key is no present, That is why it cant not  encrypt
     const encrypted = await encrypt(derivedKey, dataPassword)
     const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data)
     downloadVault(vaultFile)

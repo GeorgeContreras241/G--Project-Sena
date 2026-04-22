@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useStoragePass } from "@/storage/useStoragePass";
 import { validateVaultInputs } from "@/utils/SeccionSubmit/validateVaultInputs";
 import { openVault } from "@/utils/SeccionSubmit/openVault";
+import { generateSalt } from "@/lib/crypto/genereteSalt"
 import { Eye } from "../ui/icons/Eye";
 import { EyeClose } from "../ui/icons/EyeClose";
 
@@ -84,17 +85,26 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
             const validation = validateVaultInputs(password);
             if (validation !== true) return sileo.error(validation);
 
-            if(!file){
+            if (!file) {
                 sileo.warning({
-        title: "Error Fatal",
-        description: "La contraseña es requerida",
-        duration: 5000,
-        fill: "var(--color-bg-elevated)",
-        styles: {
-            title: "text-red! font-bold!",
-            description: "text-white! text-center!",
-        }
-    })
+                    title: "Error Fatal",
+                    description: "Seguro que desea continuar sin archivo",
+                    duration: 5000,
+                    fill: "var(--color-bg-elevated)",
+                    styles: {
+                        title: "text-red! font-bold!",
+                        description: "text-white! text-center!",
+                    },
+                    button: {
+                        onClick: async () => {
+                            // Generate the key and save key
+                            const saltGenered = await generateSalt()
+                            localStorage.setItem("salt",JSON.stringify(Array.from(saltGenered)))
+                            onSuccess(true);
+                        },
+                        title: "Aceptar"
+                    },
+                })
                 return
             }
             // Opening of vault
@@ -105,7 +115,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
             }
 
             // Setting data
-            setSalt(vaultData.salt);    
+            setSalt(vaultData.salt);
             setDataPasswordInit(vaultData.dataDecrypted);
             setDerivedKey(vaultData.key);
             onSuccess(false);
