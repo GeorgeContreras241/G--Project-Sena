@@ -1,17 +1,17 @@
 "use client"
 import { Exit } from "@/components/ui/exit"
-import VaultProvider from "@/context/VaultProvider"
+import { LocalProvider } from "@/context/localProvider"
 
 const OfflineLayout = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <section className="flex flex-col">
             <Exit />
-            <VaultProvider>
+            <LocalProvider>
                 <main>
                     {children}
                 </main>
-            </VaultProvider>
+            </LocalProvider>
         </section>
     )
 }

@@ -1,6 +1,6 @@
 "use client"
 import { use } from "react"
-import { VaultContext } from "@/context/VaultProvider";
+import { LocalContext } from "@/context/localProvider"
 import Add from "../ui/icons/Add";
 import { sileo, Toaster } from "sileo"
 import { useState } from "react";
@@ -13,7 +13,8 @@ import { EyeClose } from "../ui/icons/EyeClose";
 
 
 export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => void }) => {
-    const useRef = use(VaultContext)
+    const keyRef = use(LocalContext);
+     // Debugging log
     const [file, setFile] = useState<File | null>(null);
     const [viewPass, setViewPass] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -71,8 +72,6 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-
         const formData = new FormData(e.target as HTMLFormElement);
         const password = formData.get("password") as string;
 
@@ -101,7 +100,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
                         onClick: async () => {
                             // Generate the key and save key
                             const saltGenered = await generateSalt()
-                            localStorage.setItem("salt",JSON.stringify(Array.from(saltGenered)))
+                            localStorage.setItem("salt", JSON.stringify(Array.from(saltGenered)))
                             onSuccess(true);
                         },
                         title: "Aceptar"
@@ -118,7 +117,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
 
             // Setting data
             const salt = vaultData.salt
-            localStorage.setItem("salt",JSON.stringify(Array.from(salt)))
+            localStorage.setItem("salt", JSON.stringify(Array.from(salt)))
             setDataPasswordInit(vaultData.dataDecrypted);
             setDerivedKey(vaultData.key);
             onSuccess(false);
@@ -132,7 +131,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
     return (
         <div className="border border-border rounded-md bg-bg-main w-full max-w-xl grid place-items-center gap-2 p-8">
             <Toaster position="bottom-center" />
-            
+
             <div className="w-full grid place-items-center gap-2">
                 <div className="w-full flex gap-3">
                     <input className="hidden" id="file" type="file" onChange={handleFileChange} accept=".enc" />

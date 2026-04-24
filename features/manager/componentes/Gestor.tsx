@@ -1,6 +1,7 @@
+// Refacor en proceso
 'use client'
-
-import { useState } from 'react'
+import { LocalContext } from "@/context/localProvider"
+import { useState,use } from 'react'
 import { useStoragePass } from '@/storage/useStoragePass'
 import { encrypt } from '@/lib/crypto/encryptData'
 import { buildVaultFile } from '@/lib/vault/saveVault'
@@ -22,6 +23,7 @@ interface PasswordEntry {
 }
 
 export const Gestor = () => {
+  const  useRef  = use(LocalContext)
   const derivedKey = useStoragePass((state: any) => state.derivedKey)
   const dataPassword = useStoragePass((state: any) => state.dataPassword)
   const setDataPasswordDelate = useStoragePass((state: any) => state.setDataPasswordDelate)
@@ -50,7 +52,6 @@ export const Gestor = () => {
         return <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>
     }
   }
-  console.log(dataPassword)
   const filteredPasswords = dataPassword?.filter((password: any) => {
     const matchesSearch = password.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       password.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
