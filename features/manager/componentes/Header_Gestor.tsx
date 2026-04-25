@@ -1,10 +1,13 @@
+"use client"
+import { use } from "react"
+import { LocalContext } from "@/context/localProvider"
 import { Export } from "@/components/ui/icons/Export";
 import { Exit } from "@/components/ui/icons/Exit";
 import { Search } from "@/components/ui/icons/Search";
 import { Button } from "@/components/ui/Button";
 
-export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, onLoad, selectedCategory, searchTerm }: { setSearchTerm: (value: string) => void, setSelectedCategory: (value: string) => void, onLoad: () => void, selectedCategory: string, searchTerm: string }) => {
-   
+export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: { setSearchTerm: (value: string) => void, setSelectedCategory: (value: string) => void, onLoad: () => void, selectedCategory: string, searchTerm: string }) => {
+    const { handleExport } = use(LocalContext)
 
     return (
         <header className="bg-primary rounded-lg shadow-sm border border-border/15 p-6 mb-6">
@@ -12,7 +15,7 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, onLoad, sele
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold text-text-primary">Gestor de Contraseñas</h1>
                 <article className="flex gap-2">
-                    <Button text="Exportar" onLoad={onLoad}>
+                    <Button text="Exportar" handleExport={handleExport}>
                         <Export />
                     </Button>
                     <Button text="Salir">

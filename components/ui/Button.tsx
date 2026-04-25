@@ -1,10 +1,11 @@
 import { ReactNode } from "react"
 
-export const Button = ({ children, text, className, onLoad }: { children: ReactNode, text: string, className?: string, onLoad?: () => void }) => {
+export const Button = ({ children, text, className, handleExport }: { children: ReactNode, text: string, className?: string, handleExport?: () => void }) => {
 
     const handleClick = async () => {
-        if (onLoad) {
-            await onLoad();
+        console.log("bien")
+        if (handleExport) {
+            await handleExport();
         }
     };
 

@@ -1,16 +1,14 @@
 // Refacor en proceso
 'use client'
 import { LocalContext } from "@/context/localProvider"
-import { useState,use } from 'react'
+import { useState, use } from 'react'
 import { useStoragePass } from '@/storage/useStoragePass'
-import { encrypt } from '@/lib/crypto/encryptData'
-import { buildVaultFile } from '@/lib/vault/saveVault'
 import { Header_Gestor } from "@/features/manager/componentes/Header_Gestor"
 import { copyToClipboard } from '@/utils/Gestor/copyToClipboard'
 import { AddPasswords } from '@/features/manager/componentes/AddPasswords'
 import { Delete } from '@/components/ui/icons/Delete'
 import { Edit } from '@/components/ui/icons/Edit'
-import { deriveKey } from "@/lib/crypto/kdfKey" 
+import { deriveKey } from "@/lib/crypto/kdfKey"
 
 interface PasswordEntry {
   id: string
@@ -23,7 +21,7 @@ interface PasswordEntry {
 }
 
 export const Gestor = () => {
-  const  useRef  = use(LocalContext)
+  const  useRef = use(LocalContext)
   const derivedKey = useStoragePass((state: any) => state.derivedKey)
   const dataPassword = useStoragePass((state: any) => state.dataPassword)
   const setDataPasswordDelate = useStoragePass((state: any) => state.setDataPasswordDelate)
@@ -60,40 +58,11 @@ export const Gestor = () => {
     return matchesSearch && matchesCategory
   })
 
-  const handleExport = async () => {
-    const saltArray = JSON.parse(localStorage.getItem("salt"))
-    const salt = new Uint8Array(saltArray)
-    const derivedKey= await deriveKey("",salt)
-    console.log(salt)
-    // the derived key is no present, That is why it cant not  encrypt
-
-    const encrypted = await encrypt(derivedKey, dataPassword)
-    const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data)
-    downloadVault(vaultFile)
-  }
-
-
-
-  function downloadVault(buffer: any) {
-    const blob = new Blob(
-      [buffer],
-      { type: "application/octet-stream" }
-    )
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement("a")
-    a.href = url
-    a.download = "pass.enc"
-    a.click()
-    URL.revokeObjectURL(url)
-  }
-
-
   return (
     <main className="min-h-screen p-4">
       <div className="max-w-6xl mx-auto flex flex-col gap-2">
         {/* Header */}
-        <button onClick={handleExport}>Export</button>
-        <Header_Gestor selectedCategory={selectedCategory} onLoad={handleExport}
+        <Header_Gestor selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory} setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
         <section className='grid grid-cols-1 lg:grid-flow-col auto-cols-auto gap-2'>
           {/* Form add Password */}
