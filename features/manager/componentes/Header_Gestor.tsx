@@ -17,9 +17,10 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold text-text-primary">Gestor de Contraseñas</h1>
                 <article className="flex gap-2">
-                    <Button text="Exportar" handleExport={handleExport} dataPassword={dataPassword}>
-                        <Export />
-                    </Button>
+                    <button className={`flex gap-2 items-center bg-primary text-white px-4 py-2 rounded-md border border-border 
+        cursor-pointer hover:bg-bg-elevated`} onClick={() => handleExport(dataPassword)}>
+                        exportar
+                    </button>
                     <Button text="Salir">
                         <Exit />
                     </Button>

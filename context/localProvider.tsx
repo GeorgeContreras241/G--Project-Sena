@@ -1,9 +1,11 @@
-// Data password del storage de zustand es demacioado complejo pasarlo por props- busca solicion en el button.tsx
+// neceisto revisar action sutmit  al subir el archivo no setea la info , parece que ya funciona
 "use client";
 import { encrypt } from "@/lib/crypto/encryptData"
 import { buildVaultFile } from "@/lib/vault/saveVault"
 import { deriveKey } from "@/lib/crypto/kdfKey"
+import { loadVault } from "@/lib/vault/loadVault";
 import { createContext, useRef, useEffect, useState } from "react";
+import { decrypt } from "@/lib/crypto/decryptData";
 
 export const LocalContext = createContext<{}>(null!);
 
@@ -31,16 +33,45 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
 
     }
 
-    const handleExport = async (data) => {
-        console.log("Datos a encryptar ojo :",data)
+    const handleExport = async (dataPassword) => {
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
         const salt = new Uint8Array(saltSave);
 
-        const encrypted = await encrypt(drcKey.current, data);
+        const encrypted = await encrypt(drcKey.current, dataPassword);
 
         // Tener cuidado que encrypted es un objeto con salt, iv y data
         const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data);
         downloadVault(vaultFile)
+    }
+
+    const handleImport = async (file) => {
+        const vaultData = await loadVault({ file })
+        if (!vaultData.state) return {
+            state: false,
+            message: {
+                title: "Error Fatal",
+                description: "No se pudo cargar el archivo",
+                duration: 5000,
+                styles: {
+                    title: "text-white!"
+                }
+            }
+        };
+        const { salt, iv, data } = vaultData;
+        if (!salt || !iv || !data) return {
+            state: false,
+            message: {
+                title: "Error Fatal",
+                description: "No se pudo cargar el archivo",
+                duration: 5000,
+                styles: {
+                    title: "text-white!"
+                }
+            }
+        };
+        const decryptedData = await decrypt(drcKey.current, { iv, data })
+        localStorage.setItem("salt",JSON.stringify(Array.from(salt)))
+        return decryptedData
     }
 
     const downloadVault = (buffer: any) => {
@@ -57,7 +88,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <LocalContext value={{ saltRef, handleExport }}>
+        <LocalContext value={{ saltRef, handleExport, handleImport }}>
             {children}
         </LocalContext>
     )

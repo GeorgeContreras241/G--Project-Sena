@@ -13,7 +13,7 @@ import { EyeClose } from "../ui/icons/EyeClose";
 
 
 export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => void }) => {
-    const keyRef = use(LocalContext);
+    const {keyRef ,handleImport} = use(LocalContext);
      // Debugging log
     const [file, setFile] = useState<File | null>(null);
     const [viewPass, setViewPass] = useState(false);
@@ -85,7 +85,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
             // Validation of inputs
             const validation = validateVaultInputs(password);
             if (validation !== true) return sileo.error(validation);
-
+            
             if (!file) {
                 sileo.warning({
                     title: "Error Fatal",
@@ -108,21 +108,16 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
                 })
                 return
             }
-            // Opening of vault
-            const vaultData = await openVault({ file: file!, password });
-            // Validation of vault
-            if (!vaultData.state && vaultData.message) {
-                return sileo.error(vaultData.message);
-            }
-
             // Setting data
-            const salt = vaultData.salt
-            localStorage.setItem("salt", JSON.stringify(Array.from(salt)))
-            setDataPasswordInit(vaultData.dataDecrypted);
-            setDerivedKey(vaultData.key);
+            const decryptedData = await handleImport(file)  
+            console.log(decryptedData)
+            // if (!decryptedData.state) {
+            //     return sileo.error(decryptedData.message);
+            // } produce Error mirar 
+            setDataPasswordInit(decryptedData.data);
             onSuccess(false);
         } catch (error) {
-            sileo.error({ title: "Error al descifrar el archivo." });
+            sileo.error({ title: "Error al descifrar el archivo" });
         } finally {
             setIsLoading(false);
         }
