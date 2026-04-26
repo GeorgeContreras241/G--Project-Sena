@@ -21,7 +21,7 @@ interface PasswordEntry {
 }
 
 export const Gestor = () => {
-  const  useRef = use(LocalContext)
+  const saltRef = use(LocalContext)
   const derivedKey = useStoragePass((state: any) => state.derivedKey)
   const dataPassword = useStoragePass((state: any) => state.dataPassword)
   const setDataPasswordDelate = useStoragePass((state: any) => state.setDataPasswordDelate)

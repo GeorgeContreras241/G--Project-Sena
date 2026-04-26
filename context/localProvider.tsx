@@ -1,5 +1,4 @@
-// contexto local ts pendiente - Problema Salt no se guarda en ningun lado, se necesita
-// tenerlo en memoria 
+// Data password del storage de zustand es demacioado complejo pasarlo por props- busca solicion en el button.tsx
 "use client";
 import { encrypt } from "@/lib/crypto/encryptData"
 import { buildVaultFile } from "@/lib/vault/saveVault"
@@ -9,7 +8,7 @@ import { createContext, useRef, useEffect, useState } from "react";
 export const LocalContext = createContext<{}>(null!);
 
 export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
-    const keyRef = useRef<Uint8Array | null>(null);
+    const saltRef = useRef<Uint8Array | null>(null);
     const drcKey = useRef<CryptoKey>(null!);
     const [saltState, setSaltState] = useState<boolean>(false);
 
@@ -20,24 +19,25 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     const toogleDeriveKey = async () => {
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
         const salt = new Uint8Array(saltSave);
-        if (salt) {
-            // Si ahy un salt se guarda y estado de la aplicacion se actualiza
-            const drvKey = await deriveKey("password", salt);
 
+        if (salt) {
+            const drvKey = await deriveKey("password", salt);
             if (drvKey) {
+                saltRef.current = salt
                 drcKey.current = drvKey;
             }
             setSaltState(true);
         }
+
     }
 
-    const handleExport = async () => {
+    const handleExport = async (data) => {
+        console.log("Datos a encryptar ojo :",data)
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
         const salt = new Uint8Array(saltSave);
-        console.log("descargando")
-        console.log(drcKey.current)
-        const encrypted = await encrypt(drcKey.current, drcKey.current);
-  
+
+        const encrypted = await encrypt(drcKey.current, data);
+
         // Tener cuidado que encrypted es un objeto con salt, iv y data
         const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data);
         downloadVault(vaultFile)
@@ -57,7 +57,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     return (
-        <LocalContext value={{keyRef,handleExport}}>
+        <LocalContext value={{ saltRef, handleExport }}>
             {children}
         </LocalContext>
     )

@@ -1,11 +1,11 @@
 import { ReactNode } from "react"
 
-export const Button = ({ children, text, className, handleExport }: { children: ReactNode, text: string, className?: string, handleExport?: () => void }) => {
-
+export const Button = ({ children, text, className, handleExport, dataPassword }: { children: ReactNode, text: string, className?: string, handleExport?: () => void }) => {
+    console.log(dataPassword)
     const handleClick = async () => {
         console.log("bien")
         if (handleExport) {
-            await handleExport();
+            await handleExport(dataPassword);
         }
     };
 

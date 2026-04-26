@@ -7,7 +7,7 @@ import { useState } from "react"
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<string | null>(null);
-
+  localStorage.removeItem("salt")
   const handleWebAuthn = async () => {
     setIsLoading('webauthn');
     try {
@@ -30,8 +30,8 @@ export default function Home() {
           <span className="text-sm text-text-secondary">Elije la opcion a utilizar</span>
         </header>
         <nav className="grid grid-cols-1 sm:grid-cols-2 justify-center items-center gap-4 h-fit" role="navigation" aria-label="Opciones principales">
-          <Link 
-            href="/offline" 
+          <Link
+            href="/offline"
             className="flex flex-row sm:flex-col items-center justify-start md:justify-center gap-2 md:gap-6 text-center
             w-full sm:h-50 py-3 px-4 border rounded-2xl border-border-subtle cursor-pointer bg-bg-overlay hover:bg-bg-elevated transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-accent/20"
             role="menuitem"
@@ -45,7 +45,7 @@ export default function Home() {
               <span className="text-xs text-neutral-400 px-2">Sin conexión a internet, archivo encriptado.</span>
             </div>
           </Link>
-          <button 
+          <button
             onClick={handleWebAuthn}
             disabled={isLoading === 'webauthn'}
             className="flex flex-row sm:flex-col items-center justify-start md:justify-center gap-2 md:gap-6 
