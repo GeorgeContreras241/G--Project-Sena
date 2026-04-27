@@ -7,7 +7,9 @@ import { useState } from "react"
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<string | null>(null);
-  localStorage.removeItem("salt")
+
+ 
+
   const handleWebAuthn = async () => {
     setIsLoading('webauthn');
     try {

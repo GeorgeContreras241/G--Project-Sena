@@ -6,17 +6,28 @@ import { deriveKey } from "@/lib/crypto/kdfKey"
 import { loadVault } from "@/lib/vault/loadVault";
 import { createContext, useRef, useEffect, useState } from "react";
 import { decrypt } from "@/lib/crypto/decryptData";
+import { useStoragePass } from "@/storage/useStoragePass";
 
 export const LocalContext = createContext<{}>(null!);
 
 export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
+    const { setDataPassword } = useStoragePass();
     const saltRef = useRef<Uint8Array | null>(null);
-    const drcKey = useRef<CryptoKey>(null!);
+    const drcKey = useRef<CryptoKey | null>(null!);
     const [saltState, setSaltState] = useState<boolean>(false);
 
     useEffect(() => {
         toogleDeriveKey();
     }, [])
+
+
+    const handleReset = () => {
+        localStorage.removeItem("salt");
+        saltRef.current = null;
+        drcKey.current = null;
+        setDataPassword([]);
+        setSaltState(false);
+    }
 
     const toogleDeriveKey = async () => {
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
@@ -70,8 +81,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
             }
         };
         const decryptedData = await decrypt(drcKey.current, { iv, data })
-        localStorage.setItem("salt",JSON.stringify(Array.from(salt)))
-        return decryptedData
+        return {decryptedData,salt,drcKey:drcKey.current}
     }
 
     const downloadVault = (buffer: any) => {
@@ -86,9 +96,8 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         a.click()
         URL.revokeObjectURL(url)
     }
-
     return (
-        <LocalContext value={{ saltRef, handleExport, handleImport }}>
+        <LocalContext value={{ saltRef, handleExport, handleImport, handleReset }}>
             {children}
         </LocalContext>
     )

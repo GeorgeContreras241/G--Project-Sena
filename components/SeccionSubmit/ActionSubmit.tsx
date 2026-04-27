@@ -1,19 +1,18 @@
 "use client"
-import { use } from "react"
+import { use, useEffect } from "react"
 import { LocalContext } from "@/context/localProvider"
 import Add from "../ui/icons/Add";
 import { sileo, Toaster } from "sileo"
 import { useState } from "react";
 import { useStoragePass } from "@/storage/useStoragePass";
 import { validateVaultInputs } from "@/utils/SeccionSubmit/validateVaultInputs";
-import { openVault } from "@/utils/SeccionSubmit/openVault";
 import { generateSalt } from "@/lib/crypto/genereteSalt"
 import { Eye } from "../ui/icons/Eye";
 import { EyeClose } from "../ui/icons/EyeClose";
-
+import { validatePassword } from "@/utils/SeccionSubmit/validatePassword";
 
 export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => void }) => {
-    const {keyRef ,handleImport} = use(LocalContext);
+    const { handleImport, handleReset } = use(LocalContext);
      // Debugging log
     const [file, setFile] = useState<File | null>(null);
     const [viewPass, setViewPass] = useState(false);
@@ -22,28 +21,91 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
     const [fileError, setFileError] = useState('');
     // Storage of decrypted data
     const setDataPasswordInit = useStoragePass((state: any) => state.setDataPasswordInit);
-    const dataPassword = useStoragePass((state: any) => state.dataPassword);
-    const setDerivedKey = useStoragePass((state: any) => state.setDerivedKey);
-    const setSalt = useStoragePass((state: any) => state.setSalt);
+
+    useEffect(() => {
+        handleReset();
+    }, []);
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const password = e.target.value;
-        if (password.length === 0) {
-            setPasswordError('');
-        } else if (password.length < 4) {
-            setPasswordError('La clave debe tener al menos 4 caracteres');
-        } else {
-            setPasswordError('');
-        }
+        validatePassword(password);
     };
 
     const handleClearFile = () => {
         setFile(null);
         setFileError('');
-        // Reset file input 
-        const fileInput = document.getElementById('file') as HTMLInputElement;
-        if (fileInput) {
-            fileInput.value = '';
+    };
+
+
+    const handleNoFileScenario = async () => {
+        sileo.warning({
+            title: "Error Fatal",
+            description: "Seguro que desea continuar sin archivo",
+            duration: 5000,
+            fill: "var(--color-bg-elevated)",
+            styles: {
+                title: "text-red! font-bold!",
+                description: "text-white! text-center!",
+            },
+            button: {
+                onClick: async () => {
+                    const saltGenerated = await generateSalt();
+                    localStorage.setItem("salt", JSON.stringify(Array.from(saltGenerated)));
+                    onSuccess(true);
+                },
+                title: "Aceptar"
+            },
+        });
+    };
+
+    const processFileImport = async (file: File, password: string) => {
+        const validation = validateVaultInputs(password);
+        if (validation !== true) {
+            sileo.error(validation);
+            return false;
+        }
+
+        const { decryptedData, salt } = await handleImport(file);
+        console.log(decryptedData)
+        if (!decryptedData.status) {
+            sileo.error(decryptedData.message);
+            return false;
+        }
+
+        localStorage.setItem("salt", JSON.stringify(Array.from(salt)));
+        setDataPasswordInit(decryptedData.data);
+        return true;
+    };
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target as HTMLFormElement);
+        const password = formData.get("password") as string;
+
+        const validatePasswordResult = validatePassword(password);
+        if (!validatePasswordResult.success) {    
+            setPasswordError(validatePasswordResult.error || "");
+            sileo.error({ title: validatePasswordResult.error || "Error al validar la contraseña" });
+            return;
+        }
+
+        setIsLoading(true);
+
+        try {
+            if (!file) {
+                await handleNoFileScenario();
+                return;
+            }
+
+            const success = await processFileImport(file, password);
+            if (success) {
+                onSuccess(true);
+            }
+        } catch (error) {
+            sileo.error({ title: "Error al descifrar el archivo" });
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -70,62 +132,9 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.target as HTMLFormElement);
-        const password = formData.get("password") as string;
-
-        if (password.length < 4) {
-            setPasswordError('La clave debe tener al menos 4 caracteres');
-            return;
-        }
-        setIsLoading(true);
-
-        try {
-            // Validation of inputs
-            const validation = validateVaultInputs(password);
-            if (validation !== true) return sileo.error(validation);
-            
-            if (!file) {
-                sileo.warning({
-                    title: "Error Fatal",
-                    description: "Seguro que desea continuar sin archivo",
-                    duration: 5000,
-                    fill: "var(--color-bg-elevated)",
-                    styles: {
-                        title: "text-red! font-bold!",
-                        description: "text-white! text-center!",
-                    },
-                    button: {
-                        onClick: async () => {
-                            // Generate the key and save key
-                            const saltGenered = await generateSalt()
-                            localStorage.setItem("salt", JSON.stringify(Array.from(saltGenered)))
-                            onSuccess(true);
-                        },
-                        title: "Aceptar"
-                    },
-                })
-                return
-            }
-            // Setting data
-            const decryptedData = await handleImport(file)  
-            console.log(decryptedData)
-            // if (!decryptedData.state) {
-            //     return sileo.error(decryptedData.message);
-            // } produce Error mirar 
-            setDataPasswordInit(decryptedData.data);
-            onSuccess(false);
-        } catch (error) {
-            sileo.error({ title: "Error al descifrar el archivo" });
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
     return (
         <div className="border border-border rounded-md bg-bg-main w-full max-w-xl grid place-items-center gap-2 p-8">
-            <Toaster position="bottom-center" />
+            <Toaster position="top-center" />
 
             <div className="w-full grid place-items-center gap-2">
                 <div className="w-full flex gap-3">

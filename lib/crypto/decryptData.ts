@@ -1,5 +1,4 @@
 export const decrypt = async (key: CryptoKey, payload: any): Promise<any> => {
-
   try {
     const iv = new Uint8Array(payload.iv)
     const data = new Uint8Array(payload.data)
