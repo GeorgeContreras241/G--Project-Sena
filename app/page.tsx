@@ -4,11 +4,12 @@ import WebAuthn from "../components/ui/icons/WebAuthn"
 import SeccionSocial from "../components/Social/SocialSeccion"
 import Link from "next/link"
 import { useState } from "react"
+import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle"
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
- 
+
 
   const handleWebAuthn = async () => {
     setIsLoading('webauthn');
@@ -23,19 +24,20 @@ export default function Home() {
   };
   return (
     <main className="fondo flex flex-col h-dvh items-center justify-around md:justify-center md:gap-20 font-sans dark:bg-background px-2">
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-bg-card px-4 py-2 rounded">
-        Saltar al contenido principal
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-bg-card dark:bg-gray-800 px-4 py-2 rounded">
+        Saltar al contenido principal 
       </a>
-      <section id="main-content" className="w-full flex flex-col gap-4 sm:w-3/4 md:w-2/4 lg:w-2/5 h-fit p-8 border rounded-2xl border-border bg-bg-card">
+      <section id="main-content" className=" w-full flex flex-col gap-4 sm:w-3/4 md:w-2/4 lg:w-2/5 h-fit">
         <header className="p-4">
-          <h1 className="text-3xl font-bold text-text-primary">Gestor de Claves</h1>
-          <span className="text-sm text-text-secondary">Elije la opcion a utilizar</span>
+          <h1 className="text-3xl font-bold dark:text-primary">Gestor de Claves</h1>
+          <ThemeToggle />
+          <span className="text-sm text-neutral-500 dark:text-gray-300">Elije la opcion a utilizar</span>
         </header>
         <nav className="grid grid-cols-1 sm:grid-cols-2 justify-center items-center gap-4 h-fit" role="navigation" aria-label="Opciones principales">
           <Link
             href="/offline"
             className="flex flex-row sm:flex-col items-center justify-start md:justify-center gap-2 md:gap-6 text-center
-            w-full sm:h-50 py-3 px-4 border rounded-2xl border-border-subtle cursor-pointer bg-bg-overlay hover:bg-bg-elevated transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-accent/20"
+            w-full sm:h-50 py-3 px-4 border rounded-2xl border-border-subtle dark:border-gray-600 cursor-pointer bg-bg-overlay dark:bg-gray-700 hover:bg-bg-elevated dark:hover:bg-gray-600 transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-accent/20"
             role="menuitem"
             aria-label="Uso Offline - Administrar claves sin conexión"
           >
@@ -43,15 +45,15 @@ export default function Home() {
               <Archive />
             </div>
             <div>
-              <p className="text-start px-2 md:text-center font-medium">Uso Offline</p>
-              <span className="text-xs text-neutral-400 px-2">Sin conexión a internet, archivo encriptado.</span>
+              <p className="text-start px-2 md:text-center font-medium dark:text-white">Uso Offline</p>
+              <span className="text-xs text-neutral-400 dark:text-gray-400 px-2">Sin conexión a internet, archivo encriptado.</span>
             </div>
           </Link>
           <button
             onClick={handleWebAuthn}
             disabled={isLoading === 'webauthn'}
             className="flex flex-row sm:flex-col items-center justify-start md:justify-center gap-2 md:gap-6 
-            w-full sm:h-50 py-3 px-4 border rounded-2xl border-border-subtle cursor-pointer bg-bg-overlay hover:bg-bg-elevated transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 disabled:cursor-not-allowed relative"
+            w-full sm:h-50 py-3 px-4 border rounded-2xl border-border-subtle dark:border-gray-600 cursor-pointer bg-bg-overlay dark:bg-gray-700 hover:bg-bg-elevated dark:hover:bg-gray-600 transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 disabled:cursor-not-allowed relative"
             role="menuitem"
             aria-label="WebAuthn - Autenticación biométrica"
             aria-busy={isLoading === 'webauthn'}
@@ -67,11 +69,11 @@ export default function Home() {
               )}
             </div>
             <div>
-              <p className="text-start px-2 md:text-center font-medium">WebAuthn</p>
-              <span className="text-xs text-neutral-400 px-2">Autenticación biométrica, pin o huella.</span>
+              <p className="text-start px-2 md:text-center font-medium dark:text-white">WebAuthn</p>
+              <span className="text-xs text-neutral-400 dark:text-gray-400 px-2">Autenticación biométrica, pin o huella.</span>
             </div>
             {isLoading === 'webauthn' && (
-              <span className="absolute inset-0 flex items-center justify-center bg-bg-card/80 rounded-2xl" aria-live="polite">
+              <span className="absolute inset-0 flex items-center justify-center bg-bg-card/80 dark:bg-gray-800/80 rounded-2xl" aria-live="polite">
                 <span className="sr-only">Procesando autenticación WebAuthn</span>
               </span>
             )}

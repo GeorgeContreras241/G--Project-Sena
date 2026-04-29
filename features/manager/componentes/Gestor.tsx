@@ -58,7 +58,7 @@ export const Gestor = () => {
   })
 
   return (
-    <main className="min-h-screen p-4">
+    <main className="min-h-screen p-4 bg-bg-main dark:bg-gray-900">
       <div className="max-w-6xl mx-auto flex flex-col gap-2">
         {/* Header */}
         <Header_Gestor selectedCategory={selectedCategory}
@@ -70,20 +70,20 @@ export const Gestor = () => {
           <div className="w-full">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
               {filteredPasswords?.map((password: any) => (
-                <article key={password.id} className="bg-bg-card border border-border rounded-lg overflow-hidden hover:border-border-strong transition-colors duration-200">
+                <article key={password.id} className="bg-bg-card dark:bg-gray-800 border border-border dark:border-gray-700 rounded-lg overflow-hidden hover:border-border-strong dark:hover:border-gray-600 transition-colors duration-200">
                   {/* Password Card Header */}
-                  <div className="flex items-center gap-3 p-4 border-b border-border-subtle">
+                  <div className="flex items-center gap-3 p-4 border-b border-border-subtle dark:border-gray-700">
                     <div className="shrink-0 p-2 bg-accent-subtle rounded-lg text-accent">
                       {getCategoryIcon(password.category)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-text-primary truncate">{password.title}</h3>
+                      <h3 className="font-semibold text-text-primary dark:text-white truncate">{password.title}</h3>
                       {password.url && (
                         <a
                           href={password.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-accent hover:text-accent-hover transition-colors truncate block"
+                          className="text-xs text-accent hover:text-accent-hover transition-colors truncate block dark:text-accent"
                           aria-label={`Visitar ${password.url}`}
                         >
                           {password.url}
@@ -101,9 +101,9 @@ export const Gestor = () => {
                   {/* Password Details */}
                   <div className="p-4 space-y-3">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                      <label className="text-sm text-text-secondary shrink-0 sm:w-20">Usuario:</label>
+                      <label className="text-sm text-text-secondary dark:text-gray-400 shrink-0 sm:w-20">Usuario:</label>
                       <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <span className="text-sm font-medium text-text-primary truncate">{password.username}</span>
+                        <span className="text-sm font-medium text-text-primary dark:text-gray-200 truncate">{password.username}</span>
                         <button
                           onClick={() => copyToClipboard(password.username)}
                           className="shrink-0 p-1.5 rounded hover:bg-accent-subtle text-text-secondary hover:text-accent transition-colors focus:outline-none focus:ring-2 focus:ring-accent"
@@ -117,9 +117,9 @@ export const Gestor = () => {
                     </div>
 
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                      <label className="text-sm text-text-secondary shrink-0 sm:w-20">Contraseña:</label>
+                      <label className="text-sm text-text-secondary dark:text-gray-400 shrink-0 sm:w-20">Contraseña:</label>
                       <div className="flex items-center gap-2 flex-1 min-w-0">
-                        <span className="text-sm font-mono text-text-primary truncate">
+                        <span className="text-sm font-mono text-text-primary dark:text-gray-200 truncate">
                           {showPasswords[password.id] ? password.password : '•••••••'}
                         </span>
                         <button
@@ -151,16 +151,16 @@ export const Gestor = () => {
                     </div>
                   </div>
                   {/* Action Buttons */}
-                  <div className="flex items-center justify-end gap-2 p-4 border-t border-border-subtle bg-bg-elevated">
+                  <div className="flex items-center justify-end gap-2 p-4 border-t border-border-subtle dark:border-gray-700 bg-bg-elevated dark:bg-gray-700">
                     <button
-                      className='p-2 rounded hover:bg-accent-subtle text-text-secondary hover:text-accent transition-colors focus:outline-none focus:ring-2 focus:ring-accent'
+                      className='p-2 rounded hover:bg-accent-subtle dark:hover:bg-gray-700 text-text-secondary dark:text-gray-400 hover:text-accent transition-colors focus:outline-none focus:ring-2 focus:ring-accent'
                       aria-label="Editar contraseña"
                     >
                       <Edit />
                     </button>
                     <button
                       onClick={() => setDataPasswordDelate(password.id)}
-                      className='p-2 rounded hover:bg-error-subtle text-text-secondary hover:text-error transition-colors focus:outline-none focus:ring-2 focus:ring-error'
+                      className='p-2 rounded hover:bg-error-subtle dark:hover:bg-red-900/20 text-text-secondary dark:text-gray-400 hover:text-error transition-colors focus:outline-none focus:ring-2 focus:ring-error'
                       aria-label="Eliminar contraseña"
                     >
                       <Delete />

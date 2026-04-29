@@ -20,13 +20,13 @@ export const AddPasswords = () => {
     }
 
     return (
-        <section className="bg-background border border-border rounded-lg p-4">
+        <section className="bg-background dark:bg-gray-800 border border-border dark:border-gray-700 rounded-lg p-4">
             <form className="space-y-3" onSubmit={handleSubmit}>
-                <label htmlFor="" className="block text-xs font-medium text-text-primary mb-1">
+                <label htmlFor="" className="block text-xs font-medium text-text-primary dark:text-white mb-1">
                     Agregar Contraseña
                 </label>
                 <div>
-                    <label htmlFor="title" className="block text-xs font-medium text-text-primary mb-1">
+                    <label htmlFor="title" className="block text-xs font-medium text-text-primary dark:text-white mb-1">
                         Título
                     </label>
                     <input
@@ -39,7 +39,7 @@ export const AddPasswords = () => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="username" className="block text-xs font-medium text-text-primary mb-1">
+                    <label htmlFor="username" className="block text-xs font-medium text-text-primary dark:text-white mb-1">
                         Usuario
                     </label>
                     <input
@@ -52,7 +52,7 @@ export const AddPasswords = () => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="password" className="block text-xs font-medium text-text-primary mb-1">
+                    <label htmlFor="password" className="block text-xs font-medium text-text-primary dark:text-white mb-1">
                         Contraseña
                     </label>
                     <input

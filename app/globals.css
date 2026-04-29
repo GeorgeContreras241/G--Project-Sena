@@ -1,150 +1,8 @@
 @import "tailwindcss";
 
-:root {
-  --background: #0F172A;
-  --foreground: #F8FAFC;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-
-  /* Brand */
-  --color-primary: #0B132B;
-  --color-primary-hover: #1C2541;
-  --color-secondary: #3A506B;
-  --color-accent: #2EC4B6;
-  --color-accent-hover: #25A99D;
-  --color-accent-subtle: rgba(46, 196, 182, 0.10);
-  --color-accent-muted: rgba(46, 196, 182, 0.20);
-
-  /* Texto */
-  --color-text-primary: #F8FAFC;
-  --color-text-secondary: #CBD5E1;
-  --color-text-muted: #64748B;
-  --color-text-hint: #334155;
-
-  /* Background */
-  --color-bg-main: #020617;
-  --color-bg-card: #0F172A;
-  --color-bg-elevated: #162032;
-  --color-bg-overlay: rgba(2, 6, 23, 0.85);
-
-  /* Border */
-  --color-border: #1E293B;
-  --color-border-subtle: #0F1929;
-  --color-border-strong: #2E4060;
-
-  /* Estados */
-  --color-success: #22C55E;
-  --color-success-subtle: rgba(34, 197, 94, 0.10);
-  --color-error: #EF4444;
-  --color-error-subtle: rgba(239, 68, 68, 0.10);
-  --color-warning: #F59E0B;
-  --color-warning-subtle: rgba(245, 158, 11, 0.10);
-
-  /* Radius */
-  --radius: 8px;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-full: 9999px;
-
-  /* Typography scale */
-  --text-xs: 0.6875rem;     /* 11px */
-  --text-sm: 0.8125rem;     /* 13px */
-  --text-base: 0.9375rem;   /* 15px */
-  --text-lg: 1.0625rem;     /* 17px */
-  --text-xl: 1.25rem;       /* 20px */
-  --text-2xl: 1.5rem;       /* 24px */
-  --text-3xl: 1.875rem;     /* 30px */
-  --text-4xl: 2.25rem;      /* 36px */
-
-  /* Font weights */
-  --font-normal: 400;
-  --font-medium: 500;
-  --font-semibold: 600;
-  --font-bold: 700;
-
-  /* Shadows — layered for depth */
-  --shadow-xs:
-    0 1px 2px rgba(0, 0, 0, 0.4);
-
-  --shadow-sm:
-    0 1px 3px rgba(0, 0, 0, 0.5),
-    0 1px 2px rgba(0, 0, 0, 0.3);
-
-  --shadow-md:
-    0 4px 6px rgba(0, 0, 0, 0.5),
-    0 2px 4px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
-
-  --shadow-lg:
-    0 10px 20px rgba(0, 0, 0, 0.6),
-    0 4px 8px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-
-  --shadow-xl:
-    0 20px 40px rgba(0, 0, 0, 0.7),
-    0 8px 16px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-
-  --shadow-card:
-    0 2px 8px rgba(0, 0, 0, 0.5),
-    0 1px 3px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
-
-  --shadow-modal:
-    0 24px 48px rgba(0, 0, 0, 0.8),
-    0 8px 24px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-
-  /* Accent glows */
-  --shadow-accent:
-    0 0 0 1px rgba(46, 196, 182, 0.3),
-    0 0 12px rgba(46, 196, 182, 0.15),
-    0 4px 16px rgba(0, 0, 0, 0.5);
-
-  --shadow-accent-sm:
-    0 0 0 1px rgba(46, 196, 182, 0.2),
-    0 0 6px rgba(46, 196, 182, 0.10);
-
-  --shadow-success:
-    0 0 0 1px rgba(34, 197, 94, 0.25),
-    0 0 8px rgba(34, 197, 94, 0.10);
-
-  --shadow-error:
-    0 0 0 1px rgba(239, 68, 68, 0.25),
-    0 0 8px rgba(239, 68, 68, 0.10);
-
-  /* Focus rings */
-  --ring-accent:   0 0 0 2px var(--color-bg-main), 0 0 0 4px rgba(46, 196, 182, 0.5);
-  --ring-error:    0 0 0 2px var(--color-bg-main), 0 0 0 4px rgba(239, 68, 68, 0.5);
-
-  /* Text shadows — for titles on dark backgrounds */
-  --text-shadow-sm:   0 1px 3px rgba(0, 0, 0, 0.6);
-  --text-shadow-md:   0 2px 6px rgba(0, 0, 0, 0.7);
-  --text-shadow-lg:   0 2px 12px rgba(0, 0, 0, 0.8);
-  --text-shadow-accent: 0 0 20px rgba(46, 196, 182, 0.35), 0 2px 8px rgba(0, 0, 0, 0.6);
-  --text-shadow-glow:   0 0 30px rgba(46, 196, 182, 0.5), 0 0 60px rgba(46, 196, 182, 0.2);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
-
 
 @property --angle {
   syntax: "<angle>";
@@ -152,7 +10,7 @@ body {
   inherits: false;
 }
 
-.fondo {
+#fondo {
   background: conic-gradient(
     from var(--angle),
     #020813,
