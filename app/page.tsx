@@ -23,42 +23,47 @@ export default function Home() {
     }
   };
   return (
-    <main className="fondo flex flex-col h-dvh items-center justify-around md:justify-center md:gap-20 font-sans dark:bg-background px-2">
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-bg-card dark:bg-gray-800 px-4 py-2 rounded">
-        Saltar al contenido principal 
-      </a>
-      <section id="main-content" className=" w-full flex flex-col gap-4 sm:w-3/4 md:w-2/4 lg:w-2/5 h-fit">
-        <header className="p-4">
-          <h1 className="text-3xl font-bold dark:text-primary">Gestor de Claves</h1>
-          <ThemeToggle />
-          <span className="text-sm text-neutral-500 dark:text-gray-300">Elije la opcion a utilizar</span>
+    <main className="fondo flex flex-col min-h-screen items-center justify-center font-sans border-4 border-white/30 dark:border-white/20">
+      <section id="main-content" className="w-full max-w-2xl flex flex-col  gap-3 md:gap-4 lg:gap-6 bg-white/10 dark:bg-blue-950/30 backdrop-blur-md border-2 border-white/30 dark:border-blue-950/20 rounded-2xl px-1 md:p-3 lg:p-4 shadow-2xl">
+        <header className="text-center space-y-4">
+          <div className="flex justify-between items-start">
+            <div className="w-full flex flex-col gap-2">
+              <h1 className="lg:text-4xl md:text-3xl text-lg w-full font-bold bg-linear-to-r from-neutral-900 border-neutral-900 dark:from-neutral-200 dark:from-neutral-100
+               to-blue-800 bg-clip-text text-transparent">
+                Plataforma de Gestión de Credenciales
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300 text-[0.8rem] sm:text-sm md:text-md  text-start">ClaveVault es un gestor de credenciales diseñado para almacenar, organizar y proteger tus claves de acceso en un entorno
+                <strong>seguro</strong> y <strong>confiable</strong>, con una interfaz moderna y un fuerte enfoque en la seguridad digital.</p>
+              <span className="text-gray-600 dark:text-gray-300 text-md text-start ">Elige la opción a utilizar: </span>
+            </div>
+
+          </div>
         </header>
-        <nav className="grid grid-cols-1 sm:grid-cols-2 justify-center items-center gap-4 h-fit" role="navigation" aria-label="Opciones principales">
+        <nav className="grid grid-cols-1 md:grid-cols-2 gap-6 " role="navigation" aria-label="Opciones principales">
           <Link
             href="/offline"
-            className="flex flex-row sm:flex-col items-center justify-start md:justify-center gap-2 md:gap-6 text-center
-            w-full sm:h-50 py-3 px-4 border rounded-2xl border-border-subtle dark:border-gray-600 cursor-pointer bg-bg-overlay dark:bg-gray-700 hover:bg-bg-elevated dark:hover:bg-gray-600 transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-accent/20"
+            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-gray-900/80 dark:bg-black/80 border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800
+             dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             role="menuitem"
             aria-label="Uso Offline - Administrar claves sin conexión"
           >
-            <div className="group-hover:scale-[1.05] h-10 sm:h-14 md:h-16 lg:h-18 transition-all duration-200" aria-hidden="true">
+            <div className="hidden sm:flex md:w-16 md:h-16 w-12 h-12 flex items-center justify-center text-blue-700 group-hover:text-blue-600 transition-colors duration-300" aria-hidden="true">
               <Archive />
             </div>
-            <div>
-              <p className="text-start px-2 md:text-center font-medium dark:text-white">Uso Offline</p>
-              <span className="text-xs text-neutral-400 dark:text-gray-400 px-2">Sin conexión a internet, archivo encriptado.</span>
+            <div className="text-center space-y-2">
+              <h3 className="text-lg font-semibold text-white">Uso Offline</h3>
+              <p className="text-sm text-gray-300">Sin conexión a internet, archivo encriptado</p>
             </div>
           </Link>
           <button
             onClick={handleWebAuthn}
             disabled={isLoading === 'webauthn'}
-            className="flex flex-row sm:flex-col items-center justify-start md:justify-center gap-2 md:gap-6 
-            w-full sm:h-50 py-3 px-4 border rounded-2xl border-border-subtle dark:border-gray-600 cursor-pointer bg-bg-overlay dark:bg-gray-700 hover:bg-bg-elevated dark:hover:bg-gray-600 transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-50 disabled:cursor-not-allowed relative"
+            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-gray-900/80 dark:bg-black/80 border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative"
             role="menuitem"
             aria-label="WebAuthn - Autenticación biométrica"
             aria-busy={isLoading === 'webauthn'}
           >
-            <div className="group-hover:scale-105 h-10 sm:h-14 md:h-16 lg:h-18 transition-all duration-200" aria-hidden="true">
+            <div className="hidden sm:flex md:w-16 md:h-16 w-12 h-12 flex items-center justify-center text-blue-700 group-hover:text-blue-600 transition-colors duration-300" aria-hidden="true">
               {isLoading === 'webauthn' ? (
                 <svg className="animate-spin w-full h-full" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -68,19 +73,19 @@ export default function Home() {
                 <WebAuthn />
               )}
             </div>
-            <div>
-              <p className="text-start px-2 md:text-center font-medium dark:text-white">WebAuthn</p>
-              <span className="text-xs text-neutral-400 dark:text-gray-400 px-2">Autenticación biométrica, pin o huella.</span>
+            <div className="text-center space-y-2">
+              <h3 className="text-lg font-semibold text-white">WebAuthn</h3>
+              <p className="text-sm text-gray-300">Autenticación biométrica, pin o huella</p>
             </div>
             {isLoading === 'webauthn' && (
-              <span className="absolute inset-0 flex items-center justify-center bg-bg-card/80 dark:bg-gray-800/80 rounded-2xl" aria-live="polite">
+              <div className="absolute inset-0 flex items-center justify-center bg-white/90 dark:bg-black/90 rounded-xl backdrop-blur-sm" aria-live="polite">
                 <span className="sr-only">Procesando autenticación WebAuthn</span>
-              </span>
+              </div>
             )}
           </button>
         </nav>
       </section>
-      <SeccionSocial className="flex flex-row items-center justify-center gap-2 " />
+      <SeccionSocial className="flex flex-row items-center justify-center gap-4 mt-8" />
     </main>
   );
 }

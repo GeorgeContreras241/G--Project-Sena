@@ -1,5 +1,6 @@
 import GitHub from "../ui/icons/GitHub"
 import Linkedin from "../ui/icons/LinKedin"
+import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle"
 
 const SeccionSocial = ({className}: {className?: string}) => {
     return (
@@ -15,6 +16,9 @@ const SeccionSocial = ({className}: {className?: string}) => {
                 className="cursor-pointer w-12 h-12 hover:scale-110 transition-all">
                     <Linkedin/>
                 </a>
+            </div>
+            <div className="bg-black w-40">
+                <ThemeToggle />
             </div>
         </footer>
     )

@@ -13,14 +13,14 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
     const dataPassword = useStoragePass(state => state.dataPassword)
 
     return (
-        <header className="bg-primary dark:bg-gray-800 rounded-lg shadow-sm border border-border/15 dark:border-gray-700 p-6 mb-6">
+        <header className="bg-white/90 dark:bg-gray-800 rounded-lg shadow-sm border-2 border-gray-300 dark:border-gray-700 p-6 mb-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl font-bold text-text-primary dark:text-white">Gestor de Contraseñas</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Gestor de Contraseñas</h1>
                 <article className="flex gap-2">
                     <ThemeToggle />
-                    <button className={`flex gap-2 items-center bg-primary dark:bg-gray-700 text-white px-4 py-2 rounded-md border border-border dark:border-gray-600 
-        cursor-pointer hover:bg-bg-elevated dark:hover:bg-gray-600`} onClick={() => handleExport(dataPassword)}>
+                    <button className={`flex gap-2 items-center bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-md border-2 border-gray-300 dark:border-gray-600 
+        cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600`} onClick={() => handleExport(dataPassword)}>
                         exportar
                     </button>
                     <Button text="Salir">
@@ -33,13 +33,13 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
             </div>
             {/* Search */}
             <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted dark:text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400" />
                 <input
                     type="text"
                     placeholder="Buscar contraseñas..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-border/10 dark:border-gray-600 placeholder:text-[12px] rounded-md  focus:ring-1 focus:ring-accent/50 focus:border-transparent outline-none bg-bg-main dark:bg-gray-800 text-text-primary dark:text-white"
+                    className="w-full pl-10 pr-4 py-2 border-2 border-gray-300 dark:border-gray-600 placeholder:text-[12px] rounded-md  focus:ring-2 focus:ring-blue-500/50 focus:border-transparent outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 />
             </div>
 
@@ -49,8 +49,8 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                     <button
                         onClick={() => setSelectedCategory('all')}
                         className={`px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer ${selectedCategory === 'all'
-                            ? 'bg-secondary/30 dark:bg-gray-700 border border-border/20 dark:border-gray-600'
-                            : 'bg-primary dark:bg-gray-600 border border-border/20 dark:border-gray-500 hover:bg-primary-hover dark:hover:bg-gray-500'
+                            ? 'bg-blue-100 dark:bg-gray-700 border-2 border-blue-300 dark:border-gray-600 text-blue-700 dark:text-white'
+                            : 'bg-white dark:bg-gray-600 border-2 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-500'
                             }`}
                     >
                         Todas
@@ -58,8 +58,8 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                     <button
                         onClick={() => setSelectedCategory('web')}
                         className={`px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer flex items-center gap-1 ${selectedCategory === 'web'
-                            ? 'bg-secondary/30 dark:bg-gray-700 text-white'
-                            : 'bg-primary dark:bg-gray-600 text-white border border-border/20 dark:border-gray-500 hover:bg-primary-hover dark:hover:bg-gray-500'
+                            ? 'bg-blue-100 dark:bg-gray-700 text-blue-700 dark:text-white border-2 border-blue-300 dark:border-gray-600'
+                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-white border-2 border-gray-300 dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-gray-500'
                             }`}
                     >
                         Web
@@ -67,8 +67,8 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                     <button
                         onClick={() => setSelectedCategory('app')}
                         className={`px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer flex items-center gap-1 ${selectedCategory === 'app'
-                            ? 'bg-secondary/30 dark:bg-gray-700 text-white'
-                            : 'bg-primary dark:bg-gray-600 text-white border border-border/20 dark:border-gray-500 hover:bg-primary-hover dark:hover:bg-gray-500'
+                            ? 'bg-blue-100 dark:bg-gray-700 text-blue-700 dark:text-white border-2 border-blue-300 dark:border-gray-600'
+                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-white border-2 border-gray-300 dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-gray-500'
                             }`}
                     >
                         Apps

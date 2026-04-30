@@ -20,13 +20,13 @@ export const AddPasswords = () => {
     }
 
     return (
-        <section className="bg-background dark:bg-gray-800 border border-border dark:border-gray-700 rounded-lg p-4">
+        <section className="bg-white/90 dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 rounded-lg p-4">
             <form className="space-y-3" onSubmit={handleSubmit}>
-                <label htmlFor="" className="block text-xs font-medium text-text-primary dark:text-white mb-1">
+                <label htmlFor="" className="block text-xs font-medium text-gray-900 dark:text-white mb-1">
                     Agregar Contraseña
                 </label>
                 <div>
-                    <label htmlFor="title" className="block text-xs font-medium text-text-primary dark:text-white mb-1">
+                    <label htmlFor="title" className="block text-xs font-medium text-gray-900 dark:text-white mb-1">
                         Título
                     </label>
                     <input
@@ -35,11 +35,11 @@ export const AddPasswords = () => {
                         placeholder="Título"
                         value={keys.title}
                         onChange={(e) => setKeys({ ...keys, title: e.target.value })}
-                        className="w-full px-3 py-1.5 text-sm bg-editor-bg border border-border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-text-primary"
+                        className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-gray-900 dark:text-white"
                     />
                 </div>
                 <div>
-                    <label htmlFor="username" className="block text-xs font-medium text-text-primary dark:text-white mb-1">
+                    <label htmlFor="username" className="block text-xs font-medium text-gray-900 dark:text-white mb-1">
                         Usuario
                     </label>
                     <input
@@ -48,11 +48,11 @@ export const AddPasswords = () => {
                         placeholder="Usuario"
                         value={keys.username}
                         onChange={(e) => setKeys({ ...keys, username: e.target.value })}
-                        className="w-full px-3 py-1.5 text-sm bg-editor-bg border border-border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-text-primary"
+                        className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-gray-900 dark:text-white"
                     />
                 </div>
                 <div>
-                    <label htmlFor="password" className="block text-xs font-medium text-text-primary dark:text-white mb-1">
+                    <label htmlFor="password" className="block text-xs font-medium text-gray-900 dark:text-white mb-1">
                         Contraseña
                     </label>
                     <input
@@ -61,7 +61,7 @@ export const AddPasswords = () => {
                         placeholder="Contraseña"
                         value={keys.password}
                         onChange={(e) => setKeys({ ...keys, password: e.target.value })}
-                        className="w-full px-3 py-1.5 text-sm bg-editor-bg border border-border rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-text-primary"
+                        className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-gray-900 dark:text-white"
                     />
                 </div>
                 <Button text="Agregar" className="w-full py-1.5 text-sm flex items-center justify-center">

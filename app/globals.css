@@ -4,6 +4,21 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  /* Your default theme */
+  --background: white;
+  --foreground: blue;
+}
+
+[data-theme='dark'] {
+  --background: black;
+  --foreground: red;
+}
+
+
 @property --angle {
   syntax: "<angle>";
   initial-value: 0deg;
