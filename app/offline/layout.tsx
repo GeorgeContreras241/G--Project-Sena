@@ -6,7 +6,6 @@ const OfflineLayout = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <section className="flex flex-col">
-            <Exit />
             <LocalProvider>
                 <main>
                     {children}

@@ -13,14 +13,14 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
     const dataPassword = useStoragePass(state => state.dataPassword)
 
     return (
-        <header className="bg-white/90 dark:bg-gray-800 rounded-lg shadow-sm border-2 border-gray-300 dark:border-gray-700 p-6 mb-6">
+        <header className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 mb-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Gestor de Contraseñas</h1>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Gestor de Credenciales</h1>
                 <article className="flex gap-2">
                     <ThemeToggle />
-                    <button className={`flex gap-2 items-center bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-4 py-2 rounded-md border-2 border-gray-300 dark:border-gray-600 
-        cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600`} onClick={() => handleExport(dataPassword)}>
+                    <button className={`flex gap-2 items-center bg-gray-900 dark:bg-gray-800 text-white px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 
+        cursor-pointer hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors text-sm`} onClick={() => handleExport(dataPassword)}>
                         exportar
                     </button>
                     <Button text="Salir">
@@ -32,15 +32,22 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                 </article>
             </div>
             {/* Search */}
-            <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400" />
+            <div className="relative mb-4 group">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 transition-colors duration-200 group-focus-within:text-blue-600 dark:group-focus-within:text-blue-400" />
                 <input
                     type="text"
                     placeholder="Buscar contraseñas..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border-2 border-gray-300 dark:border-gray-600 placeholder:text-[12px] rounded-md  focus:ring-2 focus:ring-blue-500/50 focus:border-transparent outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    className="w-full pl-10 pr-12 py-2 border border-gray-300 dark:border-gray-600 placeholder:text-sm placeholder:text-gray-500 dark:placeholder:text-gray-400 rounded-lg 
+                    focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 outline-none 
+                    bg-white dark:bg-gray-900 text-gray-900 dark:text-white 
+                    shadow-sm focus:shadow-md transition-all duration-200 
+                    hover:border-gray-400 dark:hover:border-gray-500"
                 />
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-0 group-focus-within:opacity-100 transition-opacity duration-200">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                </div>
             </div>
 
             {/* Category Filters */}
@@ -49,8 +56,8 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                     <button
                         onClick={() => setSelectedCategory('all')}
                         className={`px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer ${selectedCategory === 'all'
-                            ? 'bg-blue-100 dark:bg-gray-700 border-2 border-blue-300 dark:border-gray-600 text-blue-700 dark:text-white'
-                            : 'bg-white dark:bg-gray-600 border-2 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-500'
+                            ? 'bg-blue-900 dark:bg-gray-800 border dark:border-gray-700 text-white'
+                            : 'bg-white dark:bg-gray-600 text-white dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                             }`}
                     >
                         Todas
@@ -58,8 +65,8 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                     <button
                         onClick={() => setSelectedCategory('web')}
                         className={`px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer flex items-center gap-1 ${selectedCategory === 'web'
-                            ? 'bg-blue-100 dark:bg-gray-700 text-blue-700 dark:text-white border-2 border-blue-300 dark:border-gray-600'
-                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-white border-2 border-gray-300 dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-gray-500'
+                            ? 'bg-blue-900 dark:bg-gray-800 border dark:border-gray-700 text-white'
+                            : 'bg-white dark:bg-gray-600 text-white dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                             }`}
                     >
                         Web
@@ -67,8 +74,8 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                     <button
                         onClick={() => setSelectedCategory('app')}
                         className={`px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer flex items-center gap-1 ${selectedCategory === 'app'
-                            ? 'bg-blue-100 dark:bg-gray-700 text-blue-700 dark:text-white border-2 border-blue-300 dark:border-gray-600'
-                            : 'bg-white dark:bg-gray-600 text-gray-700 dark:text-white border-2 border-gray-300 dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-gray-500'
+                            ? 'bg-blue-900 dark:bg-gray-800 border dark:border-gray-700 text-white'
+                            : 'bg-white dark:bg-gray-600 text-white dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
                             }`}
                     >
                         Apps

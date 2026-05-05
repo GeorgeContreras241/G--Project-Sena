@@ -138,11 +138,12 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
             <div className="bg-white/10 dark:bg-blue-950/30 backdrop-blur-md border-2 border-white/30 dark:border-blue-950/20 rounded-2xl w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
 
             <div className="w-full grid place-items-center gap-2">
-                <div className="w-full flex gap-3">
+                <div className="w-full flex gap-3 ">
                     <input className="hidden" id="file" type="file" onChange={handleFileChange} accept=".enc" />
-                    <div className="flex-1 h-48 border-2 border-dashed border-white/30 dark:border-blue-900/30 rounded-xl bg-white/5 dark:bg-blue-900/20 hover:bg-white/10 dark:hover:bg-blue-900/30 transition-all duration-300 cursor-pointer group">
-                        <label htmlFor="file" className="w-full h-full flex flex-col items-center justify-center cursor-pointer">
-                            <div className="w-16 h-16 bg-blue-500/20 dark:bg-blue-400/20 rounded-full border-2 border-blue-500/30 dark:border-blue-400/30 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
+                    <div className="flex-1 h-48 border-2 border-dashed border-white/30 dark:border-blue-900/30 rounded-xl bg-white/5 dark:bg-blue-900/30 hover:bg-white/10 dark:hover:bg-blue-900/30 transition-all duration-300 cursor-pointer group">
+                        <label htmlFor="file" className="w-full h-full flex flex-col items-center justify-center cursor-pointer border border-blue-500/30 dark:border-blue-400/30 ">
+                            <div className="w-16 h-16 bg-blue-500/20 dark:bg-blue-400/20 rounded-full border-2 border-blue-500/30 dark:border-blue-400/30 flex items-center 
+                            justify-center mb-3 group-hover:scale-105 transition-transform ">
                                 <Add />
                             </div>
                             <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">Arrastra o haz clic para subir</span>

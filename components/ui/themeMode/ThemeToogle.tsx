@@ -12,7 +12,7 @@ export function ThemeToggle() {
   return (
     <button 
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="flex gap-2 items-center bg-primary text-white px-4 py-2 rounded-md border border-border cursor-pointer hover:bg-bg-elevated transition-colors"
+      className="flex gap-2 items-center bg-neutral-800 dark:bg-gray-700 text-white px-3 py-2 rounded-md border-2 dark:border-gray-600 cursor-pointer hover:bg-neutral-700 dark:hover:bg-gray-600 transition-colors text-sm"
     >
       {theme === 'dark' ? 'Claro' : 'Oscuro'}
     </button>
