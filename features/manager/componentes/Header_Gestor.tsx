@@ -7,26 +7,27 @@ import { Search } from "@/components/ui/icons/Search";
 import { Button } from "@/components/ui/Button";
 import { useStoragePass } from "@/storage/useStoragePass";
 import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle";
+import { Add } from "@/components/ui/icons/Add";
 
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: { setSearchTerm: (value: string) => void, setSelectedCategory: (value: string) => void, onLoad: () => void, selectedCategory: string, searchTerm: string }) => {
     const { handleExport } = use(LocalContext)
     const dataPassword = useStoragePass(state => state.dataPassword)
 
     return (
-        <header className="bg-gray-50 dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 mb-6">
+        <header className="bg-neutral-200/70 dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 mb-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Gestor de Credenciales</h1>
                 <article className="flex gap-2">
                     <ThemeToggle />
-                    <button className={`flex gap-2 items-center bg-gray-900 dark:bg-gray-800 text-white px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 
+                    <button className={`grid gap-2 place-items-center bg-gray-900 dark:bg-gray-800 text-white h-8 w-20 rounded-md border border-gray-300 dark:border-gray-700 
         cursor-pointer hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors text-sm`} onClick={() => handleExport(dataPassword)}>
                         exportar
                     </button>
-                    <Button text="Salir">
-                        <Exit />
-                    </Button>
                     <Button text="Añadir">
+                        <Add />
+                    </Button>
+                    <Button text="Salir">
                         <Exit />
                     </Button>
                 </article>

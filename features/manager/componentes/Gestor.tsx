@@ -58,7 +58,7 @@ export const Gestor = () => {
   })
 
   return (
-    <main className="fondo min-h-screen p-4">
+    <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-gray-900">
       <div className="max-w-6xl mx-auto flex flex-col gap-2">
         {/* Header */}
         <Header_Gestor selectedCategory={selectedCategory}
@@ -70,7 +70,7 @@ export const Gestor = () => {
           <div className="w-full">
             <div className="space-y-1.5">
               {filteredPasswords?.map((password: any) => (
-                <article key={password.id} className="bg-white/95 dark:bg-blue-950/30 backdrop-blur-md border border-gray-300 dark:border-blue-950/20 rounded-lg overflow-hidden hover:border-blue-400 dark:hover:border-blue-900/40 transition-all duration-300 hover:scale-[1.003] shadow-sm hover:shadow-md">
+                <article key={password.id} className="bg-white/95 dark:bg-blue-950 backdrop-blur-md border border-gray-300 dark:border-blue-950/20 rounded-lg overflow-hidden hover:border-blue-400 dark:hover:border-blue-900/40 transition-all duration-300 hover:scale-[1.003] shadow-sm hover:shadow-md">
                   {/* Password Card Header */}
                   <div className="flex items-center gap-2 p-2 border-b border-gray-200 dark:border-blue-900/30 bg-linear-to-r from-gray-50 to-white dark:from-blue-900/20 dark:to-blue-950/30">
                     <div className="shrink-0 p-1 bg-linear-to-br from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 rounded text-white text-xs">
@@ -221,6 +221,6 @@ export const Gestor = () => {
           </div>
         </section>
       </div>
-    </main>
+    </div>
   )
 }

@@ -24,16 +24,16 @@ export default function Home() {
   };
   return (
     <main className="fondo flex flex-col min-h-screen items-center justify-center font-sans border-4 border-white/30 dark:border-white/20">
-      <section id="main-content" className="w-full max-w-2xl flex flex-col  gap-3 md:gap-4 lg:gap-6 bg-white/10 dark:bg-blue-950/30 backdrop-blur-md border-2 border-white/30 dark:border-blue-950/20 rounded-2xl px-1 md:p-3 lg:p-4 shadow-2xl">
+      <section id="main-content" className="w-full max-w-2xl flex flex-col  gap-6  
+      rounded-2xl px-1 md:p-3 lg:p-4 shadow-2xl">
         <header className="text-center space-y-4">
           <div className="flex justify-between items-start">
             <div className="w-full flex flex-col gap-2">
-              <h1 className="lg:text-4xl md:text-3xl text-lg w-full font-bold bg-linear-to-r from-neutral-900 border-neutral-900 dark:from-neutral-200 dark:from-neutral-100
-               to-blue-800 bg-clip-text text-transparent">
-                Plataforma de Gestión de Credenciales
+              <h1 className="text-start font-bold text-[1.6rem] md:text-[1.9rem] lg:text-[2.5rem] xl:text-[3.5rem] mb-6">
+                Gestor de Claves
               </h1>
-              <p className="text-gray-600 dark:text-gray-300 text-[0.8rem] sm:text-sm md:text-md  text-start">ClaveVault es un gestor de credenciales diseñado para almacenar, organizar y proteger tus claves de acceso en un entorno
-                <strong>seguro</strong> y <strong>confiable</strong>, con una interfaz moderna y un fuerte enfoque en la seguridad digital.</p>
+              <p className="text-neutral-900 dark:text-gray-300 text-[0.8rem] sm:text-sm md:text-md  text-start mb-3">ClaveVault es un gestor de credenciales diseñado para almacenar, organizar y proteger tus claves de acceso en un entorno
+                <strong> seguro</strong> y <strong>confiable</strong>, con una interfaz moderna y un fuerte enfoque en la seguridad digital.</p>
               <span className="text-gray-600 dark:text-gray-300 text-md text-start ">Elige la opción a utilizar: </span>
             </div>
 
@@ -42,7 +42,7 @@ export default function Home() {
         <nav className="grid grid-cols-1 md:grid-cols-2 gap-6 " role="navigation" aria-label="Opciones principales">
           <Link
             href="/offline"
-            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-gray-900/80 dark:bg-black/80 border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800
+            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-gray-900 dark:bg-black border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800
              dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             role="menuitem"
             aria-label="Uso Offline - Administrar claves sin conexión"
@@ -58,7 +58,7 @@ export default function Home() {
           <button
             onClick={handleWebAuthn}
             disabled={isLoading === 'webauthn'}
-            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-gray-900/80 dark:bg-black/80 border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative"
+            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-gray-900 dark:bg-black border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative"
             role="menuitem"
             aria-label="WebAuthn - Autenticación biométrica"
             aria-busy={isLoading === 'webauthn'}

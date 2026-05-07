@@ -1,5 +1,7 @@
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { Dark } from "@/components/ui/icons/Dark"
+import { Ligth } from "@/components/ui/icons/Ligth"
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -10,11 +12,16 @@ export function ThemeToggle() {
   if (!mounted) return null
 
   return (
-    <button 
+    <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="flex gap-2 items-center bg-neutral-800 dark:bg-gray-700 text-white px-3 py-2 rounded-md border-2 dark:border-gray-600 cursor-pointer hover:bg-neutral-700 dark:hover:bg-gray-600 transition-colors text-sm"
+      className="flex gap-2 items-center justify-center bg-neutral-900 text-white  rounded-md h-8 w-8  cursor-pointer 
+       transition-colors text-sm"
     >
-      {theme === 'dark' ? 'Claro' : 'Oscuro'}
+      {theme === 'dark' ? (
+        <Dark />
+      ) : (
+        <Ligth />
+      )}
     </button>
   )
 }

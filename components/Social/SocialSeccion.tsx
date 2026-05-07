@@ -17,7 +17,7 @@ const SeccionSocial = ({className}: {className?: string}) => {
                     <Linkedin/>
                 </a>
             </div>
-            <div className="bg-black w-40">
+            <div className="flex">
                 <ThemeToggle />
             </div>
         </footer>

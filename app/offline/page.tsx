@@ -4,7 +4,7 @@ import { AuthGuard } from "./AuthGuard";
 
 export const OfflinePage = () => {
   return (
-    <main className="fondo">
+    <main>
       <AuthGuard>
           <Gestor/>
       </AuthGuard>

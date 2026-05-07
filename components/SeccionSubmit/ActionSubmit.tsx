@@ -135,12 +135,13 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
     return (
         <>
             <Toaster position="top-center" />
-            <div className="bg-white/10 dark:bg-blue-950/30 backdrop-blur-md border-2 border-white/30 dark:border-blue-950/20 rounded-2xl w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
+            <div className="bg-white/10 dark:bg-black backdrop-blur-md border-2 border-white/30 dark:border-blue-950/20 rounded-2xl w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
 
             <div className="w-full grid place-items-center gap-2">
                 <div className="w-full flex gap-3 ">
                     <input className="hidden" id="file" type="file" onChange={handleFileChange} accept=".enc" />
-                    <div className="flex-1 h-48 border-2 border-dashed border-white/30 dark:border-blue-900/30 rounded-xl bg-white/5 dark:bg-blue-900/30 hover:bg-white/10 dark:hover:bg-blue-900/30 transition-all duration-300 cursor-pointer group">
+                    <div className="flex-1 h-48 border-2 border-dashed border-white/30 dark:border-blue-900/30 rounded-xl bg-white/5 dark:bg-blue-900/20 hover:bg-white/10
+                     dark:hover:bg-blue-900/30 transition-all duration-300 cursor-pointer group">
                         <label htmlFor="file" className="w-full h-full flex flex-col items-center justify-center cursor-pointer border border-blue-500/30 dark:border-blue-400/30 ">
                             <div className="w-16 h-16 bg-blue-500/20 dark:bg-blue-400/20 rounded-full border-2 border-blue-500/30 dark:border-blue-400/30 flex items-center 
                             justify-center mb-3 group-hover:scale-105 transition-transform ">
@@ -154,23 +155,25 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
                         <button
                             type="button"
                             onClick={handleClearFile}
-                            className="grid place-content-center w-12 h-12 rounded-xl border-2 border-white/30 dark:border-blue-900/30 bg-white/10 dark:bg-blue-900/20 cursor-pointer
-                            hover:bg-white/20 dark:hover:bg-blue-900/30 hover:border-white/50 dark:hover:border-blue-800/40 transition-all duration-300 group"
+                            className="grid place-content-center w-12 h-12 rounded-md bg-black border border-black dark:border-neutral-500  cursor-pointer
+                            hover-group:bg-gray-800 transition-all duration-300 group"
                             title="Eliminar archivo"
                         >
-                            <svg className="w-5 h-5 text-gray-600 dark:text-gray-400 group-hover:text-red-600 dark:hover:text-red-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-5 h-5 text-white dark:text-gray-400 group-hover:text-red-200  group-hover:scale-120 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                         </button>
                     )}
                 </div>
-                <span className={`${file ? "text-green-600 dark:text-green-400 border-green-600/50 dark:border-green-400/50 bg-green-500/10 dark:bg-green-400/10" : "text-red-600 dark:text-red-400 border-red-600/50 dark:border-red-400/50 bg-red-500/10 dark:bg-red-400/10"} text-sm border rounded px-2 py-1 w-full text-center transition-colors duration-300`}>
+                <span className={`${file ? "text-green-900 dark:text-green-400 border-green-800/50 dark:border-green-400/50 bg-green-600/50 dark:bg-green-400/10" 
+                    : "text-red-900 dark:text-red-400 border-red-800/50 dark:border-red-400/50 bg-red-500/50 dark:bg-red-400/10"} 
+                    text-sm border rounded px-2 py-1 w-full text-center transition-colors duration-300`}>
                     {fileError ? fileError : (file ? "Archivo Cargado Correctamente" : "Seleccione un archivo")}
                 </span>
             </div>
             <form className="w-full flex flex-col gap-2 mt-4 text-sm" onSubmit={handleSubmit}>
                 <div className="flex justify-between">
-                    <label htmlFor="password" className="text-start font-bold text-gray-700 dark:text-gray-300">Clave Maestra</label>
+                    <label htmlFor="password" className="text-[1.5rem] text-start font-bold text-gray-700 dark:text-neutral-100">Clave Maestra</label>
                     {passwordError && (
                         <span id="password-error" className="text-red-600 dark:text-red-400 text-xs mt-1" role="alert">
                             {passwordError}
@@ -208,7 +211,9 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
                 </div>
 
                 <button
-                    className="w-full bg-blue-950 hover:bg-blue-950 dark:bg-blue-900 dark:hover:bg-blue-800 text-white rounded-lg p-3 cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500/50 shadow-lg"
+                    className="w-full bg-neutral-950 border dark:bg-neutral-900 dark:border-neutral-600 dark:hover:bg-neutral-800 text-white rounded-lg p-3 cursor-pointer flex items-center
+                     justify-center gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] focus:outline-none focus:ring-2
+                      focus:ring-blue-500/50 shadow-lg"
                     type="submit"
                     disabled={isLoading}
                     aria-busy={isLoading}

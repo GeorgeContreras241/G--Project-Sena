@@ -155,55 +155,58 @@ export const AddPasswords = () => {
                             className="flex-1 px-2 py-1 text-xs bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
                         />
                     </div>
-                    <div className="w-full">
-                        <button className="px-2 py-1 text-xs bg-blue-900 text-white rounded-sm hover:bg-blue-600 transition-colors duration-200 ml-auto">Opciones</button>
+                    <div className="w-full flex flex-col">
+                        <button type="button" onClick={() => setMenuOptions(!menuOptions)}
+                            className="px-2 py-1 text-xs bg-blue-900 text-white rounded-sm hover:bg-blue-600 transition-colors duration-200 w-20 ml-auto">Opciones</button>
                     </div>
                     {/* Opciones de caracteres */}
-                    <div className="flex flex-wrap gap-2 ">
-                        <label className="flex items-center space-x-2 text-xs">
-                            <input
-                                type="checkbox"
-                                id="uppercase"
-                                checked={passwordOptions.includeUppercase}
-                                onChange={(e) => setPasswordOptions({ ...passwordOptions, includeUppercase: e.target.checked })}
-                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            <span className="text-gray-700 dark:text-gray-300">Mayúsculas (A-Z)</span>
-                        </label>
+                    {menuOptions && (
+                        <div className="flex flex-wrap gap-2 ">
+                            <label className="flex items-center space-x-2 text-xs">
+                                <input
+                                    type="checkbox"
+                                    id="uppercase"
+                                    checked={passwordOptions.includeUppercase}
+                                    onChange={(e) => setPasswordOptions({ ...passwordOptions, includeUppercase: e.target.checked })}
+                                    className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                />
+                                <span className="text-gray-700 dark:text-gray-300">Mayúsculas (A-Z)</span>
+                            </label>
 
-                        <label className="flex items-center space-x-2 text-xs">
-                            <input
-                                type="checkbox"
-                                id="lowercase"
-                                checked={passwordOptions.includeLowercase}
-                                onChange={(e) => setPasswordOptions({ ...passwordOptions, includeLowercase: e.target.checked })}
-                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            <span className="text-gray-700 dark:text-gray-300">Minúsculas (a-z)</span>
-                        </label>
+                            <label className="flex items-center space-x-2 text-xs">
+                                <input
+                                    type="checkbox"
+                                    id="lowercase"
+                                    checked={passwordOptions.includeLowercase}
+                                    onChange={(e) => setPasswordOptions({ ...passwordOptions, includeLowercase: e.target.checked })}
+                                    className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                />
+                                <span className="text-gray-700 dark:text-gray-300">Minúsculas (a-z)</span>
+                            </label>
 
-                        <label className="flex items-center space-x-2 text-xs">
-                            <input
-                                type="checkbox"
-                                id="numbers"
-                                checked={passwordOptions.includeNumbers}
-                                onChange={(e) => setPasswordOptions({ ...passwordOptions, includeNumbers: e.target.checked })}
-                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            <span className="text-gray-700 dark:text-gray-300">Números (0-9)</span>
-                        </label>
+                            <label className="flex items-center space-x-2 text-xs">
+                                <input
+                                    type="checkbox"
+                                    id="numbers"
+                                    checked={passwordOptions.includeNumbers}
+                                    onChange={(e) => setPasswordOptions({ ...passwordOptions, includeNumbers: e.target.checked })}
+                                    className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                />
+                                <span className="text-gray-700 dark:text-gray-300">Números (0-9)</span>
+                            </label>
 
-                        <label className="flex items-center space-x-2 text-xs">
-                            <input
-                                type="checkbox"
-                                id="symbols"
-                                checked={passwordOptions.includeSymbols}
-                                onChange={(e) => setPasswordOptions({ ...passwordOptions, includeSymbols: e.target.checked })}
-                                className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                            />
-                            <span className="text-gray-700 dark:text-gray-300">Símbolos (!@#$%^&*)</span>
-                        </label>
-                    </div>
+                            <label className="flex items-center space-x-2 text-xs">
+                                <input
+                                    type="checkbox"
+                                    id="symbols"
+                                    checked={passwordOptions.includeSymbols}
+                                    onChange={(e) => setPasswordOptions({ ...passwordOptions, includeSymbols: e.target.checked })}
+                                    className="w-3 h-3 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                                />
+                                <span className="text-gray-700 dark:text-gray-300">Símbolos (!@#$%^&*)</span>
+                            </label>
+                        </div>
+                    )}
 
                     {/* Botón de generar contraseña */}
                     <button
