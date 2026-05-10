@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Dark } from "@/components/ui/icons/Dark"
 import { Ligth } from "@/components/ui/icons/Ligth"
 
-export function ThemeToggle() {
+export function ThemeToggle({className}: {className?: string}) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
@@ -14,8 +14,8 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="flex gap-2 items-center justify-center bg-neutral-900 text-white  rounded-md h-8 w-8  cursor-pointer 
-       transition-colors text-sm"
+      className={`flex gap-2 items-center justify-center bg-transparent  text-white  rounded-md  cursor-pointer 
+       transition-colors text-sm hover:scale-105 transition-all ${className}`}
     >
       {theme === 'dark' ? (
         <Dark />

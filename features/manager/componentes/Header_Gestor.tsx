@@ -8,27 +8,26 @@ import { Button } from "@/components/ui/Button";
 import { useStoragePass } from "@/storage/useStoragePass";
 import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle";
 import { Add } from "@/components/ui/icons/Add";
+import { CATEGORY_BUTTONS } from "@/const/buttonsNavegations";
 
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: { setSearchTerm: (value: string) => void, setSelectedCategory: (value: string) => void, onLoad: () => void, selectedCategory: string, searchTerm: string }) => {
     const { handleExport } = use(LocalContext)
     const dataPassword = useStoragePass(state => state.dataPassword)
 
     return (
-        <header className="bg-neutral-200/70 dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 mb-6">
+        <header className="bg-white/95 dark:bg-neutral-950/90 backdrop-blur-md rounded-lg shadow-sm border border-gray-200 dark:border-neutral-900 p-6 mb-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Gestor de Credenciales</h1>
-                <article className="flex gap-2">
-                    <ThemeToggle />
-                    <button className={`grid gap-2 place-items-center bg-gray-900 dark:bg-gray-800 text-white h-8 w-20 rounded-md border border-gray-300 dark:border-gray-700 
-        cursor-pointer hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors text-sm`} onClick={() => handleExport(dataPassword)}>
-                        exportar
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-sora tracking-tight">Gestor de Credenciales</h1>
+                <article className="grid grid-cols-3 place-items-center gap-2">
+                    <ThemeToggle className="h-8 w-8" />
+                    <button className={`grid gap-2 place-items-center bg-gray-900 text-white h-8 w-20 rounded-md border border-gray-300 dark:border-gray-700 
+                                        cursor-pointer hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors text-xs font-semibold`} onClick={() => handleExport(dataPassword)}>
+                        Exportar
                     </button>
-                    <Button text="Añadir">
-                        <Add />
-                    </Button>
-                    <Button text="Salir">
+                    <Button>
                         <Exit />
+                        Salir
                     </Button>
                 </article>
             </div>
@@ -54,37 +53,15 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
             {/* Category Filters */}
             <section className="flex flex-row justify-between">
                 <div className="flex gap-2 flex-wrap">
-                    <button
-                        onClick={() => setSelectedCategory('all')}
-                        className={`px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer ${selectedCategory === 'all'
-                            ? 'bg-blue-900 dark:bg-gray-800 border dark:border-gray-700 text-white'
-                            : 'bg-white dark:bg-gray-600 text-white dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                            }`}
-                    >
-                        Todas
-                    </button>
-                    <button
-                        onClick={() => setSelectedCategory('web')}
-                        className={`px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer flex items-center gap-1 ${selectedCategory === 'web'
-                            ? 'bg-blue-900 dark:bg-gray-800 border dark:border-gray-700 text-white'
-                            : 'bg-white dark:bg-gray-600 text-white dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                            }`}
-                    >
-                        Web
-                    </button>
-                    <button
-                        onClick={() => setSelectedCategory('app')}
-                        className={`px-3 py-1 rounded-md text-sm font-medium transition-colors cursor-pointer flex items-center gap-1 ${selectedCategory === 'app'
-                            ? 'bg-blue-900 dark:bg-gray-800 border dark:border-gray-700 text-white'
-                            : 'bg-white dark:bg-gray-600 text-white dark:text-gray-300 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
-                            }`}
-                    >
-                        Apps
-                    </button>
+                    {CATEGORY_BUTTONS.map((button) => (
+                        <Button key={button.id} onClick={() => setSelectedCategory(button.value)} className={`${selectedCategory === button.value ? 
+                        'dark:bg-gray-950 bg-gray-900 text-white ' : 'dark:bg-gray-800 bg-gray-700 text-white'}`}>
+                            {button.label}
+                        </Button>
+                       
+                    ))}
                 </div>
             </section>
         </header>
-
-
     )
 }   

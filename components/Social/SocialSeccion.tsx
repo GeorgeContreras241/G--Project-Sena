@@ -17,8 +17,8 @@ const SeccionSocial = ({className}: {className?: string}) => {
                     <Linkedin/>
                 </a>
             </div>
-            <div className="flex">
-                <ThemeToggle />
+            <div className="flex flex-row items-center justify-center gap-2 h-12 w-12">
+                <ThemeToggle  className="h-12 w-12"/>
             </div>
         </footer>
     )

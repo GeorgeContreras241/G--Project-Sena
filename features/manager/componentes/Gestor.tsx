@@ -27,7 +27,7 @@ export const Gestor = () => {
   const [showPasswords, setShowPasswords] = useState<{ [key: string]: boolean }>({})
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
 
-  console.log(dataPassword)
+
 
   const togglePasswordVisibility = (id: string) => {
     setShowPasswords(prev => ({

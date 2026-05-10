@@ -1,19 +1,20 @@
 "use client"
 
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter,Sora } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  fallback: ['-apple-system', 'system-ui', 'sans-serif'],
+  variable: '--font-inter',
+})
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+export const sora = Sora({
+  subsets: ['latin'],
+  variable: '--font-sora',
+})
 
 
 export default function RootLayout({
@@ -24,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white/10 dark:bg-black`}
+        className={`${inter.className} ${sora.variable} antialiased bg-white/10 dark:bg-black`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}

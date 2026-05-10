@@ -173,7 +173,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
             </div>
             <form className="w-full flex flex-col gap-2 mt-4 text-sm" onSubmit={handleSubmit}>
                 <div className="flex justify-between">
-                    <label htmlFor="password" className="text-[1.5rem] text-start font-bold text-gray-700 dark:text-neutral-100">Clave Maestra</label>
+                    <label htmlFor="password" className="text-[1.5rem] text-start font-bold text-gray-700 dark:text-neutral-100 font-sora">Clave Maestra</label>
                     {passwordError && (
                         <span id="password-error" className="text-red-600 dark:text-red-400 text-xs mt-1" role="alert">
                             {passwordError}

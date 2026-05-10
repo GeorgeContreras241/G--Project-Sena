@@ -1,14 +1,15 @@
 import { ReactNode } from "react"
 
-export const Button = ({ children, text, className, onClick }: { children: ReactNode, text: string, className?: string, onClick?: () => void }) => {
+export const Button = ({ children, className, onClick }: { children: ReactNode, className?: string, onClick?: () => void }) => {
    
     return (
         <button 
             onClick={onClick}
-            className={`flex gap-1 items-center justify-center  bg-neutral-800 dark:bg-gray-700 text-white h-8 w-25 rounded-md border-2 dark:border-gray-600 
-        cursor-pointer hover:bg-neutral-700 dark:hover:bg-gray-600 transition-colors text-sm cursor-pointer ${className || ''}`}>
+            className={`${className || ''} flex gap-1 items-center justify-center text-white h-8 w-20 rounded-md border 
+            bg-neutral-900 dark:border-gray-700 
+            cursor-pointer hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors text-xs font-semibold `}>
             <span className="w-5 h-5 flex items-center justify-center">{children}</span>
-            {text}
+
         </button>
     )
 }

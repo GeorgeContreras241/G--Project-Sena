@@ -4,7 +4,10 @@ import WebAuthn from "../components/ui/icons/WebAuthn"
 import SeccionSocial from "../components/Social/SocialSeccion"
 import Link from "next/link"
 import { useState } from "react"
-import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle"
+import { Target } from "@/components/ui/Target"
+import { target } from "@/const/target"
+
+
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<string | null>(null);
@@ -22,27 +25,31 @@ export default function Home() {
       setIsLoading(null);
     }
   };
+  
   return (
-    <main className="fondo flex flex-col min-h-screen items-center justify-center font-sans border-4 border-white/30 dark:border-white/20">
-      <section id="main-content" className="w-full max-w-2xl flex flex-col  gap-6  
+    <main className="fondo grid place-items-center min-h-dvh border-4 border-white/30 dark:border-white/20">
+      <section id="main-content" className="w-full max-w-2xl flex flex-col px-2 md:px-4 gap-3 md:gap-6  
       rounded-2xl px-1 md:p-3 lg:p-4 shadow-2xl">
         <header className="text-center space-y-4">
-          <div className="flex justify-between items-start">
+          <div className="flex flex-col justify-between items-start">
             <div className="w-full flex flex-col gap-2">
-              <h1 className="text-start font-bold text-[1.6rem] md:text-[1.9rem] lg:text-[2.5rem] xl:text-[3.5rem] mb-6">
+              <h1 className="text-start font-bold text-[1.5rem] sm:text-[2.1rem] md:text-[2.6rem] lg:text-[3.3rem] xl:text-[3.8rem] mb-6 font-sora">
                 Gestor de Claves
               </h1>
-              <p className="text-neutral-900 dark:text-gray-300 text-[0.8rem] sm:text-sm md:text-md  text-start mb-3">ClaveVault es un gestor de credenciales diseñado para almacenar, organizar y proteger tus claves de acceso en un entorno
+              <p className="text-neutral-900 dark:text-gray-200/90 text-[0.8rem] sm:text-sm md:text-[1rem]  text-start mb-3">ClaveVault es un gestor de credenciales diseñado para almacenar, organizar y proteger tus claves de acceso en un entorno
                 <strong> seguro</strong> y <strong>confiable</strong>, con una interfaz moderna y un fuerte enfoque en la seguridad digital.</p>
-              <span className="text-gray-600 dark:text-gray-300 text-md text-start ">Elige la opción a utilizar: </span>
             </div>
-
+            <section className="grid grid-cols-1 md:grid-cols-3 justify-start w-full  gap-1 sm:gap-2 md:gap-3 mt-2">
+              {target.map((item, index) => (
+                <Target key={index} text={item.text}/>
+              ))}
+            </section>
           </div>
         </header>
-        <nav className="grid grid-cols-1 md:grid-cols-2 gap-6 " role="navigation" aria-label="Opciones principales">
+        <nav className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-1" role="navigation" aria-label="Opciones principales">
           <Link
             href="/offline"
-            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-gray-900 dark:bg-black border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800
+            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-neutral-900 dark:bg-black border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800
              dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
             role="menuitem"
             aria-label="Uso Offline - Administrar claves sin conexión"
@@ -58,7 +65,9 @@ export default function Home() {
           <button
             onClick={handleWebAuthn}
             disabled={isLoading === 'webauthn'}
-            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-gray-900 dark:bg-black border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative"
+            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-neutral-900/80 dark:bg-black border border-gray-700 
+            dark:border-gray-800 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 
+            focus:ring-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative pointer-events-none"
             role="menuitem"
             aria-label="WebAuthn - Autenticación biométrica"
             aria-busy={isLoading === 'webauthn'}
@@ -76,6 +85,7 @@ export default function Home() {
             <div className="text-center space-y-2">
               <h3 className="text-lg font-semibold text-white">WebAuthn</h3>
               <p className="text-sm text-gray-300">Autenticación biométrica, pin o huella</p>
+              <span className="text-xs text-gray-400">Próximamente</span>
             </div>
             {isLoading === 'webauthn' && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/90 dark:bg-black/90 rounded-xl backdrop-blur-sm" aria-live="polite">
