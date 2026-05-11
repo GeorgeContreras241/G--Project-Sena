@@ -12,7 +12,7 @@ import { Favorite } from "@/components/ui/icons/Favorite";
 import { CATEGORY_BUTTONS } from "@/const/buttonsNavegations";
 
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: { setSearchTerm: (value: string) => void, setSelectedCategory: (value: string) => void, onLoad: () => void, selectedCategory: string, searchTerm: string }) => {
-    const { handleExport } = use(LocalContext)
+    const { handleExport, handleReset } = use(LocalContext)
     const dataPassword = useStoragePass(state => state.dataPassword)
 
     return (
@@ -26,7 +26,10 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                                         cursor-pointer hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors text-xs font-semibold`} onClick={() => handleExport(dataPassword)}>
                         Exportar
                     </button>
-                    <Button>
+                    <Button onClick={() => {
+                        handleReset();
+                        window.location.href = '/';
+                    }}>
                         <Exit />
                         Salir
                     </Button>

@@ -19,6 +19,7 @@ import { Lock } from '@/components/ui/icons/Lock'
 import { LockEmpty } from '@/components/ui/icons/LockEmpty'
 import { Star } from '@/components/ui/icons/Star'
 import { StarFilled } from '@/components/ui/icons/StarFilled'
+import { Add } from '@/components/ui/icons/Add'
 import { deriveKey } from "@/lib/crypto/kdfKey"
 
 interface PasswordEntry {
@@ -128,74 +129,44 @@ export const Gestor = () => {
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                       <div className="flex items-center gap-2 flex-1 min-w-0">
                         <label className="text-xs font-bold text-gray-700 dark:text-gray-300 shrink-0 w-12 uppercase tracking-wide">User:</label>
-                        <span className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded flex-1">{password.username}</span>
-                        <button
-                          onClick={() => copyToClipboard(password.username)}
-                          className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110 sm:hidden"
-                          aria-label="Copiar usuario"
-                        >
-                          <Copy />
-                        </button>
+                        <div className="relative flex-1 min-w-0">
+                          <span className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded flex-1 pr-8">{password.username}</span>
+                          <button
+                            onClick={() => copyToClipboard(password.username)}
+                            className="absolute right-1 top-1/2 transform -translate-y-1/2 shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
+                            aria-label="Copiar usuario"
+                          >
+                            <Copy />
+                          </button>
+                        </div>
                       </div>
                       <div className="flex items-center gap-2 flex-1 min-w-0">
                         <label className="text-xs font-bold text-gray-700 dark:text-gray-300 shrink-0 w-12 uppercase tracking-wide">Pass:</label>
-                        <span className="text-xs font-mono text-gray-900 dark:text-gray-100 truncate bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded flex-1">
-                          {showPasswords[password.id] ? password.password : '•••••••'}
-                        </span>
-                        <button
-                          onClick={() => togglePasswordVisibility(password.id)}
-                          className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110 sm:hidden"
-                          aria-label={showPasswords[password.id] ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                          aria-pressed={showPasswords[password.id]}
-                        >
-                          {showPasswords[password.id] ? <EyeClose /> : <Eye />}
-                        </button>
-                        <button
-                          onClick={() => copyToClipboard(password.password)}
-                          className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110 sm:hidden"
-                          aria-label="Copiar contraseña"
-                        >
-                          <Copy />
-                        </button>
-                        <button
-                          className='p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110 sm:hidden'
-                          aria-label="Editar contraseña"
-                          onClick={() => setEditingPassword(password)}
-                        >
-                          <Edit />
-                        </button>
-                        <button
-                          onClick={() => setDataPasswordDelate(password.id)}
-                          className='p-0.5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500/50 hover:scale-110 sm:hidden'
-                          aria-label="Eliminar contraseña"
-                        >
-                          <Delete />
-                        </button>
+                        <div className="relative flex-1 min-w-0">
+                          <span className="text-xs font-mono text-gray-900 dark:text-gray-100 truncate bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded flex-1 pr-16">
+                            {showPasswords[password.id] ? password.password : '•••••••'}
+                          </span>
+                          <div className="absolute right-1 top-1/2 transform -translate-y-1/2 flex gap-1">
+                            <button
+                              onClick={() => togglePasswordVisibility(password.id)}
+                              className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
+                              aria-label={showPasswords[password.id] ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                              aria-pressed={showPasswords[password.id]}
+                            >
+                              {showPasswords[password.id] ? <EyeClose /> : <Eye />}
+                            </button>
+                            <button
+                              onClick={() => copyToClipboard(password.password)}
+                              className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
+                              aria-label="Copiar contraseña"
+                            >
+                              <Copy />
+                            </button>
+                          </div>
+                        </div>
                       </div>
                       {/* Botones de acción - visibles solo en desktop */}
                       <div className="hidden sm:flex items-center gap-1">
-                        <button
-                          onClick={() => copyToClipboard(password.username)}
-                          className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
-                          aria-label="Copiar usuario"
-                        >
-                          <Copy />
-                        </button>
-                        <button
-                          onClick={() => togglePasswordVisibility(password.id)}
-                          className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
-                          aria-label={showPasswords[password.id] ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                          aria-pressed={showPasswords[password.id]}
-                        >
-                          {showPasswords[password.id] ? <EyeClose /> : <Eye />}
-                        </button>
-                        <button
-                          onClick={() => copyToClipboard(password.password)}
-                          className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
-                          aria-label="Copiar contraseña"
-                        >
-                          <Copy />
-                        </button>
                         <button
                           className='p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110'
                           aria-label="Editar contraseña"
@@ -226,10 +197,6 @@ export const Gestor = () => {
                 <p className="text-gray-700 dark:text-gray-300 mb-6 max-w-sm">
                   {searchTerm ? 'Intenta con otra búsqueda' : 'Agrega tu primera contraseña para comenzar'}
                 </p>
-                <button className="px-6 py-3 bg-blue-950 hover:bg-neutral-700 dark:bg-blue-950 dark:hover:bg-blue-600 text-white font-medium rounded-lg flex items-center gap-2 mx-auto transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900">
-                  <span className="text-xl">+</span>
-                  Agregar Contraseña
-                </button>
               </div>
             )}
           </div>

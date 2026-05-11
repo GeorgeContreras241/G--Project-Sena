@@ -83,15 +83,19 @@ export const generatePasswordManagerCommit = (): string => {
     return generateCommitMessage({
         type: 'feat',
         scope: 'password-manager',
-        subject: 'implement complete password management system',
+        subject: 'implement complete password management system with UI improvements',
         body: `- Add EditPassword component with form for editing existing passwords
 - Implement favorite functionality with visual feedback (filled/outline stars)
 - Add favorite filter button and filtering logic
 - Create comprehensive icon components (Web, App, Card, Lock, Star, etc.)
 - Replace all inline SVGs with reusable React components
+- Move copy buttons inside input fields for better UX
 - Update AddPasswords and EditPassword forms to match filter categories
 - Add commit message generator utility for GitHub workflows
 - Fix mobile view to show edit/delete buttons
-- Add setDataPasswordEdit and setDataPasswordFavorite storage functions`
+- Add setDataPasswordEdit and setDataPasswordFavorite storage functions
+- Implement reset functionality in Exit button to clear memory and logout
+- Fix oversized icons and improve visual consistency
+- Remove duplicate eye toggle buttons for cleaner interface`
     });
 };
