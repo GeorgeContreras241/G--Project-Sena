@@ -6,8 +6,19 @@ import { useStoragePass } from '@/storage/useStoragePass'
 import { Header_Gestor } from "@/features/manager/componentes/Header_Gestor"
 import { copyToClipboard } from '@/utils/Gestor/copyToClipboard'
 import { AddPasswords } from '@/features/manager/componentes/AddPasswords'
+import { EditPassword } from '@/features/manager/componentes/EditPassword'
 import { Delete } from '@/components/ui/icons/Delete'
 import { Edit } from '@/components/ui/icons/Edit'
+import { Copy } from '@/components/ui/icons/Copy'
+import { Eye } from '@/components/ui/icons/Eye'
+import { EyeClose } from '@/components/ui/icons/EyeClose'
+import { Web } from '@/components/ui/icons/Web'
+import { App } from '@/components/ui/icons/App'
+import { Card } from '@/components/ui/icons/Card'
+import { Lock } from '@/components/ui/icons/Lock'
+import { LockEmpty } from '@/components/ui/icons/LockEmpty'
+import { Star } from '@/components/ui/icons/Star'
+import { StarFilled } from '@/components/ui/icons/StarFilled'
 import { deriveKey } from "@/lib/crypto/kdfKey"
 
 interface PasswordEntry {
@@ -23,9 +34,11 @@ interface PasswordEntry {
 export const Gestor = () => {
   const dataPassword = useStoragePass((state: any) => state.dataPassword)
   const setDataPasswordDelate = useStoragePass((state: any) => state.setDataPasswordDelate)
+  const setDataPasswordFavorite = useStoragePass((state: any) => state.setDataPasswordFavorite)
   const [searchTerm, setSearchTerm] = useState('')
   const [showPasswords, setShowPasswords] = useState<{ [key: string]: boolean }>({})
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [editingPassword, setEditingPassword] = useState<PasswordEntry | null>(null)
 
 
 
@@ -40,20 +53,21 @@ export const Gestor = () => {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'web':
-        return <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zM9.954 4.569c-.785.424-1.479 1.55-1.816 3.431h3.632c-.337-1.882-1.031-3.007-1.816-3.431zM9.954 15.431c.785-.424 1.479-1.55 1.816-3.431H8.138c.337 1.882 1.031 3.007 1.816 3.431zM10 11H4.256c.086-1.546.38-2.97.837-4.118A6.004 6.004 0 004.083 11H10zm0 0h5.917a6.004 6.004 0 01-1.01 4.118c.457-1.147.751-2.572.837-4.118H10zm0-5.856V4.569c-.785.424-1.479 1.55-1.816 3.431h3.632c-.337-1.882-1.031-3.007-1.816-3.431z" clipRule="evenodd" /></svg>
+        return <Web />
       case 'app':
-        return <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" /></svg>
+        return <App />
       case 'card':
-        return <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" /><path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" /></svg>
+        return <Card />
       default:
-        return <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>
+        return <Lock />
     }
   }
   const filteredPasswords = dataPassword?.filter((password: any) => {
     const matchesSearch = password.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       password.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (password.url && password.url.toLowerCase().includes(searchTerm.toLowerCase()))
-    const matchesCategory = selectedCategory === 'all' || password.category === selectedCategory
+    const matchesCategory = selectedCategory === 'all' || 
+      (selectedCategory === 'favorites' ? password.favorite : password.category === selectedCategory)
     return matchesSearch && matchesCategory
   })
 
@@ -65,7 +79,17 @@ export const Gestor = () => {
           setSelectedCategory={setSelectedCategory} setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
         <section className='grid grid-cols-1 xl:grid-cols-[350px_1fr] gap-4 lg:gap-6'>
           {/* Form add Password */}
-          <AddPasswords />
+          <section>
+            {editingPassword ? (
+              <EditPassword 
+                password={editingPassword} 
+                onClose={() => setEditingPassword(null)} 
+              />
+            ) : (
+              <AddPasswords />
+            )}
+          </section>
+
           {/* Password List */}
           <div className="w-full">
             <div className="space-y-1.5">
@@ -94,8 +118,9 @@ export const Gestor = () => {
                       className="shrink-0 p-1 rounded hover:bg-gray-100 dark:hover:bg-blue-900/30 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
                       aria-label={password.favorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
                       aria-pressed={password.favorite}
+                      onClick={() => setDataPasswordFavorite(password.id)}
                     >
-                      <span className="text-sm">{password.favorite ? '⭐' : '☆'}</span>
+                      {password.favorite ? <StarFilled /> : <Star />}
                     </button>
                   </div>
                   {/* Password Details */}
@@ -109,9 +134,7 @@ export const Gestor = () => {
                           className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110 sm:hidden"
                           aria-label="Copiar usuario"
                         >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
+                          <Copy />
                         </button>
                       </div>
                       <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -125,24 +148,28 @@ export const Gestor = () => {
                           aria-label={showPasswords[password.id] ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                           aria-pressed={showPasswords[password.id]}
                         >
-                          {showPasswords[password.id] ?
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                            </svg> :
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                          }
+                          {showPasswords[password.id] ? <EyeClose /> : <Eye />}
                         </button>
                         <button
                           onClick={() => copyToClipboard(password.password)}
                           className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110 sm:hidden"
                           aria-label="Copiar contraseña"
                         >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
+                          <Copy />
+                        </button>
+                        <button
+                          className='p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110 sm:hidden'
+                          aria-label="Editar contraseña"
+                          onClick={() => setEditingPassword(password)}
+                        >
+                          <Edit />
+                        </button>
+                        <button
+                          onClick={() => setDataPasswordDelate(password.id)}
+                          className='p-0.5 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500/50 hover:scale-110 sm:hidden'
+                          aria-label="Eliminar contraseña"
+                        >
+                          <Delete />
                         </button>
                       </div>
                       {/* Botones de acción - visibles solo en desktop */}
@@ -152,9 +179,7 @@ export const Gestor = () => {
                           className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
                           aria-label="Copiar usuario"
                         >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
+                          <Copy />
                         </button>
                         <button
                           onClick={() => togglePasswordVisibility(password.id)}
@@ -162,28 +187,19 @@ export const Gestor = () => {
                           aria-label={showPasswords[password.id] ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                           aria-pressed={showPasswords[password.id]}
                         >
-                          {showPasswords[password.id] ?
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                            </svg> :
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                          }
+                          {showPasswords[password.id] ? <EyeClose /> : <Eye />}
                         </button>
                         <button
                           onClick={() => copyToClipboard(password.password)}
                           className="shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
                           aria-label="Copiar contraseña"
                         >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
+                          <Copy />
                         </button>
                         <button
                           className='p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110'
                           aria-label="Editar contraseña"
+                          onClick={() => setEditingPassword(password)}
                         >
                           <Edit />
                         </button>
@@ -204,9 +220,7 @@ export const Gestor = () => {
             {filteredPasswords?.length === 0 && (
               <div className="flex flex-col items-center justify-center p-12 text-center">
                 <div className="p-4 bg-blue-500/20 dark:bg-blue-400/20 rounded-full mb-4">
-                  <svg className="w-16 h-16 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
+                  <LockEmpty />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No se encontraron contraseñas</h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-6 max-w-sm">

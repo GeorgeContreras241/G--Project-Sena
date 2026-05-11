@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { useStoragePass } from "@/storage/useStoragePass";
 import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle";
 import { Add } from "@/components/ui/icons/Add";
+import { Favorite } from "@/components/ui/icons/Favorite";
 import { CATEGORY_BUTTONS } from "@/const/buttonsNavegations";
 
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: { setSearchTerm: (value: string) => void, setSelectedCategory: (value: string) => void, onLoad: () => void, selectedCategory: string, searchTerm: string }) => {

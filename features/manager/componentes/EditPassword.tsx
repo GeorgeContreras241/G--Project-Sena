@@ -1,8 +1,23 @@
 "use client"
 import { Button } from "@/components/ui/Button"
 import { Copy } from "@/components/ui/icons/Copy"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useStoragePass } from "@/storage/useStoragePass"
+
+interface PasswordEntry {
+    id: string
+    title: string
+    username: string
+    password: string
+    favorite: boolean
+    url: string
+    category: string
+}
+
+interface EditPasswordProps {
+    password: PasswordEntry
+    onClose: () => void
+}
 
 // Función para generar contraseña aleatoria
 const generatePassword = (options: {
@@ -34,20 +49,21 @@ const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
 }
 
-export const AddPasswords = () => {
-    const [menuOptions, setMenuOptions] = useState(false);
-    const [isFormVisible, setIsFormVisible] = useState(false);
+export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
+    const [isFormVisible, setIsFormVisible] = useState(true);
     const [isConfigVisible, setIsConfigVisible] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const setDataPasswordUpdate = useStoragePass((state) => state.setDataPasswordUpdate)
+    const setDataPasswordEdit = useStoragePass((state: any) => state.setDataPasswordEdit)
+    
     const [keys, setKeys] = useState({
-        title: "",
-        application: "web",
-        username: "",
-        password: "",
-        url: "",
-        category: "",
-        favorite: false
+        id: password.id,
+        title: password.title,
+        application: password.category,
+        username: password.username,
+        password: password.password,
+        url: password.url,
+        category: password.category,
+        favorite: password.favorite
     })
 
     // Estado para opciones de configuración de contraseña
@@ -58,24 +74,26 @@ export const AddPasswords = () => {
         includeNumbers: true,
         includeSymbols: true
     })
+
     // Función para generar y asignar contraseña aleatoria
     const handleGeneratePassword = () => {
         const newPassword = generatePassword(passwordOptions);
         setKeys({ ...keys, password: newPassword });
     }
 
-    // tool tip Ventana emergente para agregar contraseña componente Reutilizable
+    // Función para manejar el envío del formulario
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setDataPasswordUpdate({ id: crypto.randomUUID(), ...keys });
+        setDataPasswordEdit(keys);
+        onClose();
     }
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg p-4 h-fit">
             <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
                 <div className="flex items-center justify-between">
-                    <label htmlFor="Agregar Contraseña" className="block text-sm md:text-base font-bold text-gray-900 dark:text-gray-200 mb-1">
-                        Agregar Contraseña
+                    <label htmlFor="Editar Contraseña" className="block text-sm md:text-base font-bold text-gray-900 dark:text-gray-200 mb-1">
+                        Editar Contraseña
                     </label>
                     <button
                         type="button"
@@ -135,6 +153,19 @@ export const AddPasswords = () => {
                                 placeholder="Usuario"
                                 value={keys.username}
                                 onChange={(e) => setKeys({ ...keys, username: e.target.value })}
+                                className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor="url" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                URL
+                            </label>
+                            <input
+                                id="url"
+                                type="text"
+                                placeholder="https://ejemplo.com"
+                                value={keys.url}
+                                onChange={(e) => setKeys({ ...keys, url: e.target.value })}
                                 className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
                             />
                         </div>
@@ -293,9 +324,17 @@ export const AddPasswords = () => {
                             )}
                         </div>
 
-                        <Button className="w-full py-1.5 text-sm flex items-center justify-center">
-                            Agregar
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button className="flex-1 py-1.5 text-sm flex items-center justify-center">
+                                Guardar Cambios
+                            </Button>
+                            <Button 
+                                onClick={onClose}
+                                className="flex-1 py-1.5 text-sm flex items-center justify-center bg-gray-500 hover:bg-gray-600"
+                            >
+                                Cancelar
+                            </Button>
+                        </div>
                     </>
                 )}
             </form>

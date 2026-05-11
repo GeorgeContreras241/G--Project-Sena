@@ -5,6 +5,11 @@ export const CATEGORY_BUTTONS = [
         value: 'all'
     },
     {
+        id: 'favorites',
+        label: 'Favoritos',
+        value: 'favorites'
+    },
+    {
         id: 'web',
         label: 'Web',
         value: 'web'
