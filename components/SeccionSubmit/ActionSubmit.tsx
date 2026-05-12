@@ -77,7 +77,12 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
         const importResult = await handleImport(file);
 
         if (!importResult.state) {
-            sileo.error(importResult.message || "Error al importar el archivo");
+            sileo.error({
+                title: importResult.message?.title || "Error al importar el archivo",
+                description: importResult.message?.description || "No se pudo cargar el archivo",
+                duration: importResult.message?.duration || 5000,
+                styles: importResult.message?.styles || { title: "text-white!" }
+            });
             return false;
         }
 
