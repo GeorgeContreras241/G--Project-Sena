@@ -1,53 +1,14 @@
 "use client"
 import { Button } from "@/components/ui/Button"
 import { Copy } from "@/components/ui/icons/Copy"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useStoragePass } from "@/storage/useStoragePass"
+import { generatePassword } from "@/lib/utils/Gestor/generatePassword"
+import { copyToClipboard } from "@/lib/utils/Gestor/copyToClipboard"
+import { EditPasswordProps } from "@/types"
 
-interface PasswordEntry {
-    id: string
-    title: string
-    username: string
-    password: string
-    favorite: boolean
-    url: string
-    category: string
-}
 
-interface EditPasswordProps {
-    password: PasswordEntry
-    onClose: () => void
-}
 
-// Función para generar contraseña aleatoria
-const generatePassword = (options: {
-    length: number;
-    includeUppercase: boolean;
-    includeLowercase: boolean;
-    includeNumbers: boolean;
-    includeSymbols: boolean;
-}): string => {
-    const { length, includeUppercase, includeLowercase, includeNumbers, includeSymbols } = options;
-
-    let charset = '';
-    if (includeLowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
-    if (includeUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (includeNumbers) charset += '0123456789';
-    if (includeSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
-
-    if (charset === '') return '';
-
-    let password = '';
-    for (let i = 0; i < length; i++) {
-        password += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-
-    return password;
-};
-
-const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text);
-}
 
 export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
     const [isFormVisible, setIsFormVisible] = useState(true);
@@ -66,7 +27,6 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
         favorite: password.favorite
     })
 
-    // Estado para opciones de configuración de contraseña
     const [passwordOptions, setPasswordOptions] = useState({
         length: 16,
         includeUppercase: true,
@@ -75,13 +35,11 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
         includeSymbols: true
     })
 
-    // Función para generar y asignar contraseña aleatoria
     const handleGeneratePassword = () => {
         const newPassword = generatePassword(passwordOptions);
         setKeys({ ...keys, password: newPassword });
     }
 
-    // Función para manejar el envío del formulario
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setDataPasswordEdit(keys);
@@ -228,7 +186,7 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
                                             </svg>
                                         )}
                                     </button>
-                                    <button className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" onClick={() => handleCopy(keys.password)}><Copy /></button>
+                                    <button className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" onClick={() => copyToClipboard(keys.password)}><Copy /></button>
                                 </div>
                             </div>
                         </div>

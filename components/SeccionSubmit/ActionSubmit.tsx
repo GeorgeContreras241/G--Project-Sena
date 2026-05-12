@@ -5,13 +5,22 @@ import Add from "../ui/icons/Add";
 import { sileo, Toaster } from "sileo"
 import { useState } from "react";
 import { useStoragePass } from "@/storage/useStoragePass";
-import { validateVaultInputs } from "@/utils/SeccionSubmit/validateVaultInputs";
+import { validateVaultInputs } from "@/lib/utils/SeccionSubmit/validateVaultInputs";
 import { generateSalt } from "@/lib/crypto/genereteSalt"
 import { Eye } from "../ui/icons/Eye";
 import { EyeClose } from "../ui/icons/EyeClose";
-import { validatePassword } from "@/utils/SeccionSubmit/validatePassword";
+import { validatePassword } from "@/lib/utils/SeccionSubmit/validatePassword";
+import { 
+  ActionSubmitProps, 
+  StorageState, 
+  FormState, 
+  PasswordValidationResult,
+  FileValidationResult,
+  ImportResult,
+  ToastMessage
+} from "@/types";
 
-export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => void }) => {
+export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     const { handleImport, handleReset } = use(LocalContext);
      // Debugging log
     const [file, setFile] = useState<File | null>(null);
@@ -66,7 +75,7 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
         }
 
         const { decryptedData, salt } = await handleImport(file);
-        console.log(decryptedData)
+
         if (!decryptedData.status) {
             sileo.error(decryptedData.message);
             return false;
@@ -97,7 +106,6 @@ export const ActionSubmit = ({ onSuccess }: { onSuccess: (value: boolean) => voi
                 await handleNoFileScenario();
                 return;
             }
-
             const success = await processFileImport(file, password);
             if (success) {
                 onSuccess(true);

@@ -1,0 +1,122 @@
+// Refacor en proceso
+'use client'
+import { LocalContext } from "@/context/localProvider"
+import { useState, use } from 'react'
+import { useStoragePass } from '@/storage/useStoragePass'
+import { Header_Gestor } from "@/features/manager/components/Header_Gestor"
+import { copyToClipboard } from '@/lib/utils/Gestor/copyToClipboard'
+import { AddPasswords } from '@/features/manager/components/AddPasswords'
+import { EditPassword } from '@/features/manager/components/EditPassword'
+import { Delete } from '@/components/ui/icons/Delete'
+import { Edit } from '@/components/ui/icons/Edit'
+import { Copy } from '@/components/ui/icons/Copy'
+import { Eye } from '@/components/ui/icons/Eye'
+import { EyeClose } from '@/components/ui/icons/EyeClose'
+import { Web } from '@/components/ui/icons/Web'
+import { App } from '@/components/ui/icons/App'
+import { Card } from '@/components/ui/icons/Card'
+import { Lock } from '@/components/ui/icons/Lock'
+import { LockEmpty } from '@/components/ui/icons/LockEmpty'
+import { Star } from '@/components/ui/icons/Star'
+import { StarFilled } from '@/components/ui/icons/StarFilled'
+import { Add } from '@/components/ui/icons/Add'
+import { PasswordCard } from './components/PasswordCard'
+import { deriveKey } from "@/lib/crypto/kdfKey"
+import { PasswordEntry } from "@/types"
+
+
+
+export const Gestor = () => {
+  const dataPassword = useStoragePass((state: any) => state.dataPassword)
+  const setDataPasswordDelate = useStoragePass((state: any) => state.setDataPasswordDelate)
+  const setDataPasswordFavorite = useStoragePass((state: any) => state.setDataPasswordFavorite)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [showPasswords, setShowPasswords] = useState<{ [key: string]: boolean }>({})
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [editingPassword, setEditingPassword] = useState<PasswordEntry | null>(null)
+
+
+
+  const togglePasswordVisibility = (id: string) => {
+    setShowPasswords(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }))
+  }
+
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'web':
+        return <Web />
+      case 'app':
+        return <App />
+      case 'card':
+        return <Card />
+      default:
+        return <Lock />
+    }
+  }
+  const filteredPasswords = dataPassword?.filter((password: any) => {
+    const matchesSearch = password.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      password.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (password.url && password.url.toLowerCase().includes(searchTerm.toLowerCase()))
+    const matchesCategory = selectedCategory === 'all' || 
+      (selectedCategory === 'favorites' ? password.favorite : password.category === selectedCategory)
+    return matchesSearch && matchesCategory
+  })
+
+  return (
+    <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-gray-900">
+      <div className="max-w-6xl mx-auto flex flex-col gap-2">
+        {/* Header */}
+        <Header_Gestor selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory} setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
+        <section className='grid grid-cols-1 xl:grid-cols-[350px_1fr] gap-4 lg:gap-6'>
+          {/* Form add Password */}
+          <section>
+            {editingPassword ? (
+              <EditPassword 
+                password={editingPassword} 
+                onClose={() => setEditingPassword(null)} 
+              />
+            ) : (
+              <AddPasswords />
+            )}
+          </section>
+
+          {/* Password List */}
+          <div className="w-full">
+            <div className="space-y-1.5">
+              {filteredPasswords?.map((password: any) => (
+                <PasswordCard
+                  key={password.id}
+                  password={password}
+                  showPasswords={showPasswords}
+                  onTogglePasswordVisibility={togglePasswordVisibility}
+                  onCopyToClipboard={copyToClipboard}
+                  onEditPassword={setEditingPassword}
+                  onDeletePassword={setDataPasswordDelate}
+                  onToggleFavorite={setDataPasswordFavorite}
+                  getCategoryIcon={getCategoryIcon}
+                />
+              ))}
+            </div>
+            {/* Empty State */}
+            {filteredPasswords?.length === 0 && (
+              <div className="flex flex-col items-center justify-center p-12 text-center">
+                <div className="p-4 bg-blue-500/20 dark:bg-blue-400/20 rounded-full mb-4">
+                  <LockEmpty />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No se encontraron contraseñas</h3>
+                <p className="text-gray-700 dark:text-gray-300 mb-6 max-w-sm">
+                  {searchTerm ? 'Intenta con otra búsqueda' : 'Agrega tu primera contraseña para comenzar'}
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      </div>
+    </div>
+  )
+}

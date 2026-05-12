@@ -1,19 +1,17 @@
 "use client"
 import { use } from "react"
 import { LocalContext } from "@/context/localProvider"
-import { Export } from "@/components/ui/icons/Export";
 import { Exit } from "@/components/ui/icons/Exit";
 import { Search } from "@/components/ui/icons/Search";
 import { Button } from "@/components/ui/Button";
 import { useStoragePass } from "@/storage/useStoragePass";
 import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle";
-import { Add } from "@/components/ui/icons/Add";
-import { Favorite } from "@/components/ui/icons/Favorite";
 import { CATEGORY_BUTTONS } from "@/const/buttonsNavegations";
+import { HeaderGestorProps } from "@/types";
 
-export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: { setSearchTerm: (value: string) => void, setSelectedCategory: (value: string) => void, onLoad: () => void, selectedCategory: string, searchTerm: string }) => {
+export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: HeaderGestorProps) => {
     const { handleExport, handleReset } = use(LocalContext)
-    const dataPassword = useStoragePass(state => state.dataPassword)
+    const dataPassword = useStoragePass((state:any) => state.dataPassword)
 
     return (
         <header className="bg-white/95 dark:bg-neutral-950/90 backdrop-blur-md rounded-lg shadow-sm border border-gray-200 dark:border-neutral-900 p-6 mb-6">

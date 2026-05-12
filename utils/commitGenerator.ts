@@ -1,71 +1,16 @@
 interface CommitData {
-    type: 'feat' | 'fix' | 'docs' | 'style' | 'refactor' | 'test' | 'chore';
-    scope: string;
-    subject: string;
-    body?: string;
-    breaking?: boolean;
+    type: 'feat' | 'fix' | 'docs' | 'style' | 'refactor' | 'perf' | 'test' | 'build' | 'ci' | 'chore' | 'revert'
+    scope: string
+    subject: string
+    body?: string
+    breaking?: boolean
 }
 
-export const generateCommitMessage = (data: CommitData): string => {
-    const { type, scope, subject, body, breaking } = data;
+const generateCommitMessage = (data: CommitData): string => {
+    const breakingText = data.breaking ? '!! BREAKING CHANGE !!' : '';
+    const body = data.body ? `\n\n${data.body}` : '';
     
-    // Formatear el tipo y alcance
-    const header = breaking 
-        ? `${type}(${scope})!: ${subject}`
-        : `${type}(${scope}): ${subject}`;
-    
-    // Construir el mensaje completo
-    let fullMessage = header;
-    
-    if (body) {
-        fullMessage += `\n\n${body}`;
-    }
-    
-    // Agregar footer si es breaking change
-    if (breaking) {
-        fullMessage += `\n\nBREAKING CHANGE: ${subject}`;
-    }
-    
-    return fullMessage;
-};
-
-export const generateCopyPasteCommit = (
-    type: CommitData['type'],
-    scope: string,
-    subject: string,
-    body?: string,
-    breaking?: boolean
-): { commitText: string; gitCommand: string } => {
-    const commitData: CommitData = { type, scope, subject, body, breaking };
-    const commitText = generateCommitMessage(commitData);
-    
-    // Generar comando git para copiar y pegar
-    const gitCommand = `git commit -m "${commitText.replace(/"/g, '\\"')}"`;
-    
-    return {
-        commitText,
-        gitCommand
-    };
-};
-
-// Tipos de commit comunes con descripciones
-export const COMMIT_TYPES = {
-    feat: 'Nueva funcionalidad',
-    fix: 'Corrección de bug',
-    docs: 'Documentación',
-    style: 'Cambios de formato (no afectan lógica)',
-    refactor: 'Refactorización (no afecta funcionalidad)',
-    test: 'Pruebas',
-    chore: 'Tareas de mantenimiento'
-} as const;
-
-export const generateCommitWithDescription = (
-    type: CommitData['type'],
-    scope: string,
-    subject: string
-): string => {
-    const typeDescription = COMMIT_TYPES[type];
-    return `${type.toUpperCase()}(${scope}): ${subject}\n\n${typeDescription}: ${subject}`;
+    return `${data.type}(${data.scope}): ${data.subject}${breakingText}${body}`;
 };
 
 export const generateGitHubCommit = (
@@ -97,5 +42,26 @@ export const generatePasswordManagerCommit = (): string => {
 - Implement reset functionality in Exit button to clear memory and logout
 - Fix oversized icons and improve visual consistency
 - Remove duplicate eye toggle buttons for cleaner interface`
+    });
+};
+
+export const generateTypeScriptCommit = (): string => {
+    return generateCommitMessage({
+        type: 'feat',
+        scope: 'typescript',
+        subject: 'implement comprehensive TypeScript typing for entire project',
+        body: `- Create comprehensive type definitions in types/index.ts
+- Add Component Props types (ActionSubmitProps, HeaderGestorProps, etc.)
+- Implement State Management types (StorageState, FormState, etc.)
+- Define Event Handler types (PasswordVisibilityHandler, CopyHandler, etc.)
+- Add Crypto & Data types (EncryptedData, ImportResult, VaultData)
+- Create UI Component types (ButtonProps, ThemeToggleProps, etc.)
+- Update LocalContext with proper TypeScript interfaces
+- Type ActionSubmit component with proper props and state
+- Update Header_Gestor component with HeaderGestorProps
+- Add CategoryType union and CategoryButton interface
+- Implement Validation Result types (PasswordValidationResult, FileValidationResult)
+- Add Utility types (ToastMessage, LoadingState)
+- Remove any types and improve type safety throughout application`
     });
 };

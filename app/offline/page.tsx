@@ -1,5 +1,5 @@
 "use client"
-import { Gestor } from "@/features/manager/componentes/Gestor";
+import { Gestor } from "@/features/manager/Gestor";
 import { AuthGuard } from "./AuthGuard";
 
 export const OfflinePage = () => {

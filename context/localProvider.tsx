@@ -7,8 +7,9 @@ import { loadVault } from "@/lib/vault/loadVault";
 import { createContext, useRef, useEffect, useState } from "react";
 import { decrypt } from "@/lib/crypto/decryptData";
 import { useStoragePass } from "@/storage/useStoragePass";
+import { LocalContextType, ImportResult, VaultData } from "@/types";
 
-export const LocalContext = createContext<{}>(null!);
+export const LocalContext = createContext<LocalContextType>(null!);
 
 export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     const { setDataPassword } = useStoragePass();
@@ -44,7 +45,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
 
     }
 
-    const handleExport = async (dataPassword) => {
+    const handleExport = async (dataPassword: any[]) => {
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
         const salt = new Uint8Array(saltSave);
 
@@ -55,8 +56,8 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         downloadVault(vaultFile)
     }
 
-    const handleImport = async (file) => {
-        const vaultData = await loadVault({ file })
+    const handleImport = async (file: File): Promise<ImportResult> => {
+        const vaultData: VaultData = await loadVault({ file })
         if (!vaultData.state) return {
             state: false,
             message: {
@@ -81,7 +82,12 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
             }
         };
         const decryptedData = await decrypt(drcKey.current, { iv, data })
-        return {decryptedData,salt,drcKey:drcKey.current}
+        return {
+            state: true,
+            decryptedData,
+            salt,
+            drcKey: drcKey.current
+        }
     }
 
     const downloadVault = (buffer: any) => {

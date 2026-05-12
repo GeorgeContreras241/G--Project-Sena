@@ -3,43 +3,16 @@ import { Button } from "@/components/ui/Button"
 import { Copy } from "@/components/ui/icons/Copy"
 import { useState } from "react"
 import { useStoragePass } from "@/storage/useStoragePass"
+import { generatePassword } from "@/lib/utils/Gestor/generatePassword"
+import { copyToClipboard } from "@/lib/utils/Gestor/copyToClipboard"        
 
-// Función para generar contraseña aleatoria
-const generatePassword = (options: {
-    length: number;
-    includeUppercase: boolean;
-    includeLowercase: boolean;
-    includeNumbers: boolean;
-    includeSymbols: boolean;
-}): string => {
-    const { length, includeUppercase, includeLowercase, includeNumbers, includeSymbols } = options;
 
-    let charset = '';
-    if (includeLowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
-    if (includeUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (includeNumbers) charset += '0123456789';
-    if (includeSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
-
-    if (charset === '') return '';
-
-    let password = '';
-    for (let i = 0; i < length; i++) {
-        password += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-
-    return password;
-};
-
-const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text);
-}
 
 export const AddPasswords = () => {
-    const [menuOptions, setMenuOptions] = useState(false);
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [isConfigVisible, setIsConfigVisible] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const setDataPasswordUpdate = useStoragePass((state) => state.setDataPasswordUpdate)
+    const setDataPasswordUpdate = useStoragePass((state: any) => state.setDataPasswordUpdate)
     const [keys, setKeys] = useState({
         title: "",
         application: "web",
@@ -197,7 +170,7 @@ export const AddPasswords = () => {
                                             </svg>
                                         )}
                                     </button>
-                                    <button className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" onClick={() => handleCopy(keys.password)}><Copy /></button>
+                                    <button className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" onClick={() => copyToClipboard(keys.password)}><Copy /></button>
                                 </div>
                             </div>
                         </div>
