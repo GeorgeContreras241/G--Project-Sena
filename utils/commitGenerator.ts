@@ -65,3 +65,21 @@ export const generateTypeScriptCommit = (): string => {
 - Remove any types and improve type safety throughout application`
     });
 };
+
+export const generateTypeScriptFixesCommit = (): string => {
+    return generateCommitMessage({
+        type: 'fix',
+        scope: 'typescript',
+        subject: 'fix TypeScript errors for production deployment',
+        body: `- Fix handleImport function return type mismatches
+- Resolve decryptedData property access errors
+- Add proper null checks for optional properties
+- Fix sileo.error undefined message handling
+- Ensure safe property access in ActionSubmit component
+- Resolve ImportResult interface compatibility issues
+- Add fallback strings for error messages
+- Fix localStorage salt storage type safety
+- Ensure production deployment without TypeScript errors
+- Verify Vercel deployment compatibility`
+    });
+};

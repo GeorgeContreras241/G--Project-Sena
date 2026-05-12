@@ -74,15 +74,19 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
             return false;
         }
 
-        const { decryptedData, salt } = await handleImport(file);
+        const importResult = await handleImport(file);
 
-        if (!decryptedData.status) {
-            sileo.error(decryptedData.message);
+        if (!importResult.state) {
+            sileo.error(importResult.message || "Error al importar el archivo");
             return false;
         }
 
-        localStorage.setItem("salt", JSON.stringify(Array.from(salt)));
-        setDataPasswordInit(decryptedData.data);
+        if (importResult.salt) {
+            localStorage.setItem("salt", JSON.stringify(Array.from(importResult.salt)));
+        }
+        if (importResult.decryptedData) {
+            setDataPasswordInit(importResult.decryptedData);
+        }
         return true;
     };
 
