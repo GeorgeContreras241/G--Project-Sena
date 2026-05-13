@@ -70,16 +70,32 @@ export const generateTypeScriptFixesCommit = (): string => {
     return generateCommitMessage({
         type: 'fix',
         scope: 'typescript',
-        subject: 'fix TypeScript errors for production deployment',
-        body: `- Fix handleImport function return type mismatches
-- Resolve decryptedData property access errors
-- Add proper null checks for optional properties
-- Fix sileo.error undefined message handling
-- Ensure safe property access in ActionSubmit component
-- Resolve ImportResult interface compatibility issues
-- Add fallback strings for error messages
-- Fix localStorage salt storage type safety
-- Ensure production deployment without TypeScript errors
-- Verify Vercel deployment compatibility`
+        subject: 'fix sileo.error TypeScript build errors',
+        body: `- Fix sileo.error() call with proper SileoOptions interface
+- Resolve build worker exit code 1 caused by type mismatches
+- Add proper object structure for error notifications
+- Fix optional property chaining for importResult.message
+- Ensure production deployment without TypeScript compilation errors
+- Resolve Next.js build failures in Vercel deployment
+- Add type-safe error handling throughout ActionSubmit component`
+    });
+};
+
+export const generateSVGFixesCommit = (): string => {
+    return generateCommitMessage({
+        type: 'fix',
+        scope: 'icons',
+        subject: 'fix SVG icon TypeScript build errors',
+        body: `- Fix SVG property names in icon components
+- Change class attributes to className in SVG elements
+- Fix stroke-width to strokeWidth in SVG properties
+- Fix stroke-linecap to strokeLinecap in SVG attributes  
+- Fix stroke-linejoin to strokeLinejoin in SVG properties
+- Update Copy.tsx icon with proper SVG attributes
+- Update Arrow.tsx icon with proper SVG attributes
+- Update Exit.tsx icon with proper SVG attributes and className
+- Update WebAuthn.tsx icon with proper SVG attributes
+- Resolve Next.js build worker exit code 1 for SVG compilation
+- Ensure production deployment without SVG TypeScript errors`
     });
 };
