@@ -10,19 +10,24 @@ import { generateSalt } from "@/lib/crypto/genereteSalt"
 import { Eye } from "../ui/icons/Eye";
 import { EyeClose } from "../ui/icons/EyeClose";
 import { validatePassword } from "@/lib/utils/SeccionSubmit/validatePassword";
-import { 
-  ActionSubmitProps, 
-  StorageState, 
-  FormState, 
-  PasswordValidationResult,
-  FileValidationResult,
-  ImportResult,
-  ToastMessage
+import {
+    ActionSubmitProps,
+    StorageState,
+    FormState,
+    PasswordValidationResult,
+    FileValidationResult,
+    ImportResult,
+    ToastMessage,
+    ContextType
 } from "@/types";
 
 export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
-    const { handleImport, handleReset } = use(LocalContext);
-     // Debugging log
+    const context = use(LocalContext);
+    if (!context) {
+        throw new Error("LocalContext debe usarse dentro del Provider");
+    }
+    const { handleImport, handleReset } = context;
+    // Debugging log
     const [file, setFile] = useState<File | null>(null);
     const [viewPass, setViewPass] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -97,12 +102,12 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        
+
         const formData = new FormData(e.target as HTMLFormElement);
         const password = formData.get("password") as string;
 
         const validatePasswordResult = validatePassword(password);
-        if (!validatePasswordResult.success) {    
+        if (!validatePasswordResult.success) {
             setPasswordError(validatePasswordResult.error || "");
             sileo.error({ title: validatePasswordResult.error || "Error al validar la contraseña" });
             return;
@@ -154,107 +159,107 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
             <Toaster position="top-center" />
             <div className="bg-white/10 dark:bg-black backdrop-blur-md border-2 border-white/30 dark:border-blue-950/20 rounded-2xl w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
 
-            <div className="w-full grid place-items-center gap-2">
-                <div className="w-full flex gap-3 ">
-                    <input className="hidden" id="file" type="file" onChange={handleFileChange} accept=".enc" />
-                    <div className="flex-1 h-48 border-2 border-dashed border-white/30 dark:border-blue-900/30 rounded-xl bg-white/5 dark:bg-blue-900/20 hover:bg-white/10
+                <div className="w-full grid place-items-center gap-2">
+                    <div className="w-full flex gap-3 ">
+                        <input className="hidden" id="file" type="file" onChange={handleFileChange} accept=".enc" />
+                        <div className="flex-1 h-48 border-2 border-dashed border-white/30 dark:border-blue-900/30 rounded-xl bg-white/5 dark:bg-blue-900/20 hover:bg-white/10
                      dark:hover:bg-blue-900/30 transition-all duration-300 cursor-pointer group">
-                        <label htmlFor="file" className="w-full h-full flex flex-col items-center justify-center cursor-pointer border border-blue-500/30 dark:border-blue-400/30 ">
-                            <div className="w-16 h-16 bg-blue-500/20 dark:bg-blue-400/20 rounded-full border-2 border-blue-500/30 dark:border-blue-400/30 flex items-center 
+                            <label htmlFor="file" className="w-full h-full flex flex-col items-center justify-center cursor-pointer border border-blue-500/30 dark:border-blue-400/30 ">
+                                <div className="w-16 h-16 bg-blue-500/20 dark:bg-blue-400/20 rounded-full border-2 border-blue-500/30 dark:border-blue-400/30 flex items-center 
                             justify-center mb-3 group-hover:scale-105 transition-transform ">
-                                <Add />
-                            </div>
-                            <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">Arrastra o haz clic para subir</span>
-                            <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">Solo archivos .enc</span>
-                        </label>
+                                    <Add />
+                                </div>
+                                <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">Arrastra o haz clic para subir</span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">Solo archivos .enc</span>
+                            </label>
+                        </div>
+                        {file && (
+                            <button
+                                type="button"
+                                onClick={handleClearFile}
+                                className="grid place-content-center w-12 h-12 rounded-md bg-black border border-black dark:border-neutral-500  cursor-pointer
+                            hover-group:bg-gray-800 transition-all duration-300 group"
+                                title="Eliminar archivo"
+                            >
+                                <svg className="w-5 h-5 text-white dark:text-gray-400 group-hover:text-red-200  group-hover:scale-120 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </button>
+                        )}
                     </div>
-                    {file && (
+                    <span className={`${file ? "text-green-900 dark:text-green-400 border-green-800/50 dark:border-green-400/50 bg-green-600/50 dark:bg-green-400/10"
+                        : "text-red-900 dark:text-red-400 border-red-800/50 dark:border-red-400/50 bg-red-500/50 dark:bg-red-400/10"} 
+                    text-sm border rounded px-2 py-1 w-full text-center transition-colors duration-300`}>
+                        {fileError ? fileError : (file ? "Archivo Cargado Correctamente" : "Seleccione un archivo")}
+                    </span>
+                </div>
+                <form className="w-full flex flex-col gap-2 mt-4 text-sm" onSubmit={handleSubmit}>
+                    <div className="flex justify-between">
+                        <label htmlFor="password" className="text-[1.5rem] text-start font-bold text-gray-700 dark:text-neutral-100 font-sora">Clave Maestra</label>
+                        {passwordError && (
+                            <span id="password-error" className="text-red-600 dark:text-red-400 text-xs mt-1" role="alert">
+                                {passwordError}
+                            </span>
+                        )}
+                    </div>
+                    <div className="relative">
+                        <input
+                            type={viewPass ? "text" : "password"}
+                            className={`w-full border-2 rounded-lg py-2 px-3 pr-10 bg-white/10 dark:bg-blue-900/20 backdrop-blur-sm
+                        placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:italic placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 ${passwordError ? 'border-red-500/50 dark:border-red-400/50 focus:ring-red-500/50' : 'border-white/30 dark:border-blue-900/30'
+                                }`}
+                            placeholder="Ingresa Aqui"
+                            id="password"
+                            name="password"
+                            autoComplete="off"
+                            spellCheck="false"
+                            autoCorrect="off"
+                            onChange={handlePasswordChange}
+                            aria-invalid={passwordError ? 'true' : 'false'}
+                            aria-describedby={passwordError ? 'password-error' : undefined}
+                        />
                         <button
                             type="button"
-                            onClick={handleClearFile}
-                            className="grid place-content-center w-12 h-12 rounded-md bg-black border border-black dark:border-neutral-500  cursor-pointer
-                            hover-group:bg-gray-800 transition-all duration-300 group"
-                            title="Eliminar archivo"
+                            onClick={() => setViewPass(!viewPass)}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 rounded hover:bg-white/20 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300"
+                            aria-label={viewPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                         >
-                            <svg className="w-5 h-5 text-white dark:text-gray-400 group-hover:text-red-200  group-hover:scale-120 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
+                            {viewPass ? (
+                                <Eye />
+                            ) : (
+                                <EyeClose />
+                            )}
                         </button>
-                    )}
-                </div>
-                <span className={`${file ? "text-green-900 dark:text-green-400 border-green-800/50 dark:border-green-400/50 bg-green-600/50 dark:bg-green-400/10" 
-                    : "text-red-900 dark:text-red-400 border-red-800/50 dark:border-red-400/50 bg-red-500/50 dark:bg-red-400/10"} 
-                    text-sm border rounded px-2 py-1 w-full text-center transition-colors duration-300`}>
-                    {fileError ? fileError : (file ? "Archivo Cargado Correctamente" : "Seleccione un archivo")}
-                </span>
-            </div>
-            <form className="w-full flex flex-col gap-2 mt-4 text-sm" onSubmit={handleSubmit}>
-                <div className="flex justify-between">
-                    <label htmlFor="password" className="text-[1.5rem] text-start font-bold text-gray-700 dark:text-neutral-100 font-sora">Clave Maestra</label>
-                    {passwordError && (
-                        <span id="password-error" className="text-red-600 dark:text-red-400 text-xs mt-1" role="alert">
-                            {passwordError}
-                        </span>
-                    )}
-                </div>
-                <div className="relative">
-                    <input
-                        type={viewPass ? "text" : "password"}
-                        className={`w-full border-2 rounded-lg py-2 px-3 pr-10 bg-white/10 dark:bg-blue-900/20 backdrop-blur-sm
-                        placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:italic placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 ${passwordError ? 'border-red-500/50 dark:border-red-400/50 focus:ring-red-500/50' : 'border-white/30 dark:border-blue-900/30'
-                            }`}
-                        placeholder="Ingresa Aqui"
-                        id="password"
-                        name="password"
-                        autoComplete="off"
-                        spellCheck="false"
-                        autoCorrect="off"
-                        onChange={handlePasswordChange}
-                        aria-invalid={passwordError ? 'true' : 'false'}
-                        aria-describedby={passwordError ? 'password-error' : undefined}
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setViewPass(!viewPass)}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 rounded hover:bg-white/20 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-300"
-                        aria-label={viewPass ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                    >
-                        {viewPass ? (
-                            <Eye />
-                        ) : (
-                            <EyeClose />
-                        )}
-                    </button>
-                </div>
+                    </div>
 
-                <button
-                    className="w-full bg-neutral-950 border dark:bg-neutral-900 dark:border-neutral-600 dark:hover:bg-neutral-800 text-white rounded-lg p-3 cursor-pointer flex items-center
+                    <button
+                        className="w-full bg-neutral-950 border dark:bg-neutral-900 dark:border-neutral-600 dark:hover:bg-neutral-800 text-white rounded-lg p-3 cursor-pointer flex items-center
                      justify-center gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] focus:outline-none focus:ring-2
                       focus:ring-blue-500/50 shadow-lg"
-                    type="submit"
-                    disabled={isLoading}
-                    aria-busy={isLoading}
-                    aria-describedby="loading-status"
-                >
-                    {isLoading ? (
-                        <>
-                            <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span>Descifrando...</span>
-                        </>
-                    ) : (
-                        <span>Descifrar</span>
+                        type="submit"
+                        disabled={isLoading}
+                        aria-busy={isLoading}
+                        aria-describedby="loading-status"
+                    >
+                        {isLoading ? (
+                            <>
+                                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>Descifrando...</span>
+                            </>
+                        ) : (
+                            <span>Descifrar</span>
+                        )}
+                    </button>
+                    {isLoading && (
+                        <span id="loading-status" className="sr-only">
+                            Procesando archivo, por favor espere
+                        </span>
                     )}
-                </button>
-                {isLoading && (
-                    <span id="loading-status" className="sr-only">
-                        Procesando archivo, por favor espere
-                    </span>
-                )}
-            </form>
-        </div>
+                </form>
+            </div>
         </>
     )
 }

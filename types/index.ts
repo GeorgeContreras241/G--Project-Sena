@@ -164,3 +164,8 @@ export interface LoadingState {
   isLoading: boolean
   message?: string
 }
+
+export interface ContextType {
+  handleImport: (file: File) => Promise<void>
+  handleReset: () => void
+}
