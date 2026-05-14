@@ -9,13 +9,13 @@ import { decrypt } from "@/lib/crypto/decryptData";
 import { useStoragePass } from "@/storage/useStoragePass";
 import { LocalContextType, ImportResult, VaultData } from "@/types";
 
-export const LocalContext = createContext<LocalContextType>(null!);
+export const LocalContext = createContext(LocalContextType(null));
 
-export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
-    const { setDataPassword } = useStoragePass() as any;
-    const saltRef = useRef<Uint8Array | null>(null);
-    const drcKey = useRef<CryptoKey | null>(null!);
-    const [saltState, setSaltState] = useState<boolean>(false);
+export const LocalProvider = ({ children }) => {
+    const { setDataPassword } = useStoragePass();
+    const saltRef = useRef(null);
+    const drcKey = useRef(null);
+    const [saltState, setSaltState] = useState(false);
 
     useEffect(() => {
         toogleDeriveKey();
@@ -45,18 +45,18 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
 
     }
 
-    const handleExport = async (dataPassword: any[]) => {
+    const handleExport = async (dataPassword) => {
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
         const salt = new Uint8Array(saltSave);
-        const encrypted = await encrypt(drcKey.current as CryptoKey, dataPassword);
+        const encrypted = await encrypt(drcKey.current, dataPassword);
 
         // Tener cuidado que encrypted es un objeto con salt, iv y data
         const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data);
         downloadVault(vaultFile)
     }
 
-    const handleImport = async (file: File): Promise<ImportResult> => {
-        const vaultData: VaultData = await loadVault({ file })
+    const handleImport = async (file) => {
+        const vaultData = await loadVault({ file })
         if (!vaultData.state) return {
             state: false,
             message: {
@@ -89,7 +89,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    const downloadVault = (buffer: any) => {
+    const downloadVault = (buffer) => {
         const blob = new Blob(
             [buffer],
             { type: "application/octet-stream" }
