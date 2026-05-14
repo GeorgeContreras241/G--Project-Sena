@@ -12,7 +12,7 @@ import { LocalContextType, ImportResult, VaultData } from "@/types";
 export const LocalContext = createContext<LocalContextType>(null!);
 
 export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
-    const { setDataPassword } = useStoragePass();
+    const { setDataPassword } = useStoragePass() as any;
     const saltRef = useRef<Uint8Array | null>(null);
     const drcKey = useRef<CryptoKey | null>(null!);
     const [saltState, setSaltState] = useState<boolean>(false);
@@ -48,8 +48,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     const handleExport = async (dataPassword: any[]) => {
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
         const salt = new Uint8Array(saltSave);
-
-        const encrypted = await encrypt(drcKey.current, dataPassword);
+        const encrypted = await encrypt(drcKey.current as CryptoKey, dataPassword);
 
         // Tener cuidado que encrypted es un objeto con salt, iv y data
         const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data);

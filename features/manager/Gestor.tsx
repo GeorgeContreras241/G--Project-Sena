@@ -57,7 +57,9 @@ export const Gestor = () => {
         return <Lock />
     }
   }
-  const filteredPasswords = dataPassword?.filter((password: any) => {
+
+  console.log(dataPassword);
+  const filteredPasswords = dataPassword?.data.filter((password: any) => {
     const matchesSearch = password.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       password.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (password.url && password.url.toLowerCase().includes(searchTerm.toLowerCase()))
