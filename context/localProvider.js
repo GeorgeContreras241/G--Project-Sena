@@ -7,9 +7,8 @@ import { loadVault } from "@/lib/vault/loadVault";
 import { createContext, useRef, useEffect, useState } from "react";
 import { decrypt } from "@/lib/crypto/decryptData";
 import { useStoragePass } from "@/storage/useStoragePass";
-import { LocalContextType, ImportResult, VaultData } from "@/types";
 
-export const LocalContext = createContext(LocalContextType(null));
+export const LocalContext = createContext(null);
 
 export const LocalProvider = ({ children }) => {
     const { setDataPassword } = useStoragePass();
