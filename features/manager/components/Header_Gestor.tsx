@@ -1,5 +1,5 @@
 "use client"
-import { use } from "react"
+import { useContext } from "react"
 import { LocalContext } from "@/context/localProvider"
 import { Exit } from "@/components/ui/icons/Exit";
 import { Search } from "@/components/ui/icons/Search";
@@ -8,9 +8,10 @@ import { useStoragePass } from "@/storage/useStoragePass";
 import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle";
 import { CATEGORY_BUTTONS } from "@/const/buttonsNavegations";
 import { HeaderGestorProps } from "@/types";
+import type { ContextType } from "@/types";
 
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: HeaderGestorProps) => {
-    const { handleExport, handleReset } = use(LocalContext)
+    const { handleExport, handleReset } = useContext<ContextType>(LocalContext as any)
     const dataPassword = useStoragePass((state:any) => state.dataPassword)
 
     return (

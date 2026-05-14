@@ -7,13 +7,14 @@ import { loadVault } from "@/lib/vault/loadVault";
 import { createContext, useRef, useEffect, useState } from "react";
 import { decrypt } from "@/lib/crypto/decryptData";
 import { useStoragePass } from "@/storage/useStoragePass";
+import type { ExportResult } from "@/types";
 
 export const LocalContext = createContext(null);
 
-export const LocalProvider = ({ children }) => {
+export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     const { setDataPassword } = useStoragePass();
-    const saltRef = useRef(null);
-    const drcKey = useRef(null);
+    const saltRef = useRef<Uint8Array | null>(null);
+    const drcKey = useRef<CryptoKey | null>(null);
     const [saltState, setSaltState] = useState(false);
 
     useEffect(() => {
@@ -44,17 +45,23 @@ export const LocalProvider = ({ children }) => {
 
     }
 
-    const handleExport = async (dataPassword) => {
+    const handleExport: ExportResult = async (dataPassword) => {
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
         const salt = new Uint8Array(saltSave);
-        const encrypted = await encrypt(drcKey.current, dataPassword);
-
-        // Tener cuidado que encrypted es un objeto con salt, iv y data
-        const vaultFile = buildVaultFile(salt, encrypted.iv, encrypted.data);
+        const derivedKey = drcKey.current;
+        if (!derivedKey) return;
+        const encrypted = await encrypt(derivedKey, dataPassword);
+        const { iv, data } = encrypted;
+        if (!iv || !data) return;
+        const ivArray = new Uint8Array(iv);
+        const dataArray = new Uint8Array(data);
+        const vaultFile = buildVaultFile(salt, ivArray, dataArray);
+        if (!vaultFile) return;
+        console.log(vaultFile);
         downloadVault(vaultFile)
     }
 
-    const handleImport = async (file) => {
+    const handleImport = async (file: File) => {
         const vaultData = await loadVault({ file })
         if (!vaultData.state) return {
             state: false,
@@ -79,7 +86,7 @@ export const LocalProvider = ({ children }) => {
                 }
             }
         };
-        const decryptedData = await decrypt(drcKey.current, { iv, data })
+        const decryptedData = await decrypt(drcKey.current as CryptoKey, { iv, data })
         return {
             state: true,
             decryptedData,
@@ -88,7 +95,7 @@ export const LocalProvider = ({ children }) => {
         }
     }
 
-    const downloadVault = (buffer) => {
+    const downloadVault = (buffer : any) => {
         const blob = new Blob(
             [buffer],
             { type: "application/octet-stream" }
@@ -101,7 +108,7 @@ export const LocalProvider = ({ children }) => {
         URL.revokeObjectURL(url)
     }
     return (
-        <LocalContext value={{ saltRef, handleExport, handleImport, handleReset }}>
+        <LocalContext value={{ saltRef, handleExport, handleImport, handleReset } as any}>
             {children}
         </LocalContext>
     )

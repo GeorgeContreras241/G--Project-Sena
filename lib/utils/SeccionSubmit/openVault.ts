@@ -1,8 +1,7 @@
 // Donde Se decrypta
 
 import { loadVault } from "@/lib/vault/loadVault";
-import { deriveKey } from "@/lib/crypto/kdfKey";
-import { decrypt } from "@/lib/crypto/decryptData";
+
 
 export const openVault = async ( file : File ) => {
     const vaultData = await loadVault({ file });
@@ -29,12 +28,6 @@ export const openVault = async ( file : File ) => {
             }
         }
     };
-    //deforma
-    //const key = await deriveKey(password, salt);
-    //const dataDecrypted = await decrypt(key, { iv, data });
-    // if (!dataDecrypted.status) return {
-    //     status: false,
-    //     message: dataDecrypted.message
-    // };
-    return { state: true, dataDecrypted: dataDecrypted.data, key, salt };
+  
+    return { state: true, dataDecrypted: data, salt };
 }

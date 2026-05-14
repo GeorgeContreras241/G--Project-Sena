@@ -1,4 +1,6 @@
-export const encrypt = async (key: CryptoKey, data: any) => {
+import type { PasswordEntry } from "@/types";
+
+export const encrypt = async (key: CryptoKey, data: PasswordEntry[]) => {
 
     const iv = crypto.getRandomValues(new Uint8Array(12))
     

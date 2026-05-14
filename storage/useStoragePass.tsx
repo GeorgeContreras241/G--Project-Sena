@@ -1,14 +1,15 @@
 import { create } from "zustand" ;
+import type { PassStorage, dataPassword } from "@/types";
 
-export const useStoragePass = create((set) => ({
+export const useStoragePass = create<PassStorage>((set) => ({
     salt: null,
     derivedKey: null,
     loading: false,
     dataPassword: [],
-    setDataPassword: (data: object) => set({ dataPassword: [] }),
-    setDataPasswordInit: (data: object) => set({ dataPassword: data }),
-    setDataPasswordUpdate: (data: object) => set((state: any) => ({ dataPassword: [...state.dataPassword, data] })),
-    setDataPasswordEdit: (data: any) => set((state: any) => ({ 
+    setDataPassword: () => set({ dataPassword: [] }),
+    setDataPasswordInit: (data: dataPassword[]) => set({ dataPassword: data }),
+    setDataPasswordUpdate: (data: dataPassword) => set((state: any) => ({ dataPassword: [...state.dataPassword, data] })),
+    setDataPasswordEdit: (data: dataPassword) => set((state: any) => ({ 
         dataPassword: state.dataPassword.map((item: any) => 
             item.id === data.id ? data : item
         )

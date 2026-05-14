@@ -32,7 +32,7 @@ export interface LocalContextType {
   handleReset: () => void
 }
 
-export interface ImportResult {
+export interface ImportResultAlert {
   state: boolean
   message?: {
     title: string
@@ -76,14 +76,29 @@ export interface EditPasswordProps {
 }
 
 // Storage Types
-export interface StorageState {
-  dataPassword: PasswordEntry[]
-  setDataPassword: (data: PasswordEntry[]) => void
-  setDataPasswordInit: (data: PasswordEntry[]) => void
-  setDataPasswordUpdate: (data: PasswordEntry) => void
-  setDataPasswordEdit: (data: PasswordEntry) => void
-  setDataPasswordDelate: (id: string | number) => void
-  setDataPasswordFavorite: (id: string | number) => void
+export type PassStorage = {
+    salt: Uint8Array | null;
+    derivedKey: CryptoKey | null;
+    loading: boolean;
+    dataPassword: dataPassword[];
+    setDataPassword: (data: Array<dataPassword> | null) => void;
+    setDataPasswordInit: (data: dataPassword[]) => void;
+    setDataPasswordUpdate: (data: dataPassword) => void;
+    setDataPasswordEdit: (data: dataPassword) => void;
+    setDataPasswordFavorite: (id: string) => void;
+    setDataPasswordDelate: (id: string | number) => void;
+    setLoading: (loading: boolean) => void;
+    setDerivedKey: (key: CryptoKey) => void;
+    setSalt: (salt: Uint8Array) => void;
+}
+
+export interface dataPassword {
+    id: string;
+    name: string;
+    username: string;
+    password: string;
+    url: string;
+    favorite: boolean;
 }
 
 // Form State Types
@@ -166,6 +181,17 @@ export interface LoadingState {
 }
 
 export interface ContextType {
-  handleImport: (file: File) => Promise<void>
+  handleImport: (file: File) => Promise<ImportResult>
   handleReset: () => void
+  handleExport: ExportResult
 }
+
+export type ImportResult = {
+  state: boolean
+  message: ToastMessage
+  data?: PasswordEntry[]
+  salt?: Uint8Array
+  drcKey?: CryptoKey
+}
+
+export type ExportResult = (dataPassword: PasswordEntry[]) => void

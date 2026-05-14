@@ -12,7 +12,6 @@ import { EyeClose } from "../ui/icons/EyeClose";
 import { validatePassword } from "@/lib/utils/SeccionSubmit/validatePassword";
 import {
     ActionSubmitProps,
-    StorageState,
     FormState,
     PasswordValidationResult,
     FileValidationResult,
@@ -22,7 +21,7 @@ import {
 } from "@/types";
 
 export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
-    const context = use(LocalContext);
+    const context = use<ContextType>(LocalContext as any);
     if (!context) {
         throw new Error("LocalContext debe usarse dentro del Provider");
     }
@@ -94,8 +93,8 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
         if (importResult.salt) {
             localStorage.setItem("salt", JSON.stringify(Array.from(importResult.salt)));
         }
-        if (importResult.decryptedData) {
-            setDataPasswordInit(importResult.decryptedData);
+        if (importResult.data) {
+            setDataPasswordInit(importResult.data);
         }
         return true;
     };

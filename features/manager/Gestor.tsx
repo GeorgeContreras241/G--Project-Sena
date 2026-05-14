@@ -58,7 +58,6 @@ export const Gestor = () => {
     }
   }
 
-  console.log(dataPassword);
   const filteredPasswords = dataPassword?.data.filter((password: any) => {
     const matchesSearch = password.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       password.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
