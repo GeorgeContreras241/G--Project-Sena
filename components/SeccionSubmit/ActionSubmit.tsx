@@ -2,23 +2,20 @@
 import { use, useEffect } from "react"
 import { LocalContext } from "@/context/localProvider"
 import Add from "../ui/icons/Add";
+import { sileoWarning, sileoError } from "@/const/sileoConfig";
 import { sileo, Toaster } from "sileo"
 import { useState } from "react";
 import { useStoragePass } from "@/storage/useStoragePass";
 import { validateVaultInputs } from "@/lib/utils/SeccionSubmit/validateVaultInputs";
-import { generateSalt } from "@/lib/crypto/genereteSalt"
 import { Eye } from "../ui/icons/Eye";
 import { EyeClose } from "../ui/icons/EyeClose";
 import { validatePassword } from "@/lib/utils/SeccionSubmit/validatePassword";
 import {
     ActionSubmitProps,
-    FormState,
-    PasswordValidationResult,
-    FileValidationResult,
-    ImportResult,
-    ToastMessage,
     ContextType
 } from "@/types";
+import SeccionSocial from "../Social/SocialSeccion";
+import { error } from "console";
 
 export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     const context = use<ContextType>(LocalContext as any);
@@ -50,51 +47,33 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     };
 
 
-    const handleNoFileScenario = async () => {
-        sileo.warning({
-            title: "Error Fatal",
-            description: "Seguro que desea continuar sin archivo",
-            duration: 5000,
-            fill: "var(--color-bg-elevated)",
-            styles: {
-                title: "text-red! font-bold!",
-                description: "text-white! text-center!",
-            },
-            button: {
-                onClick: async () => {
-                    const saltGenerated = await generateSalt();
-                    localStorage.setItem("salt", JSON.stringify(Array.from(saltGenerated)));
-                    onSuccess(true);
-                },
-                title: "Aceptar"
-            },
-        });
+    const handleNoFileScenario = async (password: string) => {
+        sileo.warning(sileoWarning);
     };
 
     const processFileImport = async (file: File, password: string) => {
+        // validacion de datos
         const validation = validateVaultInputs(password);
         if (validation !== true) {
             sileo.error(validation);
             return false;
         }
+        //revisar datos pasa con datos incorrectos ojito
+        
+        const importResult = await handleImport(file,password);
 
-        const importResult = await handleImport(file);
-
-        if (!importResult.state) {
-            sileo.error({
-                title: importResult.message?.title || "Error al importar el archivo",
-                description: importResult.message?.description || "No se pudo cargar el archivo",
-                duration: importResult.message?.duration || 5000,
-                styles: importResult.message?.styles || { title: "text-white!" }
-            });
+        if (importResult.state === false) {
+            sileo.error(sileoError);
             return false;
         }
 
         if (importResult.salt) {
             localStorage.setItem("salt", JSON.stringify(Array.from(importResult.salt)));
         }
-        if (importResult.data) {
-            setDataPasswordInit(importResult.data);
+        if (importResult.decryptedData) {
+            console.log("decryptedData", importResult);
+            const data = importResult.decryptedData;
+            setDataPasswordInit(data);
         }
         return true;
     };
@@ -104,11 +83,11 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
 
         const formData = new FormData(e.target as HTMLFormElement);
         const password = formData.get("password") as string;
-
+        console.log("password", password);
         const validatePasswordResult = validatePassword(password);
         if (!validatePasswordResult.success) {
             setPasswordError(validatePasswordResult.error || "");
-            sileo.error({ title: validatePasswordResult.error || "Error al validar la contraseña" });
+            sileo.error(sileoError);
             return;
         }
 
@@ -116,11 +95,14 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
 
         try {
             if (!file) {
-                await handleNoFileScenario();
+                await handleNoFileScenario(password);
+                console.log("Archivo no seleccionado");
                 return;
             }
+            //revisar funcion processFileImport
             const success = await processFileImport(file, password);
             if (success) {
+                console.log("Archivo procesado exitosamente");
                 onSuccess(true);
             }
         } catch (error) {
@@ -156,7 +138,7 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     return (
         <>
             <Toaster position="top-center" />
-            <div className="bg-white/10 dark:bg-black backdrop-blur-md border-2 border-white/30 dark:border-blue-950/20 rounded-2xl w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
+            <div className="bg-white/10 dark:bg-slate-900 backdrop-blur-md border-2 border-white/30 dark:border-blue-950/20 rounded-2xl w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
 
                 <div className="w-full grid place-items-center gap-2">
                     <div className="w-full flex gap-3 ">
@@ -232,7 +214,7 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                     </div>
 
                     <button
-                        className="w-full bg-neutral-950 border dark:bg-neutral-900 dark:border-neutral-600 dark:hover:bg-neutral-800 text-white rounded-lg p-3 cursor-pointer flex items-center
+                        className="w-full bg-neutral-950 border dark:bg-slate-900 dark:border-neutral-600 dark:hover:bg-slate-800 text-white rounded-lg p-3 cursor-pointer flex items-center
                      justify-center gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] focus:outline-none focus:ring-2
                       focus:ring-blue-500/50 shadow-lg"
                         type="submit"
@@ -249,7 +231,11 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                                 <span>Descifrando...</span>
                             </>
                         ) : (
-                            <span>Descifrar</span>
+                            file ? (
+                                <span>Decifrar</span>
+                            ) : (
+                                <span>Iniciar</span>
+                            )
                         )}
                     </button>
                     {isLoading && (
@@ -259,6 +245,7 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                     )}
                 </form>
             </div>
+            <SeccionSocial className="flex flex-row items-center justify-center gap-4 mt-8" />
         </>
     )
 }

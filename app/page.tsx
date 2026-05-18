@@ -12,13 +12,11 @@ import { target } from "@/const/target"
 export default function Home() {
   const [isLoading, setIsLoading] = useState<string | null>(null);
 
-
-
+  // En desarrollo 
   const handleWebAuthn = async () => {
     setIsLoading('webauthn');
     try {
-      // Implement WebAuthn logic here
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate loading
+      await new Promise(resolve => setTimeout(resolve, 2000)); 
     } catch (error) {
       console.error('WebAuthn error:', error);
     } finally {
@@ -27,7 +25,7 @@ export default function Home() {
   };
   
   return (
-    <main className="fondo grid place-items-center min-h-dvh border-4 border-white/30 dark:border-white/20">
+    <main className="grid place-items-center min-h-dvh">
       <section id="main-content" className="w-full max-w-2xl flex flex-col px-2 md:px-4 gap-3 md:gap-6  
       rounded-2xl px-1 md:p-3 lg:p-4 shadow-2xl">
         <header className="text-center space-y-4">
@@ -49,30 +47,31 @@ export default function Home() {
         <nav className="grid grid-cols-1 md:grid-cols-2 md:gap-6 gap-1" role="navigation" aria-label="Opciones principales">
           <Link
             href="/offline"
-            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-neutral-900 dark:bg-black border border-gray-700 dark:border-gray-800 rounded-xl hover:bg-gray-800
-             dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            className="group relative flex place-items-center bg-slate-800 border border-slate-700 rounded-2xl md:p-8 p-2 hover:border-blue-500 transition-all duration-300 hover:shadow-xl 
+            hover:shadow-blue-500/20 w-full "
             role="menuitem"
             aria-label="Uso Offline - Administrar claves sin conexión"
           >
             <div className="hidden sm:flex md:w-16 md:h-16 w-12 h-12 flex items-center justify-center text-blue-700 group-hover:text-blue-600 transition-colors duration-300" aria-hidden="true">
               <Archive />
             </div>
-            <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-white">Uso Offline</h3>
-              <p className="text-sm text-gray-300">Sin conexión a internet, archivo encriptado</p>
+            <div className="text-center space-y-2 w-full">
+              <h3 className="text-sm md:text-base lg:text-lg font-semibold text-white">Uso Offline</h3>
+              <p className="text-xs md:text-sm text-gray-300">Sin conexión a internet, archivo encriptado</p>
+              <span className="text-[0.6rem] md:text-sm text-gray-400">Disponible</span>
             </div>
           </Link>
           <button
             onClick={handleWebAuthn}
             disabled={isLoading === 'webauthn'}
-            className="group flex flex-row md:flex-col items-center justify-around md:justify-center gap-4 p-6 bg-neutral-900/80 dark:bg-black border border-gray-700 
-            dark:border-gray-800 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-900 transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 
-            focus:ring-purple-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 relative pointer-events-none"
+            className="group relative flex place-items-center bg-slate-800 border border-slate-700 rounded-2xl md:p-8 p-2 hover:border-blue-700/50 
+            transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/20 text-left pointer-events-none cursor-pointer"
             role="menuitem"
             aria-label="WebAuthn - Autenticación biométrica"
             aria-busy={isLoading === 'webauthn'}
           >
-            <div className="hidden sm:flex md:w-16 md:h-16 w-12 h-12 flex items-center justify-center text-blue-700 group-hover:text-blue-600 transition-colors duration-300" aria-hidden="true">
+            <div className="hidden sm:flex md:w-16 md:h-16 w-12 h-12 flex items-center justify-center text-blue-700 group-hover:text-blue-600 
+            transition-colors duration-300" aria-hidden="true">
               {isLoading === 'webauthn' ? (
                 <svg className="animate-spin w-full h-full" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -82,10 +81,10 @@ export default function Home() {
                 <WebAuthn />
               )}
             </div>
-            <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold text-white">WebAuthn</h3>
-              <p className="text-sm text-gray-300">Autenticación biométrica, pin o huella</p>
-              <span className="text-xs text-gray-400">Próximamente</span>
+            <div className="text-center space-y-2 w-full ">
+              <h3 className="text-sm md:text-base lg:text-lg font-semibold text-white">WebAuthn</h3>
+              <p className="text-xs md:text-sm text-gray-300 ">Autenticación biométrica, pin o huella</p>
+              <span className="text-[0.6rem] md:text-sm text-gray-400 ">Próximamente</span>
             </div>
             {isLoading === 'webauthn' && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/90 dark:bg-black/90 rounded-xl backdrop-blur-sm" aria-live="polite">

@@ -4,7 +4,7 @@ import { Copy } from "@/components/ui/icons/Copy"
 import { useState } from "react"
 import { useStoragePass } from "@/storage/useStoragePass"
 import { generatePassword } from "@/lib/utils/Gestor/generatePassword"
-import { copyToClipboard } from "@/lib/utils/Gestor/copyToClipboard"        
+import { copyToClipboard } from "@/lib/utils/Gestor/copyToClipboard"
 
 
 
@@ -40,7 +40,10 @@ export const AddPasswords = () => {
     // tool tip Ventana emergente para agregar contraseña componente Reutilizable
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setDataPasswordUpdate({ id: crypto.randomUUID(), ...keys });
+        const id =
+            crypto?.randomUUID?.() ||
+            Math.random().toString(36).substring(2, 15);
+        setDataPasswordUpdate({ id, ...keys });
     }
 
     return (
@@ -125,10 +128,10 @@ export const AddPasswords = () => {
                                     className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
                                 />
                                 <div className="absolute top-2.5 right-3 z-10 flex gap-1">
-                                    <button 
-                                        className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" 
-                                        onClick={handleGeneratePassword} 
-                                        title="Generar contraseña aleatoria" 
+                                    <button
+                                        className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                                        onClick={handleGeneratePassword}
+                                        title="Generar contraseña aleatoria"
                                         type="button"
                                     >
                                         <svg
@@ -141,9 +144,9 @@ export const AddPasswords = () => {
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                         </svg>
                                     </button>
-                                    <button 
-                                        className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" 
-                                        onClick={() => setShowPassword(!showPassword)} 
+                                    <button
+                                        className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                                        onClick={() => setShowPassword(!showPassword)}
                                         title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                                         type="button"
                                     >

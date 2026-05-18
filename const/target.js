@@ -6,6 +6,6 @@
         text: "Autenticación con PIN"
     },
     {
-        text: "Autenticación con Huella Digital"
+        text: "Local Storage"
     }
 ]

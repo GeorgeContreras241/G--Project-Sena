@@ -181,17 +181,19 @@ export interface LoadingState {
 }
 
 export interface ContextType {
-  handleImport: (file: File) => Promise<ImportResult>
+  handleImport: (file: File, password: string) => Promise<ImportResult>
   handleReset: () => void
   handleExport: ExportResult
 }
 
 export type ImportResult = {
   state: boolean
-  message: ToastMessage
-  data?: PasswordEntry[]
+  message?: ToastMessage
+  decryptedData?: PasswordEntry[]
   salt?: Uint8Array
   drcKey?: CryptoKey
 }
 
 export type ExportResult = (dataPassword: PasswordEntry[]) => void
+
+export type ToogleDeriveKey = (password: string) => void

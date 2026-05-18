@@ -23,9 +23,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning>
       <body
-        className={`${inter.className} ${sora.variable} antialiased bg-white/10 dark:bg-black`}
+        className={`${inter.className} ${sora.variable} bg-gradient-to-br p-1 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 light:from-slate-100 light:via-slate-50 light:to-slate-100`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}

@@ -1,27 +1,20 @@
 // Refacor en proceso
 'use client'
-import { LocalContext } from "@/context/localProvider"
 import { useState, use } from 'react'
 import { useStoragePass } from '@/storage/useStoragePass'
 import { Header_Gestor } from "@/features/manager/components/Header_Gestor"
 import { copyToClipboard } from '@/lib/utils/Gestor/copyToClipboard'
 import { AddPasswords } from '@/features/manager/components/AddPasswords'
 import { EditPassword } from '@/features/manager/components/EditPassword'
-import { Delete } from '@/components/ui/icons/Delete'
-import { Edit } from '@/components/ui/icons/Edit'
-import { Copy } from '@/components/ui/icons/Copy'
-import { Eye } from '@/components/ui/icons/Eye'
-import { EyeClose } from '@/components/ui/icons/EyeClose'
+
 import { Web } from '@/components/ui/icons/Web'
 import { App } from '@/components/ui/icons/App'
 import { Card } from '@/components/ui/icons/Card'
 import { Lock } from '@/components/ui/icons/Lock'
 import { LockEmpty } from '@/components/ui/icons/LockEmpty'
-import { Star } from '@/components/ui/icons/Star'
-import { StarFilled } from '@/components/ui/icons/StarFilled'
-import { Add } from '@/components/ui/icons/Add'
+
 import { PasswordCard } from './components/PasswordCard'
-import { deriveKey } from "@/lib/crypto/kdfKey"
+
 import { PasswordEntry } from "@/types"
 
 
@@ -58,15 +51,16 @@ export const Gestor = () => {
     }
   }
 
-  const filteredPasswords = dataPassword?.data.filter((password: any) => {
+
+  const filteredPasswords = dataPassword?.filter((password: any) => {
     const matchesSearch = password.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       password.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (password.url && password.url.toLowerCase().includes(searchTerm.toLowerCase()))
-    const matchesCategory = selectedCategory === 'all' || 
+    const matchesCategory = selectedCategory === 'all' ||
       (selectedCategory === 'favorites' ? password.favorite : password.category === selectedCategory)
     return matchesSearch && matchesCategory
   })
-
+  console.log(dataPassword)
   return (
     <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-gray-900">
       <div className="max-w-6xl mx-auto flex flex-col gap-2">
@@ -77,9 +71,9 @@ export const Gestor = () => {
           {/* Form add Password */}
           <section>
             {editingPassword ? (
-              <EditPassword 
-                password={editingPassword} 
-                onClose={() => setEditingPassword(null)} 
+              <EditPassword
+                password={editingPassword}
+                onClose={() => setEditingPassword(null)}
               />
             ) : (
               <AddPasswords />
@@ -89,19 +83,20 @@ export const Gestor = () => {
           {/* Password List */}
           <div className="w-full">
             <div className="space-y-1.5">
-              {filteredPasswords?.map((password: any) => (
-                <PasswordCard
-                  key={password.id}
-                  password={password}
-                  showPasswords={showPasswords}
-                  onTogglePasswordVisibility={togglePasswordVisibility}
-                  onCopyToClipboard={copyToClipboard}
-                  onEditPassword={setEditingPassword}
-                  onDeletePassword={setDataPasswordDelate}
-                  onToggleFavorite={setDataPasswordFavorite}
-                  getCategoryIcon={getCategoryIcon}
-                />
-              ))}
+              {
+                 filteredPasswords?.map((password: any) => (
+                  <PasswordCard
+                    key={password.id}
+                    password={password}
+                    showPasswords={showPasswords}
+                    onTogglePasswordVisibility={togglePasswordVisibility}
+                    onCopyToClipboard={copyToClipboard}
+                    onEditPassword={setEditingPassword}
+                    onDeletePassword={setDataPasswordDelate}
+                    onToggleFavorite={setDataPasswordFavorite}
+                    getCategoryIcon={getCategoryIcon}
+                  />
+                ))}
             </div>
             {/* Empty State */}
             {filteredPasswords?.length === 0 && (
