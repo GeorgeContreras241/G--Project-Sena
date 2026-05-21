@@ -8,9 +8,11 @@ import { useStoragePass } from "@/storage/useStoragePass";
 import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle";
 import { CATEGORY_BUTTONS } from "@/const/buttonsNavegations";
 import { HeaderGestorProps } from "@/types";
+import { useRouter } from "next/navigation";
 import type { ContextType } from "@/types";
 
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: HeaderGestorProps) => {
+    const router = useRouter();
     const { handleExport, handleReset } = useContext<ContextType>(LocalContext as any)
     const dataPassword = useStoragePass((state:any) => state.dataPassword)
 
@@ -27,7 +29,7 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                     </button>
                     <Button onClick={() => {
                         handleReset();
-                        window.location.href = '/';
+                        router.push('/');
                     }}>
                         <Exit />
                         Salir
