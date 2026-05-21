@@ -16,6 +16,7 @@ import {
 } from "@/types";
 import SeccionSocial from "../Social/SocialSeccion";
 import { error } from "console";
+import { generateSalt } from "@/lib/crypto/genereteSalt";
 
 export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     const context = use<ContextType>(LocalContext as any);
@@ -48,7 +49,24 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
 
 
     const handleNoFileScenario = async (password: string) => {
-        sileo.warning(sileoWarning);
+        sileo.warning({
+            title: "Error Fatal",
+            description: "Seguro que desea continuar sin archivo",
+            duration: 5000,
+            fill: "var(--color-bg-elevated)",
+            styles: {
+                title: "text-red! font-bold!",
+                description: "text-white! text-center!",
+            },
+            button: {
+                onClick: async () => {
+                    const saltGenerated = await generateSalt();
+                    localStorage.setItem("salt", JSON.stringify(Array.from(saltGenerated)));
+                    onSuccess(true);
+                },
+                title: "Aceptar"
+            },
+        });
     };
 
     const processFileImport = async (file: File, password: string) => {
@@ -59,8 +77,8 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
             return false;
         }
         //revisar datos pasa con datos incorrectos ojito
-        
-        const importResult = await handleImport(file,password);
+
+        const importResult = await handleImport(file, password);
 
         if (importResult.state === false) {
             sileo.error(sileoError);
@@ -83,7 +101,7 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
 
         const formData = new FormData(e.target as HTMLFormElement);
         const password = formData.get("password") as string;
-        console.log("password", password);
+
         const validatePasswordResult = validatePassword(password);
         if (!validatePasswordResult.success) {
             setPasswordError(validatePasswordResult.error || "");
@@ -96,13 +114,12 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
         try {
             if (!file) {
                 await handleNoFileScenario(password);
-                console.log("Archivo no seleccionado");
+
                 return;
             }
             //revisar funcion processFileImport
             const success = await processFileImport(file, password);
             if (success) {
-                console.log("Archivo procesado exitosamente");
                 onSuccess(true);
             }
         } catch (error) {
