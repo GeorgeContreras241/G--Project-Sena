@@ -1,6 +1,7 @@
 "use client"
 import { Exit } from "@/components/ui/exit"
 import { LocalProvider } from "@/context/localProvider"
+import { Toaster } from "sileo"
 
 const OfflineLayout = ({ children }: { children: React.ReactNode }) => {
 
@@ -11,6 +12,7 @@ const OfflineLayout = ({ children }: { children: React.ReactNode }) => {
                     {children}
                 </main>
             </LocalProvider>
+            <Toaster position="top-center"/>
         </section>
     )
 }
