@@ -60,7 +60,7 @@ export const Gestor = () => {
       (selectedCategory === 'favorites' ? password.favorite : password.category === selectedCategory)
     return matchesSearch && matchesCategory
   })
-  console.log(dataPassword)
+
   return (
     <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-gray-900">
       <div className="max-w-6xl mx-auto flex flex-col gap-2">
