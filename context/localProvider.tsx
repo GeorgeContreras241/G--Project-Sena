@@ -62,28 +62,34 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const handleExport: ExportResult = async (dataPassword) => {
-        console.log("Exportando datos...");
+        
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
         const salt = new Uint8Array(saltSave);
         const derivedKey = drcKey.current;
-        console.log("derivedKey", derivedKey);
-        console.log("dataPassword", dataPassword);
-        console.log("salt", salt);
+
+        // si no se carga archivo es derive key undefinen
+  
         if (!derivedKey) {
-            return sileo.error({
+            sileo.error({
                 title: "Error al exportar los datos",
                 description: "No se pudo derivar la clave",
                 duration: 5000,
                 styles: { title: "text-white!" }
             });
+            return;
         }
         const encrypted = await encrypt(derivedKey, dataPassword);
         console.log("encrypted", encrypted);
         const { iv, data } = encrypted;
-        if (!iv || !data) return {
-            state: false,
-            message: "No se pudo encriptar los datos"
-        };
+        if (!iv || !data) {
+            sileo.error({
+                title: "Error al encriptar",
+                description: "No se pudo encriptar los datos",
+                duration: 5000,
+                styles: { title: "text-white!" }
+            });
+            return;
+        }
         const ivArray = new Uint8Array(iv);
         const dataArray = new Uint8Array(data);
         const vaultFile = buildVaultFile(salt, ivArray, dataArray);
