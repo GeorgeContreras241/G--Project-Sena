@@ -5,36 +5,44 @@ export const decrypt = async (
   
   try {
     // Validar key
-    if (!key) {
-      throw new Error("Key inválida")
+    if (!key && !payload && !payload.iv && !payload.data && payload.iv.length !== 12 && payload.data.length === 0) {
+      return {
+        status: false,
+        message: {
+          title: "Error al descifrar los datos",
+          description: "Key inválida",
+          duration: 5000,
+          fill: "var(--color-bg-elevated)",
+        }
+      }
     }
 
     // Validar payload
-    if (!payload) {
-      throw new Error("Payload vacío")
-    }
+    // if (!payload) {
+    //   throw new Error("Payload vacío") 
+    // }
 
-    // Validar iv
-    if (!payload.iv) {
-      throw new Error("IV no encontrado")
-    }
+    // // Validar iv
+    // if (!payload.iv) {
+    //   throw new Error("IV no encontrado")
+    // }
 
     
-    // Validar data
-    if (!payload.data) {
-      throw new Error("Data no encontrada")
-    }
+    // // Validar data
+    // if (!payload.data) {
+    //   throw new Error("Data no encontrada")
+    // }
 
 
-    // Validar longitud IV AES-GCM
-    if (payload.iv.length !== 12) {
-      throw new Error("IV inválido para AES-GCM")
-    }
+    // // Validar longitud IV AES-GCM
+    // if (payload.iv.length !== 12) {
+    //   throw new Error("IV inválido para AES-GCM")
+    // }
 
-    // Validar contenido data
-    if (payload.data.length === 0) {
-      throw new Error("Data vacía")
-    }
+    // // Validar contenido data
+    // if (payload.data.length === 0) {
+    //   throw new Error("Data vacía")
+    // }
 
     // Convertimos
     const iv = new Uint8Array(payload.iv)
@@ -68,9 +76,6 @@ export const decrypt = async (
     }
 
   } catch (error: any) {
-
-    console.error("Decrypt Error:", error)
-
     return {
       status: false,
       message: {
