@@ -1,11 +1,18 @@
 "use client"
 import { Button } from "@/components/ui/Button"
 import { Copy } from "@/components/ui/icons/Copy"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useStoragePass } from "@/storage/useStoragePass"
 import { generatePassword } from "@/lib/utils/Gestor/generatePassword"
 import { copyToClipboard } from "@/lib/utils/Gestor/copyToClipboard"
 import { EditPasswordProps } from "@/types"
+
+interface FormErrors {
+    title?: string;
+    username?: string;
+    password?: string;
+    url?: string;
+}
 
 
 
@@ -14,9 +21,21 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
     const [isFormVisible, setIsFormVisible] = useState(true);
     const [isConfigVisible, setIsConfigVisible] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [errors, setErrors] = useState<FormErrors>({});
     const setDataPasswordEdit = useStoragePass((state: any) => state.setDataPasswordEdit)
     
     const [keys, setKeys] = useState({
+        id: password.id,
+        title: password.title,
+        application: password.category,
+        username: password.username,
+        password: password.password,
+        url: password.url,
+        category: password.category,
+        favorite: password.favorite
+    })
+
+    const [originalKeys, setOriginalKeys] = useState({
         id: password.id,
         title: password.title,
         application: password.category,
@@ -35,14 +54,62 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
         includeSymbols: true
     })
 
+    // Función para validar el formulario
+    const validateForm = (): boolean => {
+        const newErrors: FormErrors = {};
+
+        if (!keys.title.trim()) {
+            newErrors.title = "El título es requerido";
+        }
+
+        if (!keys.username.trim()) {
+            newErrors.username = "El usuario es requerido";
+        }
+
+        if (!keys.password.trim()) {
+            newErrors.password = "La contraseña es requerida";
+        } else if (keys.password.length < 4) {
+            newErrors.password = "La contraseña debe tener al menos 4 caracteres";
+        }
+
+        if (keys.url && keys.url.trim()) {
+            try {
+                new URL(keys.url);
+            } catch {
+                newErrors.url = "URL inválida";
+            }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    // Función para resetear el formulario a valores originales
+    const resetForm = () => {
+        setKeys({ ...originalKeys });
+        setErrors({});
+        setShowPassword(false);
+    };
+
     const handleGeneratePassword = () => {
         const newPassword = generatePassword(passwordOptions);
         setKeys({ ...keys, password: newPassword });
+        setErrors({ ...errors, password: undefined });
     }
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        
+        if (!validateForm()) {
+            return;
+        }
+
         setDataPasswordEdit(keys);
+        onClose();
+    }
+
+    const handleCancel = () => {
+        resetForm();
         onClose();
     }
 
@@ -74,17 +141,20 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
                     <>
                         <div>
                             <label htmlFor="title" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Título
+                                Título <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="title"
                                 type="text"
                                 placeholder="Título"
                                 value={keys.title}
-                                onChange={(e) => setKeys({ ...keys, title: e.target.value })}
-                                className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2
-                                 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
+                                onChange={(e) => {
+                                    setKeys({ ...keys, title: e.target.value });
+                                    if (errors.title) setErrors({ ...errors, title: undefined });
+                                }}
+                                className={`w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border rounded-sm focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 dark:text-white ${errors.title ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400'}`}
                             />
+                            {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
                         </div>
                         <div>
                             <label htmlFor="application" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -103,16 +173,20 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
                         </div>
                         <div>
                             <label htmlFor="username" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Usuario
+                                Usuario <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="username"
                                 type="text"
                                 placeholder="Usuario"
                                 value={keys.username}
-                                onChange={(e) => setKeys({ ...keys, username: e.target.value })}
-                                className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
+                                onChange={(e) => {
+                                    setKeys({ ...keys, username: e.target.value });
+                                    if (errors.username) setErrors({ ...errors, username: undefined });
+                                }}
+                                className={`w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border rounded-sm focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 dark:text-white ${errors.username ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400'}`}
                             />
+                            {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
                         </div>
                         <div>
                             <label htmlFor="url" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -123,13 +197,17 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
                                 type="text"
                                 placeholder="https://ejemplo.com"
                                 value={keys.url}
-                                onChange={(e) => setKeys({ ...keys, url: e.target.value })}
-                                className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
+                                onChange={(e) => {
+                                    setKeys({ ...keys, url: e.target.value });
+                                    if (errors.url) setErrors({ ...errors, url: undefined });
+                                }}
+                                className={`w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border rounded-sm focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 dark:text-white ${errors.url ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400'}`}
                             />
+                            {errors.url && <p className="text-red-500 text-xs mt-1">{errors.url}</p>}
                         </div>
                         <div className="">
                             <label htmlFor="password" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Contraseña
+                                Contraseña <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <input
@@ -137,8 +215,11 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Contraseña"
                                     value={keys.password}
-                                    onChange={(e) => setKeys({ ...keys, password: e.target.value })}
-                                    className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
+                                    onChange={(e) => {
+                                        setKeys({ ...keys, password: e.target.value });
+                                        if (errors.password) setErrors({ ...errors, password: undefined });
+                                    }}
+                                    className={`w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border rounded-sm focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 dark:text-white ${errors.password ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                 />
                                 <div className="absolute top-2.5 right-3 z-10 flex gap-1">
                                     <button 
@@ -189,6 +270,7 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
                                     <button className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" onClick={() => copyToClipboard(keys.password)}><Copy /></button>
                                 </div>
                             </div>
+                            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
                         </div>
 
                         {/* Opciones de configuración de contraseña */}
@@ -287,7 +369,7 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
                                 Guardar Cambios
                             </Button>
                             <Button 
-                                onClick={onClose}
+                                onClick={handleCancel}
                                 className="flex-1 py-1.5 text-sm flex items-center justify-center bg-gray-500 hover:bg-gray-600"
                             >
                                 Cancelar

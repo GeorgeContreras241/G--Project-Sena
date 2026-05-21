@@ -1,16 +1,16 @@
 export interface PasswordEntry {
-    id: string
-    title: string
-    username: string
-    password: string
-    favorite: boolean
-    url: string
-    category: string
+  id: string
+  title: string
+  username: string
+  password: string
+  favorite: boolean
+  url: string
+  category: string
 }
 
 export interface EditPasswordProps {
-    password: PasswordEntry
-    onClose: () => void
+  password: PasswordEntry
+  onClose: () => void
 }
 
 export interface PasswordCardProps {
@@ -77,28 +77,28 @@ export interface EditPasswordProps {
 
 // Storage Types
 export type PassStorage = {
-    salt: Uint8Array | null;
-    derivedKey: CryptoKey | null;
-    loading: boolean;
-    dataPassword: dataPassword[];
-    setDataPassword: (data: Array<dataPassword> | null) => void;
-    setDataPasswordInit: (data: dataPassword[]) => void;
-    setDataPasswordUpdate: (data: dataPassword) => void;
-    setDataPasswordEdit: (data: dataPassword) => void;
-    setDataPasswordFavorite: (id: string) => void;
-    setDataPasswordDelate: (id: string | number) => void;
-    setLoading: (loading: boolean) => void;
-    setDerivedKey: (key: CryptoKey) => void;
-    setSalt: (salt: Uint8Array) => void;
+  salt: Uint8Array | null;
+  derivedKey: CryptoKey | null;
+  loading: boolean;
+  dataPassword: dataPassword[];
+  setDataPassword: (data: Array<dataPassword> | null) => void;
+  setDataPasswordInit: (data: dataPassword[]) => void;
+  setDataPasswordUpdate: (data: dataPassword) => void;
+  setDataPasswordEdit: (data: dataPassword) => void;
+  setDataPasswordFavorite: (id: string) => void;
+  setDataPasswordDelate: (id: string | number) => void;
+  setLoading: (loading: boolean) => void;
+  setDerivedKey: (key: CryptoKey) => void;
+  setSalt: (salt: Uint8Array) => void;
 }
 
 export interface dataPassword {
-    id: string;
-    name: string;
-    username: string;
-    password: string;
-    url: string;
-    favorite: boolean;
+  id: string;
+  name: string;
+  username: string;
+  password: string;
+  url: string;
+  favorite: boolean;
 }
 
 // Form State Types
@@ -194,6 +194,17 @@ export type ImportResult = {
   drcKey?: CryptoKey
 }
 
-export type ExportResult = (dataPassword: PasswordEntry[]) => void
+export type ExportResult = (dataPassword: PasswordEntry[]) => Promise<void>
 
 export type ToogleDeriveKey = (password: string) => void
+
+export type DecryptedData = {
+  status: boolean
+  data: PasswordEntry[]
+}
+export interface FormErrors {
+  title?: string;
+  username?: string;
+  password?: string;
+  url?: string;
+}

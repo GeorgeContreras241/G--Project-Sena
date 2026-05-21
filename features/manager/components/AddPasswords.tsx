@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useStoragePass } from "@/storage/useStoragePass"
 import { generatePassword } from "@/lib/utils/Gestor/generatePassword"
 import { copyToClipboard } from "@/lib/utils/Gestor/copyToClipboard"
+import type { FormErrors } from "@/types"
 
 
 
@@ -12,6 +13,7 @@ export const AddPasswords = () => {
     const [isFormVisible, setIsFormVisible] = useState(false);
     const [isConfigVisible, setIsConfigVisible] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [errors, setErrors] = useState<FormErrors>({});
     const setDataPasswordUpdate = useStoragePass((state: any) => state.setDataPasswordUpdate)
     const [keys, setKeys] = useState({
         title: "",
@@ -31,19 +33,79 @@ export const AddPasswords = () => {
         includeNumbers: true,
         includeSymbols: true
     })
+    // Función para validar el formulario
+    const validateForm = (): boolean => {
+        const newErrors: FormErrors = {};
+
+        if (!keys.title.trim()) {
+            newErrors.title = "El título es requerido";
+        }
+
+        if (!keys.username.trim()) {
+            newErrors.username = "El usuario es requerido";
+        }
+
+        if (!keys.password.trim()) {
+            newErrors.password = "La contraseña es requerida";
+        } else if (keys.password.length < 4) {
+            newErrors.password = "La contraseña debe tener al menos 4 caracteres";
+        }
+
+        if (keys.url && keys.url.trim()) {
+            try {
+                new URL(keys.url);
+            } catch {
+                newErrors.url = "URL inválida";
+            }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    // Función para resetear el formulario
+    const resetForm = () => {
+        setKeys({
+            title: "",
+            application: "web",
+            username: "",
+            password: "",
+            url: "",
+            category: "",
+            favorite: false
+        });
+        setErrors({});
+        setShowPassword(false);
+        setPasswordOptions({
+            length: 16,
+            includeUppercase: true,
+            includeLowercase: true,
+            includeNumbers: true,
+            includeSymbols: true
+        });
+    };
+
     // Función para generar y asignar contraseña aleatoria
     const handleGeneratePassword = () => {
         const newPassword = generatePassword(passwordOptions);
         setKeys({ ...keys, password: newPassword });
+        setErrors({ ...errors, password: undefined });
     }
 
     // tool tip Ventana emergente para agregar contraseña componente Reutilizable
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        
+        if (!validateForm()) {
+            return;
+        }
+
         const id =
             crypto?.randomUUID?.() ||
             Math.random().toString(36).substring(2, 15);
         setDataPasswordUpdate({ id, ...keys });
+        resetForm();
+        setIsFormVisible(false);
     }
 
     return (
@@ -74,17 +136,20 @@ export const AddPasswords = () => {
                     <>
                         <div>
                             <label htmlFor="title" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Título
+                                Título <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="title"
                                 type="text"
                                 placeholder="Título"
                                 value={keys.title}
-                                onChange={(e) => setKeys({ ...keys, title: e.target.value })}
-                                className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2
-                                 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
+                                onChange={(e) => {
+                                    setKeys({ ...keys, title: e.target.value });
+                                    if (errors.title) setErrors({ ...errors, title: undefined });
+                                }}
+                                className={`w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border rounded-sm focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 dark:text-white ${errors.title ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400'}`}
                             />
+                            {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
                         </div>
                         <div>
                             <label htmlFor="application" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -103,20 +168,24 @@ export const AddPasswords = () => {
                         </div>
                         <div>
                             <label htmlFor="username" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Usuario
+                                Usuario <span className="text-red-500">*</span>
                             </label>
                             <input
                                 id="username"
                                 type="text"
                                 placeholder="Usuario"
                                 value={keys.username}
-                                onChange={(e) => setKeys({ ...keys, username: e.target.value })}
-                                className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
+                                onChange={(e) => {
+                                    setKeys({ ...keys, username: e.target.value });
+                                    if (errors.username) setErrors({ ...errors, username: undefined });
+                                }}
+                                className={`w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border rounded-sm focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 dark:text-white ${errors.username ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400'}`}
                             />
+                            {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
                         </div>
                         <div className="">
                             <label htmlFor="password" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                Contraseña
+                                Contraseña <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
                                 <input
@@ -124,8 +193,11 @@ export const AddPasswords = () => {
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Contraseña"
                                     value={keys.password}
-                                    onChange={(e) => setKeys({ ...keys, password: e.target.value })}
-                                    className="w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400 text-gray-900 dark:text-white transition-all duration-200"
+                                    onChange={(e) => {
+                                        setKeys({ ...keys, password: e.target.value });
+                                        if (errors.password) setErrors({ ...errors, password: undefined });
+                                    }}
+                                    className={`w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border rounded-sm focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 dark:text-white ${errors.password ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                 />
                                 <div className="absolute top-2.5 right-3 z-10 flex gap-1">
                                     <button
@@ -176,6 +248,7 @@ export const AddPasswords = () => {
                                     <button className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" onClick={() => copyToClipboard(keys.password)}><Copy /></button>
                                 </div>
                             </div>
+                            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
                         </div>
 
                         {/* Opciones de configuración de contraseña */}
@@ -269,9 +342,20 @@ export const AddPasswords = () => {
                             )}
                         </div>
 
-                        <Button className="w-full py-1.5 text-sm flex items-center justify-center">
-                            Agregar
-                        </Button>
+                        <div className="flex gap-2">
+                            <Button className="flex-1 py-1.5 text-sm flex items-center justify-center">
+                                Agregar
+                            </Button>
+                            <Button 
+                                onClick={() => {
+                                    resetForm();
+                                    setIsFormVisible(false);
+                                }}
+                                className="flex-1 py-1.5 text-sm flex items-center justify-center bg-gray-500 hover:bg-gray-600"
+                            >
+                                Cancelar
+                            </Button>
+                        </div>
                     </>
                 )}
             </form>
