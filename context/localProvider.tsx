@@ -27,12 +27,6 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         drcKey.current = null;
         setDataPassword(null);
         setSaltState(false);
-        console.log("Reset completo");
-        console.log("saltRef", saltRef.current);
-        console.log("drcKey", drcKey.current);
-        console.log("saltState", saltState);
-        console.log("setDataPassword", dataPassword);
-        console.log("localStorage", localStorage);
     }
 
     const toogleDeriveKey: ToogleDeriveKey = async (password: string) => { 
@@ -68,7 +62,6 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         const derivedKey = drcKey.current;
 
         // si no se carga archivo es derive key undefinen
-  
         if (!derivedKey) {
             sileo.error({
                 title: "Error al exportar los datos",
@@ -164,7 +157,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         URL.revokeObjectURL(url)
     }
     return (
-        <LocalContext value={{ saltRef, handleExport, handleImport, handleReset, toogleDeriveKey } as any}>
+        <LocalContext value={{ saltRef, handleExport, handleImport, handleReset, toogleDeriveKey,drcKey } as any}>
             {children}
         </LocalContext>
     )
