@@ -17,13 +17,15 @@ import {
 import SeccionSocial from "../Social/SocialSeccion";
 import { error } from "console";
 import { generateSalt } from "@/lib/crypto/genereteSalt";
+import { deriveKey } from "@/lib/crypto/kdfKey";
 
 export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     const context = use<ContextType>(LocalContext as any);
     if (!context) {
         throw new Error("LocalContext debe usarse dentro del Provider");
     }
-    const { handleImport, handleReset } = context;
+    const { handleImport, handleReset , drcKey } = context;
+    
     // Debugging log
     const [file, setFile] = useState<File | null>(null);
     const [viewPass, setViewPass] = useState(false);
@@ -62,7 +64,10 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                 onClick: async () => {
                     const saltGenerated = await generateSalt();
                     localStorage.setItem("salt", JSON.stringify(Array.from(saltGenerated)));
+                    const drcKeyResult = await deriveKey(password, saltGenerated);
+                    drcKey.current = drcKeyResult;
                     onSuccess(true);
+                    sileo.clear()
                 },
                 title: "Aceptar"
             },
@@ -114,7 +119,6 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
         try {
             if (!file) {
                 await handleNoFileScenario(password);
-
                 return;
             }
             //revisar funcion processFileImport
