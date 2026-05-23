@@ -1,10 +1,11 @@
-export const Target = ({text}: {text: string}) => {
+export const Target = ({ text }: { text: string }) => {
     return (
-        <article className="border border-white/20 dark:border-white/10 bg-white/5 dark:bg-white/5 text-black/90 dark:text-white/80 
-        rounded-full px-3 py-1.5 text-[0.7rem] md:text-xs md:px-4 md:py-2
-        cursor-pointer hover:bg-white/10 dark:hover:bg-white/10 hover:border-white/40 dark:hover:border-white/20 
-        hover:scale-105 transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
+        <article className="group relative inline-flex items-center justify-center px-3 py-2 text-[0.65rem] font-semibold tracking-[0.25em] 
+        text-black dark:text-white transition duration-300 outline-none hover:text-blue-900 dark:hover:text-blue-400 focus-visible:text-blue-900 
+        dark:focus-visible:text-blue-400 sm:px-4 sm:text-xs cursor-pointer">
             {text}
+            <span className="pointer-events-none absolute inset-x-3 -bottom-px h-px origin-center scale-x-0 bg-blue-900 dark:bg-blue-400 
+            transition-transform duration-300 group-hover:scale-x-100 group-focus-visible:scale-x-100 sm:inset-x-4 text-center"></span>
         </article>
     );
 };
