@@ -1,13 +1,10 @@
-"use client"
 import { Gestor } from "@/features/manager/Gestor";
 import { AuthGuard } from "./AuthGuard";
 
-export const OfflinePage = () => {
+export default function OfflinePage() {
   return (
     <AuthGuard>
       <Gestor />
     </AuthGuard>
   );
-};
-
-export default OfflinePage
+}

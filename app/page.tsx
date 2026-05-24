@@ -1,18 +1,16 @@
-"use client";
-
+import { Suspense } from "react";
 import Archive from "../components/ui/icons/Archive";
-import WebAuthn from "../components/ui/icons/WebAuthn";
 import SeccionSocial from "../components/Social/SocialSeccion";
 import Link from "next/link";
 import { Target } from "@/components/ui/Target";
 import { target } from "@/const/target";
-import { sileo, Toaster } from "sileo";
+import { WebAuthnAction } from "@/components/home/WebAuthnAction";
+import {
+  SocialFallback,
+  WebAuthnFallback,
+} from "@/components/home/HomeFallbacks";
 
 export default function Home() {
-  const handleWebAuthn = async () => {
-    return sileo.warning({ title: "Proximamente" });
-  };
-
   return (
     <>
       <div className="vault-bg" aria-hidden="true" />
@@ -46,8 +44,8 @@ export default function Home() {
                   className="vault-rise vault-rise-delay-2 grid grid-cols-3 gap-2 sm:gap-3"
                   aria-label="Capacidades"
                 >
-                  {target.map((item, index) => (
-                    <Target key={index} text={item.text} />
+                  {target.map((item) => (
+                    <Target key={item.text} text={item.text} />
                   ))}
                 </section>
               </div>
@@ -84,40 +82,18 @@ export default function Home() {
                 </div>
               </Link>
 
-              <button
-                type="button"
-                onClick={handleWebAuthn}
-                className="vault-action-card group relative flex items-center gap-4 rounded-2xl p-4 text-left md:p-6 active:scale-[0.99]"
-                role="menuitem"
-                aria-label="WebAuthn - Autenticación biométrica"
-              >
-                <div
-                  className="vault-icon-frame h-12 w-12 shrink-0 rounded-xl opacity-70 md:h-14 md:w-14"
-                  aria-hidden="true"
-                >
-                  <WebAuthn />
-                </div>
-                <div className="min-w-0 flex-1 space-y-1 text-start md:text-center md:space-y-1.5">
-                  <h2 className="font-sora text-base font-semibold text-zinc-900 dark:text-zinc-50 md:text-lg">
-                    WebAuthn
-                  </h2>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400 md:text-sm">
-                    Biometría, PIN o llave de seguridad
-                  </p>
-                  <span className="vault-status-soon flex justify-start md:justify-center">
-                    Próximamente
-                  </span>
-                </div>
-              </button>
+              <Suspense fallback={<WebAuthnFallback />}>
+                <WebAuthnAction />
+              </Suspense>
             </nav>
           </section>
 
           <div className="vault-rise vault-rise-delay-4 w-full">
-            <SeccionSocial />
+            <Suspense fallback={<SocialFallback />}>
+              <SeccionSocial />
+            </Suspense>
           </div>
         </div>
-
-        <Toaster position="top-center" />
       </main>
     </>
   );
