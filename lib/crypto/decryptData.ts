@@ -1,11 +1,17 @@
+import type { DecryptResult, PasswordEntry, VaultCipherPayload } from "@/types";
+
 export const decrypt = async (
   key: CryptoKey,
-  payload: any
-): Promise<any> => {
-  
+  payload: VaultCipherPayload,
+): Promise<DecryptResult> => {
   try {
-    // Validar key
-    if (!key && !payload && !payload.iv && !payload.data && payload.iv.length !== 12 && payload.data.length === 0) {
+    if (
+      !key ||
+      !payload?.iv ||
+      !payload?.data ||
+      payload.iv.length !== 12 ||
+      payload.data.length === 0
+    ) {
       return {
         status: false,
         message: {
@@ -13,82 +19,55 @@ export const decrypt = async (
           description: "Key inválida",
           duration: 5000,
           fill: "var(--color-bg-elevated)",
-        }
-      }
+        },
+      };
     }
 
-    // Validar payload
-    // if (!payload) {
-    //   throw new Error("Payload vacío") 
-    // }
+    const iv = new Uint8Array(payload.iv);
+    const data = new Uint8Array(payload.data);
 
-    // // Validar iv
-    // if (!payload.iv) {
-    //   throw new Error("IV no encontrado")
-    // }
-
-    
-    // // Validar data
-    // if (!payload.data) {
-    //   throw new Error("Data no encontrada")
-    // }
-
-
-    // // Validar longitud IV AES-GCM
-    // if (payload.iv.length !== 12) {
-    //   throw new Error("IV inválido para AES-GCM")
-    // }
-
-    // // Validar contenido data
-    // if (payload.data.length === 0) {
-    //   throw new Error("Data vacía")
-    // }
-
-    // Convertimos
-    const iv = new Uint8Array(payload.iv)
-    const data = new Uint8Array(payload.data)
-
-    // Decrypt
     const decrypted = await crypto.subtle.decrypt(
       {
         name: "AES-GCM",
-        iv
+        iv,
       },
       key,
-      data
-    )
+      data,
+    );
 
-    // Decode
-    const decoded = new TextDecoder().decode(decrypted)
+    const decoded = new TextDecoder().decode(decrypted);
 
-    // Parse JSON seguro
-    let parsedData
-
+    let parsedData: unknown;
     try {
-      parsedData = JSON.parse(decoded)
+      parsedData = JSON.parse(decoded);
     } catch {
-      throw new Error("JSON inválido")
+      throw new Error("JSON inválido");
+    }
+
+    if (!Array.isArray(parsedData)) {
+      throw new Error("Formato de bóveda inválido");
     }
 
     return {
       status: true,
-      data: parsedData
-    }
+      data: parsedData as PasswordEntry[],
+    };
+  } catch (error: unknown) {
+    const description =
+      error instanceof Error ? error.message : "Datos incorrectos";
 
-  } catch (error: any) {
     return {
       status: false,
       message: {
         title: "Error al descifrar los datos",
-        description:
-          error?.message || "Datos incorrectos",
+        description,
         duration: 5000,
         fill: "var(--color-bg-elevated)",
         styles: {
           title: "text-red! font-bold!",
           description: "text-white! text-center!",
-        }
-      }
-    }
+        },
+      },
+    };
   }
-}
+};

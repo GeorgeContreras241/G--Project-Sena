@@ -6,6 +6,7 @@ import { useStoragePass } from "@/storage/useStoragePass"
 import { generatePassword } from "@/lib/utils/Gestor/generatePassword"
 import { copyToClipboard } from "@/lib/utils/Gestor/copyToClipboard"
 import type { FormErrors } from "@/types"
+import { toPasswordEntry } from "@/lib/utils/Gestor/toPasswordEntry"
 
 
 
@@ -14,7 +15,7 @@ export const AddPasswords = () => {
     const [isConfigVisible, setIsConfigVisible] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<FormErrors>({});
-    const setDataPasswordUpdate = useStoragePass((state: any) => state.setDataPasswordUpdate)
+    const setDataPasswordUpdate = useStoragePass((state) => state.setDataPasswordUpdate)
     const [keys, setKeys] = useState({
         title: "",
         application: "web",
@@ -103,7 +104,7 @@ export const AddPasswords = () => {
         const id =
             crypto?.randomUUID?.() ||
             Math.random().toString(36).substring(2, 15);
-        setDataPasswordUpdate({ id, ...keys });
+        setDataPasswordUpdate(toPasswordEntry({ id, ...keys }));
         resetForm();
         setIsFormVisible(false);
     }

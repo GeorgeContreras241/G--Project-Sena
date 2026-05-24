@@ -5,14 +5,8 @@ import { useState, useEffect } from "react"
 import { useStoragePass } from "@/storage/useStoragePass"
 import { generatePassword } from "@/lib/utils/Gestor/generatePassword"
 import { copyToClipboard } from "@/lib/utils/Gestor/copyToClipboard"
-import { EditPasswordProps } from "@/types"
-
-interface FormErrors {
-    title?: string;
-    username?: string;
-    password?: string;
-    url?: string;
-}
+import type { EditPasswordProps, FormErrors } from "@/types"
+import { toPasswordEntry } from "@/lib/utils/Gestor/toPasswordEntry"
 
 
 
@@ -22,7 +16,7 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
     const [isConfigVisible, setIsConfigVisible] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState<FormErrors>({});
-    const setDataPasswordEdit = useStoragePass((state: any) => state.setDataPasswordEdit)
+    const setDataPasswordEdit = useStoragePass((state) => state.setDataPasswordEdit)
     
     const [keys, setKeys] = useState({
         id: password.id,
@@ -104,7 +98,7 @@ export const EditPassword = ({ password, onClose }: EditPasswordProps) => {
             return;
         }
 
-        setDataPasswordEdit(keys);
+        setDataPasswordEdit(toPasswordEntry(keys));
         onClose();
     }
 

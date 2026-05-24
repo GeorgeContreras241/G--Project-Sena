@@ -1,6 +1,6 @@
 "use client"
-import { use, useEffect } from "react"
-import { LocalContext } from "@/context/localProvider"
+import { useEffect } from "react"
+import { useLocalContext } from "@/context/useLocalContext"
 import Add from "../ui/icons/Add";
 import { sileoWarning, sileoError } from "@/const/sileoConfig";
 import { sileo, Toaster } from "sileo"
@@ -10,21 +10,13 @@ import { validateVaultInputs } from "@/lib/utils/SeccionSubmit/validateVaultInpu
 import { Eye } from "../ui/icons/Eye";
 import { EyeClose } from "../ui/icons/EyeClose";
 import { validatePassword } from "@/lib/utils/SeccionSubmit/validatePassword";
-import {
-    ActionSubmitProps,
-    ContextType
-} from "@/types";
+import type { ActionSubmitProps } from "@/types";
 import SeccionSocial from "../Social/SocialSeccion";
-import { error } from "console";
 import { generateSalt } from "@/lib/crypto/genereteSalt";
 import { deriveKey } from "@/lib/crypto/kdfKey";
 
 export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
-    const context = use<ContextType>(LocalContext as any);
-    if (!context) {
-        throw new Error("LocalContext debe usarse dentro del Provider");
-    }
-    const { handleImport, handleReset , drcKey } = context;
+    const { handleImport, handleReset, drcKey } = useLocalContext();
     
     // Debugging log
     const [file, setFile] = useState<File | null>(null);
@@ -33,7 +25,7 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     const [passwordError, setPasswordError] = useState('');
     const [fileError, setFileError] = useState('');
     // Storage of decrypted data
-    const setDataPasswordInit = useStoragePass((state: any) => state.setDataPasswordInit);
+    const setDataPasswordInit = useStoragePass((state) => state.setDataPasswordInit);
 
     useEffect(() => {
         handleReset();

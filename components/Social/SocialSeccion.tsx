@@ -2,10 +2,17 @@ import GitHub from "../ui/icons/GitHub";
 import Linkedin from "../ui/icons/LinKedin";
 import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle";
 
-const SeccionSocial = () => {
+type SeccionSocialProps = {
+  className?: string;
+};
+
+const SeccionSocial = ({ className }: SeccionSocialProps) => {
   return (
     <footer
-      className="vault-panel flex w-full items-center justify-between gap-4 rounded-2xl px-4 py-3 md:px-6"
+      className={
+        className ??
+        "vault-panel flex w-full items-center justify-between gap-4 rounded-2xl px-4 py-3 md:px-6"
+      }
       aria-label="Enlaces y preferencias"
     >
       <p className="hidden text-[0.65rem] font-medium tracking-widest text-zinc-500 uppercase sm:block dark:text-zinc-500">

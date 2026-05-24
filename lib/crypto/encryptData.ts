@@ -1,57 +1,39 @@
-import type { PasswordEntry } from "@/types";
-
-export type EncryptResult = {
-   iv: number[];
-   data: number[];
-};
+import type { EncryptResult, PasswordEntry } from "@/types";
 
 export const encrypt = async (
-   key: CryptoKey,
-   data: PasswordEntry[]
+  key: CryptoKey,
+  data: PasswordEntry[],
 ): Promise<EncryptResult> => {
+  if (!crypto?.subtle) {
+    throw new Error("Web Crypto API no soportada");
+  }
 
-   if (!crypto?.subtle) {
-      throw new Error("Web Crypto API no soportada");
-   }
+  if (!key) {
+    throw new Error("La key es requerida");
+  }
 
-   if (!key) {
-      throw new Error("La key es requerida");
-   }
-   console.log("clave derivada", key);
-   try {
+  try {
+    const iv = crypto.getRandomValues(new Uint8Array(12));
 
-      // IV recomendado para AES-GCM
-      const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encodedData = new TextEncoder().encode(JSON.stringify(data));
 
-      // Convertimos el objeto a bytes
-      const encodedData = new TextEncoder().encode(
-         JSON.stringify(data)
-      );
+    const encryptedBuffer = await crypto.subtle.encrypt(
+      {
+        name: "AES-GCM",
+        iv,
+      },
+      key,
+      encodedData,
+    );
 
-      // Encriptamos
-      const encryptedBuffer = await crypto.subtle.encrypt(
-         {
-            name: "AES-GCM",
-            iv
-         },
-         key,
-         encodedData
-      );
+    const encryptedArray = Array.from(new Uint8Array(encryptedBuffer));
 
-      // Convertimos ArrayBuffer -> number[]
-      const encryptedArray = Array.from(
-         new Uint8Array(encryptedBuffer)
-      );
-
-      return {
-         iv: Array.from(iv),
-         data: encryptedArray
-      };
-
-   } catch (error) {
-
-      console.error("Error encryptando datos:", error);
-
-      throw new Error("No se pudieron encryptar los datos");
-   }
+    return {
+      iv: Array.from(iv),
+      data: encryptedArray,
+    };
+  } catch (error) {
+    console.error("Error encryptando datos:", error);
+    throw new Error("No se pudieron encryptar los datos");
+  }
 };

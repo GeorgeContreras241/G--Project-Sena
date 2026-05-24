@@ -7,13 +7,13 @@ import { loadVault } from "@/lib/vault/loadVault";
 import { createContext, useRef, useEffect, useState } from "react";
 import { decrypt } from "@/lib/crypto/decryptData";
 import { useStoragePass } from "@/storage/useStoragePass";
-import type { ExportResult , ToogleDeriveKey } from "@/types";
+import type { ExportResult, ImportResult, LocalContextValue, ToogleDeriveKey } from "@/types";
 import { sileo } from "sileo"
 
-export const LocalContext = createContext(null);
+export const LocalContext = createContext<LocalContextValue | null>(null);
 
 export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
-    const { setDataPassword, dataPassword } = useStoragePass();
+    const { setDataPassword } = useStoragePass();
     const saltRef = useRef<Uint8Array | null>(null);
     const drcKey = useRef<CryptoKey | null>(null);
     const [saltState, setSaltState] = useState(false);
@@ -25,7 +25,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.removeItem("salt");
         saltRef.current = null;
         drcKey.current = null;
-        setDataPassword(null);
+        setDataPassword();
         setSaltState(false);
     }
 
@@ -91,7 +91,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         downloadVault(vaultFile)
     }
 
-    const handleImport = async (file: File, password: string) => {
+    const handleImport = async (file: File, password: string): Promise<ImportResult> => {
         const vaultData = await loadVault({ file })
         if (!vaultData.state) return {
             state: false,
@@ -120,20 +120,26 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         // no recibe nada aqui esta el error
         await toogleDeriveKey(password);
         //retorna status mensaje
-        const decryptedData = await decrypt(drcKey.current as CryptoKey, { iv, data })
-
-        if (!decryptedData.status) {
+        const key = drcKey.current;
+        if (!key) {
             return {
                 state: false,
                 message: {
                     title: "Error Fatal",
-                    description: "No se pudo cargar el archivo",
+                    description: "No se pudo derivar la clave",
                     duration: 5000,
-                    styles: {
-                        title: "text-black!"
-                    }
-                }
-            }
+                    styles: { title: "text-black!" },
+                },
+            };
+        }
+
+        const decryptedData = await decrypt(key, { iv, data });
+
+        if (!decryptedData.status) {
+            return {
+                state: false,
+                message: decryptedData.message,
+            };
         }
         
         return {
@@ -144,11 +150,11 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }
 
-    const downloadVault = (buffer: any) => {
+    const downloadVault = (buffer: Uint8Array) => {
         const blob = new Blob(
-            [buffer],
-            { type: "application/octet-stream" }
-        )
+            [buffer.slice()],
+            { type: "application/octet-stream" },
+        );
         const url = URL.createObjectURL(blob)
         const a = document.createElement("a")
         a.href = url
@@ -157,7 +163,16 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         URL.revokeObjectURL(url)
     }
     return (
-        <LocalContext value={{ saltRef, handleExport, handleImport, handleReset, toogleDeriveKey,drcKey } as any}>
+        <LocalContext
+            value={{
+                saltRef,
+                drcKey,
+                handleExport,
+                handleImport,
+                handleReset,
+                toogleDeriveKey,
+            }}
+        >
             {children}
         </LocalContext>
     )

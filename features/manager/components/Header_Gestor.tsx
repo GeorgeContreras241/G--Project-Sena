@@ -1,6 +1,5 @@
 "use client"
-import { useContext } from "react"
-import { LocalContext } from "@/context/localProvider"
+import { useLocalContext } from "@/context/useLocalContext"
 import { Exit } from "@/components/ui/icons/Exit";
 import { Export } from "@/components/ui/icons/Export" 
 import { Search } from "@/components/ui/icons/Search";
@@ -10,12 +9,10 @@ import { ThemeToggle } from "@/components/ui/themeMode/ThemeToogle";
 import { CATEGORY_BUTTONS } from "@/const/buttonsNavegations";
 import { HeaderGestorProps } from "@/types";
 import { useRouter } from "next/navigation";
-import type { ContextType } from "@/types";
-
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: HeaderGestorProps) => {
     const router = useRouter();
-    const { handleExport, handleReset } = useContext<ContextType>(LocalContext as any)
-    const dataPassword = useStoragePass((state: any) => state.dataPassword)
+    const { handleExport, handleReset } = useLocalContext()
+    const dataPassword = useStoragePass((state) => state.dataPassword)
 
     return (
         <header className="bg-white/95 dark:bg-neutral-950/90 backdrop-blur-md rounded-lg shadow-sm border border-gray-200 dark:border-neutral-900 p-6 mb-6">

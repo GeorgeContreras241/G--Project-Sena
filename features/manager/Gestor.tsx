@@ -15,14 +15,12 @@ import { LockEmpty } from '@/components/ui/icons/LockEmpty'
 
 import { PasswordCard } from './components/PasswordCard'
 
-import { PasswordEntry } from "@/types"
-
-
+import type { PasswordEntry } from "@/types"
 
 export const Gestor = () => {
-  const dataPassword = useStoragePass((state: any) => state.dataPassword)
-  const setDataPasswordDelate = useStoragePass((state: any) => state.setDataPasswordDelate)
-  const setDataPasswordFavorite = useStoragePass((state: any) => state.setDataPasswordFavorite)
+  const dataPassword = useStoragePass((state) => state.dataPassword)
+  const setDataPasswordDelate = useStoragePass((state) => state.setDataPasswordDelate)
+  const setDataPasswordFavorite = useStoragePass((state) => state.setDataPasswordFavorite)
   const [searchTerm, setSearchTerm] = useState('')
   const [showPasswords, setShowPasswords] = useState<{ [key: string]: boolean }>({})
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
@@ -52,7 +50,7 @@ export const Gestor = () => {
   }
 
 
-  const filteredPasswords = dataPassword?.filter((password: any) => {
+  const filteredPasswords = dataPassword.filter((password) => {
     const matchesSearch = password.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       password.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (password.url && password.url.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -84,7 +82,7 @@ export const Gestor = () => {
           <div className="w-full">
             <div className="space-y-1.5">
               {
-                 filteredPasswords?.map((password: any) => (
+                 filteredPasswords.map((password) => (
                   <PasswordCard
                     key={password.id}
                     password={password}
