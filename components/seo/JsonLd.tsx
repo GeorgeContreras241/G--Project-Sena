@@ -1,4 +1,4 @@
-import { siteConfig } from "@/lib/site";
+import { getCachedSiteConfig } from "@/lib/cache/site";
 
 type JsonLdProps = {
   data: Record<string, unknown>;
@@ -13,7 +13,9 @@ export function JsonLd({ data }: JsonLdProps) {
   );
 }
 
-export function WebApplicationJsonLd() {
+export async function WebApplicationJsonLd() {
+  const siteConfig = await getCachedSiteConfig();
+
   return (
     <JsonLd
       data={{
