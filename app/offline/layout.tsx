@@ -1,20 +1,19 @@
-"use client"
-import { Exit } from "@/components/ui/exit"
-import { LocalProvider } from "@/context/localProvider"
-import { Toaster } from "sileo"
+import type { Metadata } from "next";
+import { OfflineShell } from "./OfflineShell";
 
-const OfflineLayout = ({ children }: { children: React.ReactNode }) => {
+export const metadata: Metadata = {
+  title: "Gestor offline",
+  description:
+    "Administra tus credenciales sin conexión. Archivo cifrado local en el navegador con ClaveVault.",
+  alternates: {
+    canonical: "/offline",
+  },
+};
 
-    return (
-        <section className="flex flex-col">
-            <LocalProvider>
-                <main>
-                    {children}
-                </main>
-            </LocalProvider>
-            <Toaster position="top-center"/>
-        </section>
-    )
+export default function OfflineLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <OfflineShell>{children}</OfflineShell>;
 }
-
-export default OfflineLayout

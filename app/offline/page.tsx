@@ -4,12 +4,10 @@ import { AuthGuard } from "./AuthGuard";
 
 export const OfflinePage = () => {
   return (
-    <main>
-      <AuthGuard>
-          <Gestor/>
-      </AuthGuard>
-    </main>
-  )
-}
+    <AuthGuard>
+      <Gestor />
+    </AuthGuard>
+  );
+};
 
 export default OfflinePage
