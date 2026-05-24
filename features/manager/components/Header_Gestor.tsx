@@ -2,6 +2,7 @@
 import { useContext } from "react"
 import { LocalContext } from "@/context/localProvider"
 import { Exit } from "@/components/ui/icons/Exit";
+import { Export } from "@/components/ui/icons/Export" 
 import { Search } from "@/components/ui/icons/Search";
 import { Button } from "@/components/ui/Button";
 import { useStoragePass } from "@/storage/useStoragePass";
@@ -14,26 +15,29 @@ import type { ContextType } from "@/types";
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: HeaderGestorProps) => {
     const router = useRouter();
     const { handleExport, handleReset } = useContext<ContextType>(LocalContext as any)
-    const dataPassword = useStoragePass((state:any) => state.dataPassword)
+    const dataPassword = useStoragePass((state: any) => state.dataPassword)
 
     return (
         <header className="bg-white/95 dark:bg-neutral-950/90 backdrop-blur-md rounded-lg shadow-sm border border-gray-200 dark:border-neutral-900 p-6 mb-6">
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white font-sora tracking-tight">Gestor de Credenciales</h1>
-                <article className="grid grid-cols-3 place-items-center gap-2">
-                    <ThemeToggle className="h-8 w-8" />
-                    <button className={`grid gap-2 place-items-center bg-gray-900 text-white h-8 w-20 rounded-md border border-gray-300 dark:border-gray-700 
+            <div className="flex flex-row justify-between items-center mb-4">
+                <h1 className="tex-lg md:text-3xl font-bold text-gray-900 dark:text-white font-sora tracking-tight">Gestor de Credenciales</h1>
+                <article className="flex flex-row  items-center justify-between gap-2">
+                    <ThemeToggle className="h-6 w-6" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+                        <button className={`grid gap-2 place-items-center bg-gray-900 text-white h-8 w-20 rounded-md border border-gray-300 dark:border-gray-700 
                                         cursor-pointer hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors text-xs font-semibold`} onClick={() => handleExport(dataPassword)}>
-                        Exportar
-                    </button>
-                    <Button onClick={() => {
-                        handleReset();
-                        router.push('/');
-                    }}>
-                        <Exit />
-                        Salir
-                    </Button>
+                            Exportar
+                        </button>
+                        <Button  onClick={() => {
+                            handleReset();
+                            router.push('/');
+                        }}>
+                            <Exit />
+                            <span> Salir</span>
+                           <span><Export/></span>
+                        </Button>
+                    </div>
                 </article>
             </div>
             {/* Search */}
@@ -59,11 +63,11 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
             <section className="flex flex-row justify-between">
                 <div className="flex gap-2 flex-wrap">
                     {CATEGORY_BUTTONS.map((button) => (
-                        <Button key={button.id} onClick={() => setSelectedCategory(button.value)} className={`${selectedCategory === button.value ? 
-                        'dark:bg-gray-950 bg-gray-900 text-white ' : 'dark:bg-gray-800 bg-gray-700 text-white'}`}>
+                        <Button key={button.id} onClick={() => setSelectedCategory(button.value)} className={`${selectedCategory === button.value ?
+                            'dark:bg-gray-950 bg-gray-900 text-white ' : 'dark:bg-gray-800 bg-gray-700 text-white'}`}>
                             {button.label}
                         </Button>
-                       
+
                     ))}
                 </div>
             </section>
