@@ -198,17 +198,19 @@ export const AddPasswords = () => {
                                         setKeys({ ...keys, password: e.target.value });
                                         if (errors.password) setErrors({ ...errors, password: undefined });
                                     }}
-                                    className={`w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border rounded-sm focus:outline-none focus:ring-2 transition-all duration-200 text-gray-900 dark:text-white ${errors.password ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400'}`}
+                                    className={`w-full px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border rounded-sm focus:outline-none focus:ring-2 transition-all duration-200 
+                                        text-gray-900 dark:text-white ${errors.password ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' : 
+                                            'border-gray-300 dark:border-gray-600 focus:ring-blue-500/20 focus:border-blue-500 dark:focus:border-blue-400'}`}
                                 />
                                 <div className="absolute top-2.5 right-3 z-10 flex gap-1">
                                     <button
-                                        className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                                        className="bg-transparent px-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
                                         onClick={handleGeneratePassword}
                                         title="Generar contraseña aleatoria"
                                         type="button"
                                     >
                                         <svg
-                                            className="w-4 h-4 text-gray-600"
+                                            className="w-4 h-4 text-black dark:text-white"
                                             fill="none"
                                             stroke="currentColor"
                                             viewBox="0 0 24 24"
@@ -218,14 +220,14 @@ export const AddPasswords = () => {
                                         </svg>
                                     </button>
                                     <button
-                                        className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
+                                        className="bg-transparent px-1 hover:scale-110 transition-transform duration-200 cursor-pointer"
                                         onClick={() => setShowPassword(!showPassword)}
                                         title={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                                         type="button"
                                     >
                                         {showPassword ? (
                                             <svg
-                                                className="w-4 h-4 text-gray-600"
+                                                className="w-4 h-4 text-black dark:text-white"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"
@@ -235,7 +237,7 @@ export const AddPasswords = () => {
                                             </svg>
                                         ) : (
                                             <svg
-                                                className="w-4 h-4 text-gray-600"
+                                                className="w-4 h-4 text-black dark:text-white"
                                                 fill="none"
                                                 stroke="currentColor"
                                                 viewBox="0 0 24 24"
@@ -246,7 +248,7 @@ export const AddPasswords = () => {
                                             </svg>
                                         )}
                                     </button>
-                                    <button className="bg-white px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" onClick={() => copyToClipboard(keys.password)}><Copy /></button>
+                                    <button className="bg-transparent px-1 hover:scale-110 transition-transform duration-200 cursor-pointer" onClick={() => copyToClipboard(keys.password)}><Copy /></button>
                                 </div>
                             </div>
                             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
