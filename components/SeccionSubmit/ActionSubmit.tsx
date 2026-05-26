@@ -151,8 +151,7 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     return (
         <>
             <Toaster position="top-center" />
-            <div className="bg-white/10 dark:bg-slate-900 backdrop-blur-md border-2 border-white/30 dark:border-blue-950/20 rounded-2xl w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
-
+            <div className="vault-panel vault-rise  w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
                 <div className="w-full grid place-items-center gap-2">
                     <div className="w-full flex gap-3 ">
                         <input className="hidden" id="file" type="file" onChange={handleFileChange} accept=".enc" />
