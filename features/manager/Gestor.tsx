@@ -60,12 +60,12 @@ export const Gestor = () => {
   })
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-gray-900">
+    <div className="min-h-screen p-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-gray-900 ">
       <div className="max-w-6xl mx-auto flex flex-col gap-2">
         {/* Header */}
         <Header_Gestor selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory} setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
-        <section className='grid grid-cols-1 xl:grid-cols-[350px_1fr] gap-4 lg:gap-6'>
+        <section className='grid grid-cols-1 xl:grid-cols-[350px_1fr] gap-4 lg:gap-6 z-9999'>
           {/* Form add Password */}
           <section>
             {editingPassword ? (
