@@ -59,12 +59,12 @@ export default function Home() {
               <Link
                 href="/offline"
                 title="Abrir gestor de contraseñas sin conexión"
-                className="vault-action-card group relative flex items-center gap-4 rounded-2xl p-4 md:p-6"
+                className="group relative flex  items-center gap-4 rounded-2xl p-4 md:p-6 border border-zinc-500/60 cursor-pointer" 
                 role="menuitem"
                 aria-label="Uso Offline - Administrar claves sin conexión"
               >
                 <div
-                  className="vault-icon-frame h-12 w-12 shrink-0 rounded-xl md:h-14 md:w-14"
+                  className="vault-icon-frame h-12 w-12 shrink-0 md:h-14 md:w-14"
                   aria-hidden="true"
                 >
                   <Archive />

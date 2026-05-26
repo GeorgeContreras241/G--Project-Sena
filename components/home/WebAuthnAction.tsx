@@ -12,7 +12,7 @@ export function WebAuthnAction() {
     <button
       type="button"
       onClick={handleWebAuthn}
-      className="vault-action-card group relative flex items-center gap-4 rounded-2xl p-4 text-left md:p-6 active:scale-[0.99]"
+      className="group relative flex items-center gap-4 rounded-2xl p-4 text-left md:p-6 active:scale-[0.99] border border-zinc-500/60 cursor-pointer"
       role="menuitem"
       aria-label="WebAuthn - Autenticación biométrica"
     >
