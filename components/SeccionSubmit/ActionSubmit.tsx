@@ -15,6 +15,8 @@ import SeccionSocial from "../Social/SocialSeccion";
 import { generateSalt } from "@/lib/crypto/genereteSalt";
 import { deriveKey } from "@/lib/crypto/kdfKey";
 
+//   i need review sileo alerts styles and refactor styles - Pending 
+
 export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     const { handleImport, handleReset, drcKey } = useLocalContext();
     
@@ -73,7 +75,7 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
             sileo.error(validation);
             return false;
         }
-        //revisar datos pasa con datos incorrectos ojito
+        //revisar datos pasa con datos incorrectos ojito - Completed
 
         const importResult = await handleImport(file, password);
 
@@ -113,7 +115,7 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                 await handleNoFileScenario(password);
                 return;
             }
-            //revisar funcion processFileImport
+            //revisar funcion processFileImport - Completed 
             const success = await processFileImport(file, password);
             if (success) {
                 onSuccess(true);
@@ -151,7 +153,7 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     return (
         <>
             <Toaster position="top-center" />
-            <div className="vault-panel vault-rise  w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
+            <div className="offline vault-panel vault-rise  w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
                 <div className="w-full grid place-items-center gap-2">
                     <div className="w-full flex gap-3 ">
                         <input className="hidden" id="file" type="file" onChange={handleFileChange} accept=".enc" />

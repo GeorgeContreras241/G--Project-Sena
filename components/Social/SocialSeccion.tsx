@@ -15,7 +15,7 @@ const SeccionSocial = ({ className }: SeccionSocialProps) => {
       }
       aria-label="Enlaces y preferencias"
     >
-      <p className="hidden text-[0.65rem] font-medium tracking-widest text-zinc-500 uppercase sm:block dark:text-zinc-500">
+      <p className="hidden text-[0.65rem] font-medium tracking-widest uppercase sm:block text-zinc-400">
         ClaveVault · local first
       </p>
 
@@ -25,7 +25,8 @@ const SeccionSocial = ({ className }: SeccionSocialProps) => {
           target="_blank"
           rel="noopener noreferrer"
           title="GitHub"
-          className="group flex h-11 w-11 items-center justify-center rounded-xl border border-transparent text-zinc-600 transition-all duration-300 hover:border-vault-amber/30 hover:bg-vault-amber/10 hover:text-vault-amber dark:text-zinc-400"
+          className="group flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300  
+          hover:text-vault-amber text-zinc-400"
         >
           <span className="sr-only">GitHub</span>
           <GitHub />
@@ -35,13 +36,13 @@ const SeccionSocial = ({ className }: SeccionSocialProps) => {
           target="_blank"
           rel="noopener noreferrer"
           title="LinkedIn"
-          className="group flex h-11 w-11 items-center justify-center rounded-xl border border-transparent text-zinc-600 transition-all duration-300 hover:border-vault-amber/30 hover:bg-vault-amber/10 hover:text-vault-amber dark:text-zinc-400"
+          className="group flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300  hover:text-vault-amber text-zinc-400"
         >
           <span className="sr-only">LinkedIn</span>
           <Linkedin />
         </a>
-        <div className="ml-1 flex h-11 w-11 items-center justify-center rounded-xl border border-zinc-300/60 dark:border-zinc-700/80">
-          <ThemeToggle className="h-8 w-8 text-zinc-700 dark:text-zinc-300" />
+        <div className="ml-1 flex h-11 w-11 items-center justify-center rounded-xl">
+          <ThemeToggle className="h-8 w-8 text-zinc-400" />
         </div>
       </div>
     </footer>

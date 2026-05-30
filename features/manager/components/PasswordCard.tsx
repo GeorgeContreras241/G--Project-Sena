@@ -8,7 +8,7 @@ import { Star } from "@/components/ui/icons/Star"
 import { StarFilled } from "@/components/ui/icons/StarFilled"
 import type { PasswordEntry, PasswordCardProps } from "@/types"
 
-
+// Ajustar tamaño icons 
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
@@ -73,7 +73,7 @@ export const PasswordCard = ({
               <span className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate bg-gray-100 dark:bg-gray-950 px-1.5 py-1.5 rounded flex-1 pr-8 flex">{password.username}</span>
               <button
                 onClick={() => onCopyToClipboard(password.username)}
-                className="absolute right-1 top-1/2 transform -translate-y-1/2 shrink-0 p-0.5 rounded hover:bg-blue-100 dark:hover:bg-blue-900/30 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 hover:scale-110"
+                className="absolute right-1 top-1/2 transform -translate-y-1/2 "
                 aria-label="Copiar usuario"
               >
                 <Copy />

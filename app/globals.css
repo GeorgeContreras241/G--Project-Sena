@@ -21,16 +21,16 @@
 
 :root {
   --vault-glow: rgba(232, 184, 74, 0.14);
-  --vault-line: rgba(15, 23, 42, 0.08);
-  --vault-surface: rgba(255, 255, 255, 0.72);
-  --vault-border: rgba(15, 23, 42, 0.1);
+  --vault-line: rgba(34, 73, 165, 0.08);
+  --vault-surface: rgb(7, 11, 36);
+  --vault-border: rgba(15, 23, 42, 0.938);
 }
 
 .dark {
   --vault-glow: rgba(232, 184, 74, 0.22);
   --vault-line: rgba(148, 163, 184, 0.06);
   --vault-surface: rgba(9, 9, 11, 0.55);
-  --vault-border: rgba(148, 163, 184, 0.12);
+  --vault-border: rgba(148, 163, 184, 0.199);
 }
 
 @keyframes vault-rise {
@@ -38,6 +38,7 @@
     opacity: 0;
     transform: translateY(18px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -48,17 +49,20 @@
   0% {
     background-position: 200% center;
   }
+
   100% {
     background-position: -200% center;
   }
 }
 
 @keyframes vault-pulse-ring {
+
   0%,
   100% {
     opacity: 0.35;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.65;
     transform: scale(1.02);
@@ -72,12 +76,15 @@
 .vault-rise-delay-1 {
   animation-delay: 0.08s;
 }
+
 .vault-rise-delay-2 {
   animation-delay: 0.16s;
 }
+
 .vault-rise-delay-3 {
   animation-delay: 0.24s;
 }
+
 .vault-rise-delay-4 {
   animation-delay: 0.32s;
 }
@@ -88,16 +95,23 @@
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, var(--vault-glow), transparent 55%),
-    radial-gradient(circle at 100% 100%, rgba(61, 214, 195, 0.06), transparent 40%),
-    linear-gradient(165deg, rgb(248 250 252) 0%, rgb(241 245 249) 45%, rgb(226 232 240) 100%);
+    radial-gradient(ellipse 80% 50% at 50% -10%,
+      var(--color-vault-amber),
+      transparent 55%),
+    radial-gradient(circle at 100% 100%,
+      rgba(255, 255, 255, 0.6),
+      transparent 40%),
+    linear-gradient(165deg,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgb(245, 247, 250) 45%,
+      rgba(255, 255, 255, 0.85) 100%);
 }
 
 .dark .vault-bg {
   background:
-    radial-gradient(ellipse 70% 45% at 50% 0%, var(--vault-glow), transparent 50%),
-    radial-gradient(circle at 0% 100%, rgba(61, 214, 195, 0.05), transparent 35%),
-    linear-gradient(165deg, rgb(9 9 11) 0%, rgb(15 23 42) 50%, rgb(2 6 23) 100%);
+    radial-gradient(ellipse 80% 50% at 50% -10%, #e8b94a62, transparent 55%),
+    radial-gradient(circle at 100% 100%, #0000001a, transparent 40%),
+    linear-gradient(165deg, #0000007c 0%, #181729ef 45%, #00000038 100%);
 }
 
 .vault-grid {
@@ -158,11 +172,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    transparent 40%,
-    color-mix(in oklab, var(--color-vault-amber) 8%, transparent) 100%
-  );
+  background: linear-gradient(135deg,
+      transparent 40%,
+      color-mix(in oklab, var(--color-vault-amber) 8%, transparent) 100%);
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -183,17 +195,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: color-mix(in oklab, var(--color-vault-amber) 6%, transparent);
-  color: var(--color-vault-amber);
+  border-radius: 1rem;
+  overflow: hidden;
+  color: white;
   transition:
     color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
+    background 0.3s ease;
 }
 
 .group:hover .vault-icon-frame {
-  border-color: color-mix(in oklab, var(--color-vault-amber) 50%, transparent);
-  box-shadow: 0 0 24px color-mix(in oklab, var(--color-vault-amber) 20%, transparent);
+  background: radial-gradient(circle,
+      rgba(232, 185, 74, 0.199) 0%,
+      transparent 80%);
   color: var(--color-vault-teal);
 }
 
@@ -216,3 +229,10 @@
 .dark .vault-status-soon {
   color: var(--color-zinc-500);
 }
+
+
+/* Animation View Transcition Experimental Next js */
+
+/* .home,.offline{
+  view-transition-name: state;
+} */

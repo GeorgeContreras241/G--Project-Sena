@@ -10,6 +10,7 @@ import {
   WebAuthnFallback,
 } from "@/components/home/HomeFallbacks";
 
+// Remember i have to do  a border animation - completed
 export default function Home() {
   return (
     <>
@@ -17,7 +18,7 @@ export default function Home() {
       <div className="vault-grid" aria-hidden="true" />
       <div className="vault-grain" aria-hidden="true" />
 
-      <main className="relative z-10 grid min-h-dvh place-items-center px-3 py-10 md:px-6 md:py-12">
+      <main className="home relative z-10 grid min-h-dvh place-items-center px-3 py-10 md:px-6 md:py-12">
         <div className="flex w-full max-w-2xl flex-col items-center gap-8 md:gap-10">
           <section
             id="main-content"
@@ -27,13 +28,13 @@ export default function Home() {
               <div className="flex flex-col gap-5">
                 <div className="vault-rise vault-rise-delay-1 space-y-3">
                   <p className="vault-eyebrow">ClaveVault</p>
-                  <h1 className="font-sora text-start text-[1.65rem] font-bold leading-[1.05] tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-[2.2rem] md:text-[2.75rem] lg:text-[3.25rem]">
+                  <h1 className="font-sora text-start text-[1.65rem] font-bold leading-[1.05] tracking-tight text-zinc-50 sm:text-[2.2rem] md:text-[2.75rem] lg:text-[3.25rem]">
                     Tu bóveda local de credenciales
                   </h1>
-                  <p className="max-w-xl text-start text-[0.85rem] leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-sm md:text-base">
+                  <p className="max-w-xl text-start text-[0.85rem] leading-relaxed text-zinc-400 sm:text-sm md:text-base">
                     Almacena, organiza y protege tus claves en el navegador. Cifrado
                     en cliente,{" "}
-                    <strong className="font-semibold text-zinc-800 dark:text-vault-amber">
+                    <strong className="font-semibold text-vault-amber">
                       cero servidores
                     </strong>{" "}
                     y control total sobre tus datos.
@@ -56,24 +57,26 @@ export default function Home() {
               role="navigation"
               aria-label="Opciones principales"
             >
+
+              {/* Se queja de Role de SEo - Pending*/}
               <Link
                 href="/offline"
                 title="Abrir gestor de contraseñas sin conexión"
-                className="group relative flex  items-center gap-4 rounded-2xl p-4 md:p-6 border border-zinc-500/60 cursor-pointer" 
+                className="group relative flex  items-center gap-4 rounded-2xl p-4 md:p-6 border border-zinc-500/30 hover:border-zinc-500/80 cursor-pointer" 
                 role="menuitem"
                 aria-label="Uso Offline - Administrar claves sin conexión"
               >
                 <div
-                  className="vault-icon-frame h-12 w-12 shrink-0 md:h-14 md:w-14"
+                  className="vault-icon-frame  h-12 w-12 shrink-0 md:h-14 md:w-14"
                   aria-hidden="true"
                 >
                   <Archive />
                 </div>
                 <div className="min-w-0 flex-1 space-y-1 text-start md:text-center md:space-y-1.5">
-                  <h2 className="font-sora text-base font-semibold text-zinc-900 dark:text-zinc-50 md:text-lg">
+                  <h2 className="font-sora text-base font-semibold text-zinc-50 md:text-lg">
                     Uso Offline
                   </h2>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400 md:text-sm">
+                  <p className="text-xs text-zinc-400 md:text-sm">
                     Sin internet · archivo cifrado local
                   </p>
                   <span className="vault-status-live flex justify-start md:justify-center">
