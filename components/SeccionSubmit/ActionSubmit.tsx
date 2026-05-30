@@ -1,5 +1,5 @@
 "use client"
-import { useEffect } from "react"
+import { useEffect, Suspense } from "react"
 import { useLocalContext } from "@/context/useLocalContext"
 import Add from "../ui/icons/Add";
 import { sileoWarning, sileoError } from "@/const/sileoConfig";
@@ -14,12 +14,13 @@ import type { ActionSubmitProps } from "@/types";
 import SeccionSocial from "../Social/SocialSeccion";
 import { generateSalt } from "@/lib/crypto/genereteSalt";
 import { deriveKey } from "@/lib/crypto/kdfKey";
+import { SocialFallback } from "@/components/home/HomeFallbacks";
 
 //   i need review sileo alerts styles and refactor styles - Pending 
 
 export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     const { handleImport, handleReset, drcKey } = useLocalContext();
-    
+
     // Debugging log
     const [file, setFile] = useState<File | null>(null);
     const [viewPass, setViewPass] = useState(false);
@@ -151,21 +152,21 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
     };
 
     return (
-        <>
+        <div className="max-w-[600px] w-full flex flex-col items-center justify-center gap-8 py-12">
             <Toaster position="top-center" />
-            <div className="offline vault-panel vault-rise  w-full max-w-xl grid place-items-center gap-2 p-8 shadow-2xl">
+            <div className="offline vault-panel vault-rise w-full grid place-items-center rounded-3xl p-5 md:p-7">
                 <div className="w-full grid place-items-center gap-2">
                     <div className="w-full flex gap-3 ">
                         <input className="hidden" id="file" type="file" onChange={handleFileChange} accept=".enc" />
-                        <div className="flex-1 h-48 border-2 border-dashed border-white/30 dark:border-blue-900/30 rounded-xl bg-white/5 dark:bg-blue-900/20 hover:bg-white/10
-                     dark:hover:bg-blue-900/30 transition-all duration-300 cursor-pointer group">
-                            <label htmlFor="file" className="w-full h-full flex flex-col items-center justify-center cursor-pointer border border-blue-500/30 dark:border-blue-400/30 ">
+                        <div className="flex-1 h-48 border-1 border-dashed border-white/30 dark:border-blue-900/30 rounded-xl bg-white/5 dark:bg-blue-950/10 hover:bg-white/10
+                     dark:hover:bg-blue-950/20 transition-all duration-300 cursor-pointer group">
+                            <label htmlFor="file" className="w-full h-full flex flex-col items-center justify-center cursor-pointer border rounded-lg border-blue-500/30 dark:border-blue-400/30 ">
                                 <div className="w-16 h-16 bg-blue-500/20 dark:bg-blue-400/20 rounded-full border-2 border-blue-500/30 dark:border-blue-400/30 flex items-center 
                             justify-center mb-3 group-hover:scale-105 transition-transform ">
                                     <Add />
                                 </div>
-                                <span className="text-sm text-gray-600 dark:text-gray-300 font-medium">Arrastra o haz clic para subir</span>
-                                <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">Solo archivos .enc</span>
+                                <span className="text-sm text-gray-300 font-medium">Arrastra o haz clic para subir</span>
+                                <span className="text-xs text-gray-400 mt-1">Solo archivos .enc</span>
                             </label>
                         </div>
                         {file && (
@@ -176,23 +177,23 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                             hover-group:bg-gray-800 transition-all duration-300 group"
                                 title="Eliminar archivo"
                             >
-                                <svg className="w-5 h-5 text-white dark:text-gray-400 group-hover:text-red-200  group-hover:scale-120 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-5 h-5 text-gray-400 group-hover:text-red-200  group-hover:scale-120 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
                             </button>
                         )}
                     </div>
-                    <span className={`${file ? "text-green-900 dark:text-green-400 border-green-800/50 dark:border-green-400/50 bg-green-600/50 dark:bg-green-400/10"
-                        : "text-red-900 dark:text-red-400 border-red-800/50 dark:border-red-400/50 bg-red-500/50 dark:bg-red-400/10"} 
+                    <span className={`${file ? "text-green-400 border-green-800/50 dark:border-green-400/50 bg-green-600/50 dark:bg-green-400/10"
+                        : "text-red-400 border-red-800/50 dark:border-red-400/50 bg-red-500/50 dark:bg-red-400/10"} 
                     text-sm border rounded px-2 py-1 w-full text-center transition-colors duration-300`}>
                         {fileError ? fileError : (file ? "Archivo Cargado Correctamente" : "Seleccione un archivo")}
                     </span>
                 </div>
-                <form className="w-full flex flex-col gap-2 mt-4 text-sm" onSubmit={handleSubmit}>
+                <form className="w-full flex flex-col gap-3 mt-4 text-sm" onSubmit={handleSubmit}>
                     <div className="flex justify-between">
-                        <label htmlFor="password" className="text-[1.5rem] text-start font-bold text-gray-700 dark:text-neutral-100 font-sora">Clave Maestra</label>
+                        <label htmlFor="password" className="font-sora text-[1.5rem] text-start font-bold text-neutral-100">Clave Maestra</label>
                         {passwordError && (
-                            <span id="password-error" className="text-red-600 dark:text-red-400 text-xs mt-1" role="alert">
+                            <span id="password-error" className="text-red-400 text-xs mt-1" role="alert">
                                 {passwordError}
                             </span>
                         )}
@@ -200,8 +201,8 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                     <div className="relative">
                         <input
                             type={viewPass ? "text" : "password"}
-                            className={`w-full border-2 rounded-lg py-2 px-3 pr-10 bg-white/10 dark:bg-blue-900/20 backdrop-blur-sm
-                        placeholder:text-gray-500 dark:placeholder:text-gray-400 placeholder:italic placeholder:text-md focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 ${passwordError ? 'border-red-500/50 dark:border-red-400/50 focus:ring-red-500/50' : 'border-white/30 dark:border-blue-900/30'
+                            className={`w-full border rounded-lg px-4 py-2 font-mono pr-10 border-white bg-zinc-800/50  backdrop-blur-sm placeholder:text-gray-500  placeholder:italic placeholder:text-md focus:outline-none focus:ring-1 focus:ring-neutral-500/50 transition-all duration-300 ${passwordError
+                                    ? 'border-red-400/50 focus:ring-red-500/50' : 'border-zinc-600/70'
                                 }`}
                             placeholder="Ingresa Aqui"
                             id="password"
@@ -226,11 +227,8 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                             )}
                         </button>
                     </div>
-
                     <button
-                        className="w-full bg-neutral-950 border dark:bg-slate-900 dark:border-neutral-600 dark:hover:bg-slate-800 text-white rounded-lg p-3 cursor-pointer flex items-center
-                     justify-center gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] focus:outline-none focus:ring-2
-                      focus:ring-blue-500/50 shadow-lg"
+                       className="w-full bg-slate-900 hover:bg-slate-800/70 text-white rounded-lg p-3 cursor-pointer flex items-center justify-center gap-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-[1.02] focus:outline-none focus:ring-1 focus:ring-blue-500/20 shadow-lg"
                         type="submit"
                         disabled={isLoading}
                         aria-busy={isLoading}
@@ -246,9 +244,9 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                             </>
                         ) : (
                             file ? (
-                                <span>Decifrar</span>
+                                <span className="font-medium font-mono">Decifrar</span>
                             ) : (
-                                <span>Iniciar</span>
+                                <span className="font-medium font-mono">Iniciar</span>
                             )
                         )}
                     </button>
@@ -259,7 +257,9 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
                     )}
                 </form>
             </div>
-            <SeccionSocial className="flex flex-row items-center justify-center gap-4 mt-8" />
-        </>
+            <Suspense fallback={<SocialFallback />}>
+                <SeccionSocial />
+            </Suspense>
+        </div>
     )
 }
