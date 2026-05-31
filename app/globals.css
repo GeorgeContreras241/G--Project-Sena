@@ -197,21 +197,25 @@
   justify-content: center;
   border-radius: 1rem;
   overflow: hidden;
-  color: white;
+  color: rgb(15, 23, 42);
   transition:
     color 0.3s ease,
     background 0.3s ease;
+}
+
+.dark .vault-icon-frame {
+  color: white;
 }
 
 .group:hover .vault-icon-frame {
   background: radial-gradient(circle,
       rgba(232, 185, 74, 0.199) 0%,
       transparent 80%);
-  color: var(--color-vault-teal);
+  color: var(--color-vault-amber);
 }
 
 .vault-status-live {
-  color: var(--color-vault-teal);
+  color: var(--color-vault-amber-dim);
   letter-spacing: 0.12em;
   font-size: 0.6rem;
   font-weight: 600;
