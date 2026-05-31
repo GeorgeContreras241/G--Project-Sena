@@ -41,8 +41,11 @@ export interface LocalContextValue {
   drcKey: React.MutableRefObject<CryptoKey | null>;
   handleExport: ExportResult;
   handleImport: (file: File, password: string) => Promise<ImportResult>;
-  handleReset: () => void;
+  handleReset: () => Promise<void>;
   toogleDeriveKey: ToogleDeriveKey;
+  isUnLocked: boolean;
+  setIsUnLocked: React.Dispatch<React.SetStateAction<boolean>>;
+  isResetting: boolean;
 }
 
 /** @deprecated Use `LocalContextValue` */

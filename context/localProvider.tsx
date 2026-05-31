@@ -18,13 +18,18 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     const drcKey = useRef<CryptoKey | null>(null);
     const [saltState, setSaltState] = useState(false);
     const [isUnLocked, setIsUnLocked] = useState(false)
+    const [isResetting, setIsResetting] = useState(false)
 
-    const handleReset = () => {
+    const handleReset = async () => {
+        setIsResetting(true)
+        setIsUnLocked(false)
         localStorage.removeItem("salt");
         saltRef.current = null;
         drcKey.current = null;
         setDataPassword();
         setSaltState(false);
+        await new Promise(resolve => setTimeout(resolve, 500))
+        setIsResetting(false)
     }
 
     const toogleDeriveKey: ToogleDeriveKey = async (password: string) => {
@@ -70,7 +75,6 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
             return;
         }
         const encrypted = await encrypt(derivedKey, dataPassword);
-        console.log("encrypted", encrypted);
         const { iv, data } = encrypted;
         if (!iv || !data) {
             sileo.error({
@@ -85,7 +89,6 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         const dataArray = new Uint8Array(data);
         const vaultFile = buildVaultFile(salt, ivArray, dataArray);
         if (!vaultFile) return;
-        console.log(vaultFile);
         downloadVault(vaultFile)
     }
 
@@ -171,6 +174,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
                 toogleDeriveKey,
                 setIsUnLocked,
                 isUnLocked,
+                isResetting,
             }}
         >
             {children}
