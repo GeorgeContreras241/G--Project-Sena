@@ -91,7 +91,6 @@ export const ActionSubmit = ({ onSuccess }: ActionSubmitProps) => {
             localStorage.setItem("salt", JSON.stringify(Array.from(importResult.salt)));
         }
         if (importResult.decryptedData) {
-            console.log("decryptedData", importResult);
             const data = importResult.decryptedData;
             setDataPasswordInit(data);
         }
