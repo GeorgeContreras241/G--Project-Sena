@@ -15,7 +15,7 @@ const SeccionSocial = ({ className }: SeccionSocialProps) => {
       }
       aria-label="Enlaces y preferencias"
     >
-      <p className="hidden text-[0.65rem] font-medium tracking-widest uppercase sm:block text-zinc-400">
+      <p className="hidden text-[0.65rem] font-medium tracking-widest uppercase sm:block text-zinc-600 dark:text-zinc-400">
         ClaveVault · local first
       </p>
 
@@ -26,7 +26,7 @@ const SeccionSocial = ({ className }: SeccionSocialProps) => {
           rel="noopener noreferrer"
           title="GitHub"
           className="group flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300  
-          hover:text-vault-amber text-zinc-400"
+          hover:text-amber-600 dark:hover:text-vault-amber text-zinc-600 dark:text-zinc-400"
         >
           <span className="sr-only">GitHub</span>
           <GitHub />
@@ -36,13 +36,13 @@ const SeccionSocial = ({ className }: SeccionSocialProps) => {
           target="_blank"
           rel="noopener noreferrer"
           title="LinkedIn"
-          className="group flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300  hover:text-vault-amber text-zinc-400"
+          className="group flex h-11 w-11 items-center justify-center rounded-xl transition-all duration-300  hover:text-amber-600 dark:hover:text-vault-amber text-zinc-600 dark:text-zinc-400"
         >
           <span className="sr-only">LinkedIn</span>
           <Linkedin />
         </a>
         <div className="ml-1 flex h-11 w-11 items-center justify-center rounded-xl">
-          <ThemeToggle className="h-8 w-8 text-zinc-400" />
+          <ThemeToggle className="h-8 w-8 text-zinc-600 dark:text-zinc-400" />
         </div>
       </div>
     </footer>

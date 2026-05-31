@@ -98,7 +98,7 @@ export const Gestor = () => {
             </div>
             {/* Empty State */}
             {filteredPasswords?.length === 0 && (
-              <div className="flex flex-col items-center justify-center p-12 text-center">
+              <div className="flex flex-col items-center justify-center p-12 text-center bg-white/80 dark:bg-gray-800/80 rounded-lg">
                 <div className="p-4 bg-blue-500/20 dark:bg-blue-400/20 rounded-full mb-4">
                   <LockEmpty />
                 </div>

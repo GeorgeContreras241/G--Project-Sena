@@ -12,7 +12,7 @@ export function WebAuthnAction() {
     <button
       type="button"
       onClick={handleWebAuthn}
-      className="group relative flex items-center gap-4 rounded-2xl p-4 text-left md:p-6 active:scale-[0.99] border border-zinc-500/30 hover:border-zinc-500/80  cursor-pointer"
+      className="group relative flex items-center gap-4 rounded-2xl p-4 text-left md:p-6 active:scale-[0.99] border border-zinc-300 dark:border-zinc-500/30 hover:border-zinc-400 dark:hover:border-zinc-500/80  cursor-pointer"
       role="menuitem"
       aria-label="WebAuthn - Autenticación biométrica"
     >
@@ -23,10 +23,10 @@ export function WebAuthnAction() {
         <WebAuthn />
       </div>
       <div className="min-w-0 flex-1 space-y-1 text-start md:text-center md:space-y-1.5">
-        <h2 className="font-sora text-base font-semibold text-zinc-50 md:text-lg">
+        <h2 className="font-sora text-base font-semibold text-zinc-900 dark:text-zinc-50 md:text-lg">
           WebAuthn
         </h2>
-        <p className="text-xs text-zinc-400 md:text-sm">
+        <p className="text-xs text-zinc-600 dark:text-zinc-400 md:text-sm">
           Biometría, PIN o llave de seguridad
         </p>
         <span className="vault-status-soon flex justify-start md:justify-center">
