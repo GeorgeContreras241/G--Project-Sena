@@ -11,7 +11,7 @@ import { HeaderGestorProps } from "@/types";
 import { useRouter } from "next/navigation";
 export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCategory, searchTerm }: HeaderGestorProps) => {
     const router = useRouter();
-    const { handleExport, handleReset } = useLocalContext()
+    const { handleExport, handleReset, isResetting } = useLocalContext()
     const dataPassword = useStoragePass((state) => state.dataPassword)
 
     return (
@@ -26,13 +26,21 @@ export const Header_Gestor = ({ setSearchTerm, setSelectedCategory, selectedCate
                                         cursor-pointer hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors text-xs font-semibold`} onClick={() => handleExport(dataPassword)}>
                             Exportar
                         </button>
-                        <Button  onClick={() => {
-                            handleReset();
-                            router.push('/');
-                        }}>
-                            <Exit />
-                            <span> Salir</span>
-                           <span><Export/></span>
+                        <Button  onClick={async () => {
+                            await handleReset();
+                            router.push('/offline');
+                        }} disabled={isResetting}>
+                            {isResetting ? (
+                                <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            ) : (
+                                <>
+                                    <Exit />
+                                    <span> Salir</span>
+                                </>
+                            )}
                         </Button>
                     </div>
                 </article>
