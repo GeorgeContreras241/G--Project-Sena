@@ -17,9 +17,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     const saltRef = useRef<Uint8Array | null>(null);
     const drcKey = useRef<CryptoKey | null>(null);
     const [saltState, setSaltState] = useState(false);
-
-
-
+    const [isUnLocked, setIsUnLocked] = useState(false)
 
     const handleReset = () => {
         localStorage.removeItem("salt");
@@ -29,7 +27,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
         setSaltState(false);
     }
 
-    const toogleDeriveKey: ToogleDeriveKey = async (password: string) => { 
+    const toogleDeriveKey: ToogleDeriveKey = async (password: string) => {
         const saltSave = JSON.parse(
             localStorage.getItem("salt") || "null"
         );
@@ -56,7 +54,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const handleExport: ExportResult = async (dataPassword) => {
-        
+
         const saltSave = JSON.parse(localStorage.getItem("salt") || "null");
         const salt = new Uint8Array(saltSave);
         const derivedKey = drcKey.current;
@@ -141,7 +139,7 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
                 message: decryptedData.message,
             };
         }
-        
+
         return {
             state: true,
             decryptedData: decryptedData.data,
@@ -171,6 +169,8 @@ export const LocalProvider = ({ children }: { children: React.ReactNode }) => {
                 handleImport,
                 handleReset,
                 toogleDeriveKey,
+                setIsUnLocked,
+                isUnLocked,
             }}
         >
             {children}
